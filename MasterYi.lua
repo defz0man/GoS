@@ -2,7 +2,10 @@ if GetObjectName(GetMyHero()) ~= "MasterYi" then return
 else
 
 require 'Inspired'
-castQ=false
+
+
+local castQ=false
+local delay=0
 
 Q_ON = {
 ["Aatrox"]		= {0,_R},
@@ -57,7 +60,7 @@ Q_ON = {
 ["Syndra"]		= {20,_R},
 ["Talon"]		= {0,_R},
 ["Taric"]		= {0,_E},
-["Teemo"]		= {0,_Q},		--FUCK YOU
+["Teemo"]		= {0,_Q},
 ["Thresh"]		= {0,_E},
 ["Tryndamere"]		= {0,_E},
 ["TwistedFate"]		= {0,"goldcardpreattack"},		--special 
@@ -94,17 +97,17 @@ Config.addParam("KSQ", "Killsteal with Q", SCRIPT_PARAM_ONOFF, false)
 OnLoop(function(myHero)
 	local unit = GetTarget(1500, DAMAGE_NORMAL)
 	ks()
-	if not IsImmune(unit) then 
-		if delay and delay<=GetTickCount() and ValidTarget(unit,GetCastRange(myHero,_Q)) and castQ and Config.Q and CanUseSpell(myHero, _Q)==READY  then
-			PrintChat("USED Q")
-			CastTargetSpell(unit,_Q)
-			castQ=false
-		end
-		if ValidTarget(unit,GetCastRange(myHero,_E)) and CanUseSpell(myHero, _E)==READY and Config.E then
-			CastSpell(_E)
-		end
+	if IsImmune(unit)==false then PrintChat("Immune") end
+	if IsImmune(unit)==true then PrintChat("Immune") end
+	if delay<=GetTickCount() and ValidTarget(unit,GetCastRange(myHero,_Q)) and castQ and Config.Q and CanUseSpell(myHero, _Q) then
+		PrintChat("USED Q")
+		CastTargetSpell(unit,_Q)
+		castQ=false
 	end
-delay=false
+	if ValidTarget(unit,GetCastRange(myHero,_E)) and CanUseSpell(myHero, _E)==READY and Config.E then
+		CastSpell(_E)
+	end
+delay=0
 end)
 
 
@@ -137,7 +140,7 @@ end)
 
 function ks()
 	for i,unit in pairs(GetEnemyHeroes()) do
-		if CanUseSpell(myHero,_Q) == READY and ValidTarget(unit,GetCastRange(myHero,_Q))and GetCurrentHP(unit) < CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusAD(myHero))) then 
+		if CanUseSpell(myHero,_Q) == READY and ValidTarget(unit,GetCastRange(myHero,_Q))and GetCurrentHP(unit) < CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
 				CastSpell(unit,Q)
 		end
 	end
