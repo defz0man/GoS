@@ -23,6 +23,7 @@ Q_ON = {
 ["Darius"]		= {0,_R},
 ["Draven"]		= {0,_R},
 ["Elise"]		= {0,_E},
+["Ezreal"]		= {0,_E},
 ["Fizz"]		= {0,_R},
 ["Garen"]		= {0,_R},
 ["Gragas"]		= {0,_E},
@@ -75,16 +76,17 @@ Q_ON = {
 ["Tristana"]		= {0,_W,_R},
 ["Yasuo"]		= {0,"yasuoq3","yasuoq3w"},		--special
 ["Zyra"]		= {0,_E},
-["Riven"]		= {0,"rivenizunablade"},
 
-["Jax"]		= {1050,_E}	--give me time :^)
+["Riven"]		= {0,"rivenizunablade"},
+["Rengar"]		= {0,_Q},		--Empowered
+["Jax"]		= {1050,_E}
 
 --Plz rework me \|/
 --["Nocturne"]		= {0,_R},
 --["Karthus"]		= {3000,_R},
 --["Zed"]		= {0,_R},
 
---["Rengar"]		= {0,_Q}
+
 }
 
 -- Menu
@@ -92,31 +94,32 @@ local Config = Menu("Master Yi", "MY")
 Config:SubMenu("c", "Combo")
 Config.c:Boolean("AQ","Use awesome Q",true)
 Config.c:Boolean("E", "Use E", true)
-Config.c:Boolean("KSQ", "Killsteal with Q", SCRIPT_PARAM_ONOFF, false)
-
+Config.c:Boolean("KSQ", "Killsteal with Q", false)
 
 -- Start
 OnLoop(function(myHero)
-	local unit = goslib:GetTarget(1500, DAMAGE_NORMAL)
+	local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)
 	ks()
+
 end)
 
 
 OnProcessSpell(function(unit, spellProc)
-	if Config.c.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and goslib:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
+	if Config.c.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
 --		PrintChat(GetObjectType(unit)..":"..spellProc.name)						--DEBUG
 		
 		for n,slot in pairs(Q_ON[GetObjectName(unit)]) do
 			if n==1 then
 				delay=slot
 			elseif n>1 then
-				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then
-	--				PrintChat("Looking for "..GetCastName(unit,slot))			--DEBUG
-					if spellProc.name==GetCastName(unit,slot) then
+				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then						
+					--print("Looking for "..GetCastName(unit,slot))			--DEBUG
+					if GetCastName(unit,slot)=="RengarQ" and not GotBuff(unit,"RengarR") and not GotBuff(unit,"Ferocity")==5 then return end
+					if spellProc.name==GetCastName(unit,slot) or spellProc.name==slot then
 						PrintChat("Q'd on "..spellProc.name.." with "..delay.."ms delay")
 						GoS:DelayAction( 
 								function()
-							--	PrintChat("USED Q")
+								PrintChat("USED Q")
 								CastTargetSpell(unit,_Q)
 								end
 							,delay)
@@ -126,15 +129,15 @@ OnProcessSpell(function(unit, spellProc)
 			end
 		end
 	end
-	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and Config.c.E:Value() and goslib:GetDistance(myHero,goslib:ClosestEnemy(pos))<150 and CanUseSpell(myHero, _E) then
+	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and Config.c.E:Value() and GoS:GetDistance(myHero,GoS:ClosestEnemy(pos))<150 and CanUseSpell(myHero, _E) then
 		CastSpell(_E)
 	end
 end)
 
 function ks()
-	for i,unit in pairs(goslib:GetEnemyHeroes()) do
-		if CanUseSpell(myHero,_Q) == READY and goslib:ValidTarget(unit,GetCastRange(myHero,_Q))and GetCurrentHP(unit) < goslib:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
-				CastSpell(unit,Q)
+	for i,unit in pairs(GoS:GetEnemyHeroes()) do
+		if CanUseSpell(myHero,_Q) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < GoS:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
+				CastTargetSpell(unit,_Q)
 		end
 	end
 end
