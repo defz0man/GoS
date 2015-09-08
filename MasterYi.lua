@@ -3,8 +3,7 @@ else
 
 require 'Inspired'
 
-
-local castQ=false
+local myHero=GetMyHero()
 local delay=0
 
 Q_ON = {
@@ -60,7 +59,7 @@ Q_ON = {
 ["Syndra"]		= {20,_R},
 ["Talon"]		= {0,_R},
 ["Taric"]		= {0,_E},
-["Teemo"]		= {0,_Q},
+["Teemo"]		= {0,_Q},		--FUCK YOU
 ["Thresh"]		= {0,_E},
 ["Tryndamere"]		= {0,_E},
 ["TwistedFate"]		= {0,"goldcardpreattack"},		--special 
@@ -73,74 +72,68 @@ Q_ON = {
 ["Warwick"]		= {0,_R},
 ["Xerath"]		= {0,_E},
 ["Trundle"]		= {0,_R},
-["Tristana"]		= {0,_W},
+["Tristana"]		= {0,_W,_R},
 ["Yasuo"]		= {0,"yasuoq3","yasuoq3w"},		--special
 ["Zyra"]		= {0,_E},
-["Riven"]		= {0,"rivenizunablade"}
+["Riven"]		= {0,"rivenizunablade"},
+
+["Jax"]		= {1050,_E}	--give me time :^)
 
 --Plz rework me \|/
 --["Nocturne"]		= {0,_R},
 --["Karthus"]		= {3000,_R},
 --["Zed"]		= {0,_R},
---["Jax"]		= {1000,_E},
+
 --["Rengar"]		= {0,_Q}
 }
 
 -- Menu
-Config = scriptConfig("Yi", "Yi")
-Config.addParam("Q", "Use awesome Q", SCRIPT_PARAM_ONOFF, true)
-Config.addParam("E", "Use E", SCRIPT_PARAM_ONOFF, true)
-Config.addParam("KSQ", "Killsteal with Q", SCRIPT_PARAM_ONOFF, false)
+local Config = Menu("Master Yi", "MY")
+Config:SubMenu("c", "Combo")
+Config.c:Boolean("AQ","Use awesome Q",true)
+Config.c:Boolean("E", "Use E", true)
+Config.c:Boolean("KSQ", "Killsteal with Q", SCRIPT_PARAM_ONOFF, false)
 
 
 -- Start
 OnLoop(function(myHero)
-	local unit = GetTarget(1500, DAMAGE_NORMAL)
+	local unit = goslib:GetTarget(1500, DAMAGE_NORMAL)
 	ks()
-	if IsImmune(unit)==false then PrintChat("Immune") end
-	if IsImmune(unit)==true then PrintChat("Immune") end
-	if delay<=GetTickCount() and ValidTarget(unit,GetCastRange(myHero,_Q)) and castQ and Config.Q and CanUseSpell(myHero, _Q) then
-		PrintChat("USED Q")
-		CastTargetSpell(unit,_Q)
-		castQ=false
-	end
-	if ValidTarget(unit,GetCastRange(myHero,_E)) and CanUseSpell(myHero, _E)==READY and Config.E then
-		CastSpell(_E)
-	end
-delay=0
 end)
 
 
 OnProcessSpell(function(unit, spellProc)
-	if GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) then
+	if Config.c.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and goslib:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
 --		PrintChat(GetObjectType(unit)..":"..spellProc.name)						--DEBUG
 		
 		for n,slot in pairs(Q_ON[GetObjectName(unit)]) do
 			if n==1 then
 				delay=slot
 			elseif n>1 then
-				if slot==_Q or slot==_W or slot==_E or slot==_R then
+				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then
 	--				PrintChat("Looking for "..GetCastName(unit,slot))			--DEBUG
 					if spellProc.name==GetCastName(unit,slot) then
 						PrintChat("Q'd on "..spellProc.name.." with "..delay.."ms delay")
-						castQ=true
-						delay=GetTickCount()+delay	
-					end
-				else
-					if	spellProc.name==slot then
-						castQ=true
-						delay=GetTickCount()
+						GoS:DelayAction( 
+								function()
+							--	PrintChat("USED Q")
+								CastTargetSpell(unit,_Q)
+								end
+							,delay)
+						delay=0
 					end
 				end
 			end
-
 		end
+	end
+	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and Config.c.E:Value() and goslib:GetDistance(myHero,goslib:ClosestEnemy(pos))<150 and CanUseSpell(myHero, _E) then
+		CastSpell(_E)
 	end
 end)
 
 function ks()
-	for i,unit in pairs(GetEnemyHeroes()) do
-		if CanUseSpell(myHero,_Q) == READY and ValidTarget(unit,GetCastRange(myHero,_Q))and GetCurrentHP(unit) < CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
+	for i,unit in pairs(goslib:GetEnemyHeroes()) do
+		if CanUseSpell(myHero,_Q) == READY and goslib:ValidTarget(unit,GetCastRange(myHero,_Q))and GetCurrentHP(unit) < goslib:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
 				CastSpell(unit,Q)
 		end
 	end
