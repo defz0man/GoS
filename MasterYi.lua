@@ -41,7 +41,7 @@ Q_ON = {
 ["Lux"]			= {0,_Q},
 ["Malphite"]		= {0,_R},
 ["Malzahar"]		= {0,_R},
-["Morgana"]		= {0,_R},
+["Morgana"]		= {0,_Q,_R},
 ["Nautilus"]		= {0,_R},
 ["Orianna"]		= {0,_R},
 ["Pantheon"]		= {0,_W},
@@ -136,7 +136,7 @@ end)
 
 function ks()
 	for i,unit in pairs(GoS:GetEnemyHeroes()) do
-		if CanUseSpell(myHero,_Q) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < GoS:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
+		if Config.c.KSQ:Value() and CanUseSpell(myHero,_Q) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < GoS:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
 				CastTargetSpell(unit,_Q)
 		end
 	end
