@@ -18,7 +18,7 @@ Q_ON = {
 ["Azir"]		= {0,_R},
 ["Blitzcrank"]		= {0,_Q},
 ["Brand"]		= {0,_R},
-["Caitlyn"]		= {0,_R},
+["Caitlyn"]		= {0,_E,_R},
 ["Cassiopeia"]		= {0,_R},
 ["Darius"]		= {0,_R},
 ["Draven"]		= {0,_R},
@@ -78,7 +78,7 @@ Q_ON = {
 ["Zyra"]		= {0,_E},
 
 ["Riven"]		= {0,"rivenizunablade"},
-["Rengar"]		= {0,_Q},		--Empowered
+--["Rengar"]		= {0,_Q},		--Empowered
 ["Jax"]		= {1050,_E}
 
 --Plz rework me \|/
@@ -103,6 +103,11 @@ OnLoop(function(myHero)
 
 end)
 
+OnCreateObj(function(Object) --ANTI Rengar Mechanic
+	if GetObjectBaseName(Object)=="Rengar_LeapSound.troy" and GoS:ValidTarget(unit,GetCastRange(_Q)) and GetObjectName(unit)=="Rengar" and GotBuff(unit,"RengarR") then
+		CastTargetSpell(unit,_Q)
+	end
+end)
 
 OnProcessSpell(function(unit, spellProc)
 	if Config.c.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
@@ -114,12 +119,11 @@ OnProcessSpell(function(unit, spellProc)
 			elseif n>1 then
 				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then						
 					--print("Looking for "..GetCastName(unit,slot))			--DEBUG
-					if GetCastName(unit,slot)=="RengarQ" and not GotBuff(unit,"RengarR") and not GotBuff(unit,"Ferocity")==5 then return end
-					if spellProc.name==GetCastName(unit,slot) or spellProc.name==slot then
+					if (spellProc.name==GetCastName(unit,slot) or spellProc.name==slot) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
 						PrintChat("Q'd on "..spellProc.name.." with "..delay.."ms delay")
 						GoS:DelayAction( 
 								function()
-								PrintChat("USED Q")
+								--PrintChat("USED Q")
 								CastTargetSpell(unit,_Q)
 								end
 							,delay)
@@ -136,7 +140,7 @@ end)
 
 function ks()
 	for i,unit in pairs(GoS:GetEnemyHeroes()) do
-		if Config.c.KSQ:Value() and CanUseSpell(myHero,_Q) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < GoS:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero))) then 
+		if Config.c.KSQ:Value() and CanUseSpell(myHero,_Q) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < GoS:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero)))+GetDmgShield(unit) then 
 				CastTargetSpell(unit,_Q)
 		end
 	end
