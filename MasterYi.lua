@@ -103,11 +103,11 @@ OnLoop(function(myHero)
 
 end)
 
-OnCreateObj(function(Object) --ANTI Rengar Mechanic
-	if GetObjectBaseName(Object)=="Rengar_LeapSound.troy" and GoS:ValidTarget(unit,GetCastRange(_Q)) and GetObjectName(unit)=="Rengar" and GotBuff(unit,"RengarR") then
-		CastTargetSpell(unit,_Q)
-	end
-end)
+--OnCreateObj(function(Object) --ANTI Rengar Mechanic
+--	if GetObjectBaseName(Object)=="Rengar_LeapSound.troy" and GoS:ValidTarget(unit,GetCastRange(_Q)) and GetObjectName(unit)=="Rengar" and GotBuff(unit,"RengarR") then
+--		CastTargetSpell(unit,_Q)
+--	end
+--end)
 
 OnProcessSpell(function(unit, spellProc)
 	if Config.c.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
