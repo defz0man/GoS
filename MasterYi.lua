@@ -5,6 +5,7 @@ require 'Inspired'
 
 local myHero=GetMyHero()
 local delay=0
+local RengarIsJumping=false
 
 Q_ON = {
 ["Aatrox"]		= {0,_R},
@@ -104,8 +105,8 @@ OnLoop(function(myHero)
 end)
 
 --OnCreateObj(function(Object) --ANTI Rengar Mechanic
---	if GetObjectBaseName(Object)=="Rengar_LeapSound.troy" and GoS:ValidTarget(unit,GetCastRange(_Q)) and GetObjectName(unit)=="Rengar" and GotBuff(unit,"RengarR") then
---		CastTargetSpell(unit,_Q)
+--	if GetObjectBaseName(Object)=="Rengar_LeapSound.troy" and GoS:ValidTarget(unit,GetCastRange(_Q)) and GetObjectName(unit)=="Rengar" then
+--		RengarIsJumping=true
 --	end
 --end)
 
