@@ -2,6 +2,7 @@ if GetObjectName(GetMyHero()) ~= "MasterYi" then return
 else
 
 require 'Inspired'
+require("IOW")
 
 local myHero=GetMyHero()
 local delay=0
