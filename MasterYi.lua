@@ -5,7 +5,6 @@ require 'Inspired'
 
 local myHero=GetMyHero()
 local delay=0
-local RengarIsJumping=false
 
 Q_ON = {
 ["Aatrox"]		= {0,_R},
@@ -79,7 +78,7 @@ Q_ON = {
 ["Zyra"]		= {0,_E},
 
 ["Riven"]		= {0,"rivenizunablade"},
---["Rengar"]		= {0,_Q},		--Empowered
+["Rengar"]		= {0,"RengarBasicAttack","RengarBasicAttack2"},
 ["Jax"]		= {1050,_E}
 
 --Plz rework me \|/
@@ -99,19 +98,15 @@ Config.c:Boolean("KSQ", "Killsteal with Q", false)
 
 -- Start
 OnLoop(function(myHero)
-	local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)
-	ks()
-
+	if not IsDead(myHero) then
+		local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)
+		ks()
+	end
 end)
 
---OnCreateObj(function(Object) --ANTI Rengar Mechanic
---	if GetObjectBaseName(Object)=="Rengar_LeapSound.troy" and GoS:ValidTarget(unit,GetCastRange(_Q)) and GetObjectName(unit)=="Rengar" then
---		RengarIsJumping=true
---	end
---end)
 
 OnProcessSpell(function(unit, spellProc)
-	if Config.c.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
+	if not IsDead(myHero) and Config.c.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
 --		PrintChat(GetObjectType(unit)..":"..spellProc.name)						--DEBUG
 		
 		for n,slot in pairs(Q_ON[GetObjectName(unit)]) do
@@ -121,6 +116,7 @@ OnProcessSpell(function(unit, spellProc)
 				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then						
 					--print("Looking for "..GetCastName(unit,slot))			--DEBUG
 					if (spellProc.name==GetCastName(unit,slot) or spellProc.name==slot) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)*1.5) and CanUseSpell(myHero, _Q) then
+						if GetObjectName(unit)=="Rengar" and not GotBuff("RengarR") then return end
 						PrintChat("Q'd on "..spellProc.name.." with "..delay.."ms delay")
 						GoS:DelayAction( 
 								function()
