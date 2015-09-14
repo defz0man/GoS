@@ -11,7 +11,7 @@ Q_ON = {
 ["Aatrox"]		= {0,_R},
 ["Ahri"]		= {0,_E},
 ["Akali"]		= {0,_Q},
-["Alistar"]		= {0,_Q,_W},
+["Alistar"]		= {0,_Q,0,_W},
 ["Amumu"]		= {0,_R},
 ["Anivia"]		= {0,_E},
 ["Annie"]		= {0,_R},
@@ -19,7 +19,7 @@ Q_ON = {
 ["Azir"]		= {0,_R},
 ["Blitzcrank"]		= {0,_Q},
 ["Brand"]		= {0,_R},
-["Caitlyn"]		= {0,_E,_R},
+["Caitlyn"]		= {0,_E,0,_R},
 ["Cassiopeia"]		= {0,_R},
 ["Darius"]		= {0,_R},
 ["Draven"]		= {0,_R},
@@ -75,11 +75,11 @@ Q_ON = {
 ["Xerath"]		= {0,_E},
 ["Trundle"]		= {0,_R},
 ["Tristana"]		= {0,_W,_R},
-["Yasuo"]		= {0,"yasuoq3","yasuoq3w"},		--special
+["Yasuo"]		= {0,"yasuoq3",0,"yasuoq3w"},		--special
 ["Zyra"]		= {0,_E},
 
 ["Riven"]		= {0,"rivenizunablade"},
-["Rengar"]		= {0,"RengarBasicAttack","RengarBasicAttack2"},
+["Rengar"]		= {0,"RengarBasicAttack",0,"RengarBasicAttack2"},
 ["Jax"]		= {1050,_E}
 
 --Plz rework me \|/
@@ -111,7 +111,7 @@ OnProcessSpell(function(unit, spellProc)
 --		PrintChat(GetObjectType(unit)..":"..spellProc.name)						--DEBUG
 		
 		for n,slot in pairs(Q_ON[GetObjectName(unit)]) do
-			if n==1 then
+			if n%2==1 then
 				delay=slot
 			elseif n>1 then
 				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then						
