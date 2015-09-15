@@ -1,5 +1,4 @@
-if GetObjectName(GetMyHero()) ~= "MasterYi" then return
-else
+if GetObjectName(GetMyHero()) ~= "MasterYi" then return end
 
 require 'Inspired'
 require("IOW")
@@ -11,7 +10,7 @@ Q_ON = {
 ["Aatrox"]		= {0,_R},
 ["Ahri"]		= {0,_E},
 ["Akali"]		= {0,_Q},
-["Alistar"]		= {0,_Q,_W},
+["Alistar"]		= {0,_Q,0,_W},
 ["Amumu"]		= {0,_R},
 ["Anivia"]		= {0,_E},
 ["Annie"]		= {0,_R},
@@ -19,7 +18,7 @@ Q_ON = {
 ["Azir"]		= {0,_R},
 ["Blitzcrank"]		= {0,_Q},
 ["Brand"]		= {0,_R},
-["Caitlyn"]		= {0,_E,_R},
+["Caitlyn"]		= {0,_E,0,_R},
 ["Cassiopeia"]		= {0,_R},
 ["Darius"]		= {0,_R},
 ["Draven"]		= {0,_R},
@@ -61,7 +60,7 @@ Q_ON = {
 ["Syndra"]		= {20,_R},
 ["Talon"]		= {0,_R},
 ["Taric"]		= {0,_E},
-["Teemo"]		= {0,_Q},		--FUCK YOU
+["Teemo"]		= {0,_Q},
 ["Thresh"]		= {0,_E},
 ["Tryndamere"]		= {0,_E},
 ["TwistedFate"]		= {0,"goldcardpreattack"},		--special 
@@ -75,11 +74,11 @@ Q_ON = {
 ["Xerath"]		= {0,_E},
 ["Trundle"]		= {0,_R},
 ["Tristana"]		= {0,_W,_R},
-["Yasuo"]		= {0,"yasuoq3","yasuoq3w"},		--special
+["Yasuo"]		= {0,"yasuoq3",0,"yasuoq3w"},		--special
 ["Zyra"]		= {0,_E},
 
 ["Riven"]		= {0,"rivenizunablade"},
-["Rengar"]		= {0,"RengarBasicAttack","RengarBasicAttack2"},
+["Rengar"]		= {0,"RengarBasicAttack",0,"RengarBasicAttack2"},
 ["Jax"]		= {1050,_E}
 
 --Plz rework me \|/
@@ -90,18 +89,23 @@ Q_ON = {
 
 }
 
+LvLSeq={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
+
 -- Menu
 local Config = Menu("Master Yi", "MY")
 Config:SubMenu("c", "Combo")
 Config.c:Boolean("AQ","Use awesome Q",true)
 Config.c:Boolean("E", "Use E", true)
 Config.c:Boolean("KSQ", "Killsteal with Q", false)
+Config:SubMenu("m", "Misc")
+Config.m:Boolean("AL","AutoLevel", true)
 
 -- Start
 OnLoop(function(myHero)
 	if not IsDead(myHero) then
 		local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)
 		ks()
+		ALvL()
 	end
 end)
 
@@ -111,7 +115,7 @@ OnProcessSpell(function(unit, spellProc)
 --		PrintChat(GetObjectType(unit)..":"..spellProc.name)						--DEBUG
 		
 		for n,slot in pairs(Q_ON[GetObjectName(unit)]) do
-			if n==1 then
+			if n%2==1 then
 				delay=slot
 			elseif n>1 then
 				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then						
@@ -136,6 +140,13 @@ OnProcessSpell(function(unit, spellProc)
 	end
 end)
 
+function ALvL()
+	if Config.m.AL:Value() then
+		local lvl=GetLevel(myHero)
+		LevelSpell(LvLSeq[lvl])
+	end
+end
+
 function ks()
 	for i,unit in pairs(GoS:GetEnemyHeroes()) do
 		if Config.c.KSQ:Value() and CanUseSpell(myHero,_Q) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < GoS:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero)))+GetDmgShield(unit) then 
@@ -145,4 +156,3 @@ function ks()
 end
 
 PrintChat("Yi Loaded - Enjoy your game - Logge")
-end -- End script
