@@ -164,17 +164,18 @@ function ks()
 end
 
 function UseItems()
-	if Config.m.It:Value() and IOW:Mode() == "Combo" then 
+	if Config.m.It:Value() then 
 	local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)
 		for _,id in pairs(cleanseItems) do
 			if GetItemSlot(myHero,id) > 0 and GotBuff(myHero, "rocketgrab2") > 0 or GotBuff(myHero, "charm") > 0 or GotBuff(myHero, "fear") > 0 or GotBuff(myHero, "flee") > 0 or GotBuff(myHero, "snare") > 0 or GotBuff(myHero, "taunt") > 0 or GotBuff(myHero, "suppression") > 0 or GotBuff(myHero, "stun") > 0 or GotBuff(myHero, "zedultexecute") > 0 or GotBuff(myHero, "summonerexhaust") > 0  then
 				CastTargetSpell(myHero, GetItemSlot(myHero,id))
 			end
 		end
-	
-		for _,id in pairs(meeleItems) do
-			if GetItemSlot(myHero,id) > 0 and GoS:ValidTarget(unit, 550) then
-			CastTargetSpell(unit, GetItemSlot(myHero,id))
+		if IOW:Mode() == "Combo" then
+			for _,id in pairs(meeleItems) do
+				if GetItemSlot(myHero,id) > 0 and GoS:ValidTarget(unit, 550) then
+				CastTargetSpell(unit, GetItemSlot(myHero,id))
+				end
 			end
 		end
 	end
