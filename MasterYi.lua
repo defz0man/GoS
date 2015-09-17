@@ -16,7 +16,7 @@ Q_ON = {
 --["Annie"]		= {0,_R},
 ["Ashe"]		= {0,_R},
 ["Azir"]		= {0,_R},
-["Blitzcrank"]		= {0,_Q,0,_R},
+["Blitzcrank"]		= {0,_Q}
 ["Brand"]		= {0,_R},
 ["Caitlyn"]		= {0,_E,0,_R},
 ["Cassiopeia"]		= {0,_R},
@@ -90,13 +90,6 @@ Q_ON = {
 
 }
 
-LvLSeq={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
---Q,E,W; 1R,2Q,3E,4W
-meeleItems={3153,3144,3142,3074,3077,3143}
---	    Botr,Bilg,Ghos,Hydr,Tiam,Rand
-cleanseItems={3140,3139}
---	     Merc,QSS
-
 -- Menu
 local Config = Menu("Master Yi", "MY")
 Config:SubMenu("c", "Combo")
@@ -106,6 +99,8 @@ Config.c:Boolean("KSQ", "Killsteal with Q", false)
 Config:SubMenu("m", "Misc")
 Config.m:Boolean("AL","AutoLevel", true)
 Config.m:Boolean("It","Items", true)
+
+
 
 -- Start
 OnLoop(function(myHero)
@@ -148,12 +143,19 @@ OnProcessSpell(function(unit, spellProc)
 	end
 end)
 
+LvLSeq={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
 function ALvL()
 	if Config.m.AL:Value() then
-		local lvl=GetLevel(myHero)
-		LevelSpell(LvLSeq[lvl])
+		if GetLevel(myHero)==3 then  --ARAM
+			LevelSpell(LvLSeq[3])
+			LevelSpell(LvLSeq[1])
+			LevelSpell(LvLSeq[2])
+		else
+			LevelSpell(LvLSeq[GetLevel(myHero)])
+		end
 	end
 end
+
 
 function ks()
 	for i,unit in pairs(GoS:GetEnemyHeroes()) do
@@ -162,6 +164,12 @@ function ks()
 		end
 	end
 end
+
+--Q,E,W; 1R,2Q,3E,4W
+meeleItems={3153,3144,3142,3074,3077,3143}
+--	    Botr,Bilg,Ghos,Hydr,Tiam,Rand
+cleanseItems={3140,3139}
+--	     Merc,QSS
 
 function UseItems()
 	if Config.m.It:Value() then 
