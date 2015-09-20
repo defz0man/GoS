@@ -1,6 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "MasterYi" then return end
 
-require 'Inspired'
+require("Inspired")
 require("IOW")
 
 local myHero=GetMyHero()
@@ -19,7 +19,7 @@ Q_ON = {
 ["Ahri"]		= {0,0,_E},
 ["Akali"]		= {0,1,_Q},
 ["Alistar"]		= {0,0,_Q,0,1,_W},
-["Amumu"]		= {0,0,_R},
+["Amumu"]		= {0,0,_Q,0,0,_R},
 ["Anivia"]		= {0,1,_E},
 ["Annie"]		= {0,1,_Q,0,2,_R},
 ["Ashe"]		= {0,0,_R},
@@ -30,6 +30,7 @@ Q_ON = {
 ["Cassiopeia"]		= {0,0,_R},
 ["Darius"]		= {0,2,_R},
 ["Draven"]		= {0,0,_R},
+["Diana"]		= {0,1,_R},
 ["Elise"]		= {0,0,_E},		-- ADD NAME HUMAN FORM
 ["Ezreal"]		= {0,3,_E},
 ["Fizz"]		= {0,0,_R},
@@ -52,6 +53,7 @@ Q_ON = {
 ["Malzahar"]		= {0,1,_R},
 ["Morgana"]		= {0,0,_Q,0,1,_R},
 ["Nautilus"]		= {0,1,_R},
+["Nocturne"]		= {0,1,"NocturneParanoia2"},
 ["Orianna"]		= {0,0,_R},
 ["Pantheon"]		= {0,1,_W},
 ["Quinn"]		= {0,0,_Q,0,1,_E},
@@ -91,9 +93,6 @@ Q_ON = {
 ["Jax"]		= {1050,0,_E},
 ["Karthus"]		= {3000,1,_R},
 ["Zed"]		= {0,1,_R}
-
---Plz rework me \|/
---["Nocturne"]		= {0,_R},		--GET NAME
 }
 
 -- Menu
@@ -126,7 +125,7 @@ end)
 
 OnProcessSpell(function(unit, spellProc)
 	if not IsDead(myHero) and Config.q.AQ:Value() and GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and Q_ON[GetObjectName(unit)] then
-	--	PrintChat(GetObjectType(unit)..":"..spellProc.name)						--DEBUG
+	--PrintChat(GetObjectType(unit)..":"..spellProc.name)						--DEBUG
 	--	PrintChat(GetObjectName(spellProc.target))
 		for n,slot in pairs(Q_ON[GetObjectName(unit)]) do
 			if n%3==1 then
@@ -161,7 +160,7 @@ OnProcessSpell(function(unit, spellProc)
 							end
 							,delay)
 						else
-							PrintChat("Error 01: No spell reaction found")
+							PrintChat("Error 01: No spell reaction found for "..spellProc.name)
 						end
 						delay=0
 					end
@@ -179,7 +178,6 @@ function jump2creep()
 	function()
 		for _,creep in pairs(GoS:GetAllMinions(MINION_ENEMY)) do
 			if GoS:GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
-				--
 				CastTargetSpell(creep,_Q)
 			end
 		end
