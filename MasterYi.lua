@@ -17,7 +17,7 @@ local spelltype=0
 Q_ON = {
 ["Aatrox"]		= {0,0,_R},
 ["Ahri"]		= {0,0,_E},
-["Akali"]		= {0,1,_Q},
+["Akali"]		= {0,1,_Q,0,3,_R},
 ["Alistar"]		= {0,0,_Q,0,1,_W},
 ["Amumu"]		= {0,0,_Q,0,0,_R},
 ["Anivia"]		= {0,1,_E},
@@ -28,10 +28,10 @@ Q_ON = {
 ["Brand"]		= {0,1,_R},
 ["Caitlyn"]		= {0,3,_E,0,1,_R},
 ["Cassiopeia"]		= {0,0,_R},
-["Darius"]		= {0,2,_R},
+["Darius"]		= {0,1,_R},
 ["Draven"]		= {0,0,_R},
 ["Diana"]		= {0,1,_R},
-["Elise"]		= {0,0,_E},		-- ADD NAME HUMAN FORM
+["Elise"]		= {0,0,"EliseHumanE"},
 ["Ezreal"]		= {0,3,_E},
 ["Fizz"]		= {0,0,_R},
 --[Fiora"]		= {0,0,_W},
@@ -69,7 +69,7 @@ Q_ON = {
 ["Skarner"]		= {0,1,_R},
 ["Sona"]		= {0,0,_R},
 ["Syndra"]		= {20,1,_R},
-["Talon"]		= {0,1,_R},		--needs test
+["Talon"]		= {0,2,_R},		--needs test
 ["Taric"]		= {10,1,_E},
 ["Teemo"]		= {10,1,_Q},
 ["Thresh"]		= {0,0,_E},
@@ -81,7 +81,6 @@ Q_ON = {
 ["Veigar"]		= {0,1,_R},
 ["Vi"]			= {10,1,_R},
 ["Vladimir"]		= {4950,2,_R},
---["Warwick"]		= {0,1,_R},			--toofast
 ["Xerath"]		= {0,0,_E},
 ["Trundle"]		= {0,1,_R},
 ["Tristana"]		= {0,3,_W,0,3,_R},
@@ -138,7 +137,7 @@ OnProcessSpell(function(unit, spellProc)
 					--print("Looking for "..GetCastName(unit,slot))			--DEBUG
 					if (spellProc.name==GetCastName(unit,slot) or spellProc.name==slot) then
 --						if GetObjectName(unit)=="Rengar" and not GotBuff("RengarR") then return end
-						if (spelltype==0 or spelltype==1 or spelltype==3) then
+						if (spelltype==0 or spelltype==1 or spelltype==3) and CanUseSpell(myHero,_Q) == 0 then
 							if GoS:GetDistance(unit,myHero)<GetCastRange(myHero,_Q) then
 							GoS:DelayAction( 
 								function()
@@ -148,8 +147,8 @@ OnProcessSpell(function(unit, spellProc)
 									end
 								end
 								,delay)
-							elseif spelltype==1 then 
-							PrintChat("Q'd on Creep "..spellProc.name.." with "..delay.."ms delay")
+							elseif spelltype==1 and spellProc.target==myHero then 
+							if Config.m.Debug:Value() then PrintChat("Q'd on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 							jump2creep()
 							end
 						elseif spelltype==2 and CanUseSpell(myHero, _W)==0 and GoS:GetDistance(unit,myHero)<GetCastRange(myHero,_Q) and Config.c.W.Value() then
@@ -160,7 +159,9 @@ OnProcessSpell(function(unit, spellProc)
 							end
 							,delay)
 						else
+							if CanUseSpell(myHero,_Q)==0 then
 							PrintChat("Error 01: No spell reaction found for "..spellProc.name)
+							end
 						end
 						delay=0
 					end
@@ -168,8 +169,15 @@ OnProcessSpell(function(unit, spellProc)
 			end
 		end
 	end
-	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and Config.c.E:Value() and GoS:GetDistance(myHero,GoS:ClosestEnemy(pos))<150 and CanUseSpell(myHero, _E)==0 then
-		CastSpell(_E)
+	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and GoS:GetDistance(myHero,GoS:ClosestEnemy(pos))<250 then
+		if Config.c.E:Value() and CanUseSpell(myHero, _E)==0 then
+			CastSpell(_E)
+		end
+		if Config.m.It:Value() then
+			for _,id in pairs(aaResetItems) do
+				CastSpell(GetItemSlot(myHero,id))
+			end
+		end
 	end
 end)
 
@@ -195,6 +203,7 @@ function ks()
 end
 
 LvLSeq={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
+--Q,E,W; 1R,2Q,3E,4W
 function ALvL()
 	if Config.m.AL:Value() then
 		if GetLevel(myHero)==3 then --ARAM AutoLvL
@@ -208,9 +217,11 @@ function ALvL()
 	end
 end
 
---Q,E,W; 1R,2Q,3E,4W
-meeleItems={3153,3144,3142,3074,3077,3143}
---	    Botr,Bilg,Ghos,Hydr,Tiam,Rand
+aaResetItems={3074,3077,3748}
+--		Hydr,Tiam,Tita
+
+meeleItems={3153,3144,3142,3143}
+--	    Botr,Bilg,Ghos,Rand
 cleanseItems={3140,3139}
 --	     Merc,QSS
 
