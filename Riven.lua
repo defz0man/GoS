@@ -27,7 +27,7 @@ spellData =
 OnLoop(function(myHero)
                 myHero = GetMyHero()
                 local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)	
-				wowistarget = GetCurrentTarget()
+				--wowistarget = GetCurrentTarget()
                 myHeroPos = GoS:myHeroPos()
                 mousePos=GetMousePos()
                 unitpos=GetOrigin(unit)
