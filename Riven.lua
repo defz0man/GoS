@@ -128,7 +128,7 @@ OnProcessSpell(function(unit, spell)
 	if unit and unit == myHero and spell and spell.name and spell.name:lower():find("attack") then
 	--print("Windup:"..spell.windUpTime*1000)
 		if GetTeam(spell.target)~=GetTeam(myHero) and GetObjectType(spell.target) == Obj_AI_Hero then
-				print("aa Q")
+			--	print("aa Q")
 		--RivenMenu.c.Combo:Value() and
 			targetPos = GetOrigin(unit)
 			GoS:DelayAction(
