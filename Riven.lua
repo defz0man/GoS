@@ -1,13 +1,20 @@
 --laiha riven beta 0.0.1 ALPHA IOW UPDATE (Logge)
+
+if GetObjectName(GetMyHero()) ~= "Riven" then return end
+
 require('Inspired')
 require('IOW')
 RivenMenu = Menu("BoxBox", "BoxBox")
+
 RivenMenu:SubMenu("c", "Combo")
 RivenMenu.c:Boolean("Q", "Use Q", true)
 RivenMenu.c:Boolean("W", "Use W", true)
 RivenMenu.c:Boolean("E", "Use smart E", true)
 RivenMenu.c:Boolean("R", "Use R only kill", true)
 RivenMenu.c:Key("Combo", "Combo", string.byte(" "))
+
+RivenMenu:SubMenu("m", "Misc")
+RivenMenu.m:Boolean("It","Use items")
  
         local lvl = GetLevel(myHero)
         local ad = GetBaseDamage(myHero)
@@ -27,36 +34,37 @@ spellData =
 OnLoop(function(myHero)
                 myHero = GetMyHero()
                 local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)	
-				wowistarget = GetCurrentTarget()
-                myHeroPos = GoS:myHeroPos()
-                mousePos=GetMousePos()
-                unitpos=GetOrigin(unit)
+                local myHeroPos = GoS:myHeroPos()
+                local mousePos=GetMousePos()
+                local unitpos=GetOrigin(unit)
                 --if ((GetCurrentHP(myHero)/(GetMaxHP(myHero)/100))) < 26 then
                      --   CastSkillShot(_E,mousePos.x,mousePos.y,mousePos.z)
              --   end
 				if unit then
                 DrawDmgOverHpBar(unit,GetCurrentHP(unit),120,60,0xffffffff)
 				end
-                        if RivenMenu.c.Combo:Value() then
+                    if RivenMenu.c.Combo:Value() then
+						
+						UseItems()
                        
-                               -- if GotBuff(myHero, "rivenpassiveaaboost") > 0 and ValidTarget(unit, 125) then
-                                      --MoveToXYZ(GetOrigin(unit).x, GetOrigin(unit).y, GetOrigin(unit).z)
-                                      --  DelayAction(function() AttackObject(unit) end, 180)
+                                --if GotBuff(myHero, "rivenpassiveaaboost") > 0 and GoS:ValidTarget(unit, 125) then
+                               --       MoveToXYZ(GetOrigin(unit).x, GetOrigin(unit).y, GetOrigin(unit).z)
+                               --         GoS:DelayAction(function() AttackObject(unit) end, 180)
                                -- end
  
  
-                                if  GoS:ValidTarget(unit, 260) then
-                                        if RivenMenu.c.Q:Value() then
-                                                --DelayAction(function() CastSkillShot(_Q,unitpos.x,unitpos.y,unitpos.z) end, 500)
-					--AttackUnit(unit)
-                                        end
-                                        if CanUseSpell(myHero,_W) == READY and GoS:GetDistance(unit)<125 then
-                                                CastTargetSpell(myHero,_W)
-                       
-                                        elseif CanUseSpell(myHero,_W) == READY and CanUseSpell(myHero,_E) == READY and GoS:GetDistance(unit) < 300 then
+                                if  GoS:ValidTarget(unit, 260) then	--Q Usage
+                                    if RivenMenu.c.Q:Value() then
+                                        GoS:DelayAction(function() CastSkillShot(_Q,unitpos.x,unitpos.y,unitpos.z) end, 400+GetLatency())
+										AttackUnit(unit)
+                                    end
+									
+                                    if CanUseSpell(myHero,_W) == READY and GoS:GetDistance(unit)<125 then	--W Usage
+                                        CastTargetSpell(myHero,_W)
+                                    elseif CanUseSpell(myHero,_W) == READY and CanUseSpell(myHero,_E) == READY and GoS:GetDistance(unit) < 300 then
                                                 CastSkillShot(_E,unitpos.x,unitpos.y,unitpos.z)
                                                 CastTargetSpell(myHero,_W)
-                                        end
+                                    end
                                 end
                         end
                 for _, enemy in pairs(GoS:GetEnemyHeroes()) do
@@ -88,11 +96,46 @@ end
 GoS:AddGapcloseEvent(_W, 120, true)
 
 
---OnProcessSpell(function(unit, spell)
---if unit and unit == myHero and spell and spell.name and spell.name:lower():find("attack") then
---if KeyIsDown(0x20) and ValidTarget(wowistarget) then
--- targetPos = GetOrigin(wowistarget)
---DelayAction(function() CastSkillShot(_Q, targetPos.x, targetPos.y, targetPos.z) end, spell.windUpTime * 800)
---end
---end
---end)
+aaResetItems={3074,3077,3748}
+--		Hydr,Tiam,Tita
+
+meeleItems={3153,3144,3142,3143}
+--	    Botr,Bilg,Ghos,Rand
+cleanseItems={3140,3139}
+--	     Merc,QSS
+
+function UseItems()
+	if RivenMenu.m.It:Value() then 
+	local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)
+		for _,id in pairs(cleanseItems) do
+			if GetItemSlot(myHero,id) > 0 and GotBuff(myHero, "rocketgrab2") > 0 or GotBuff(myHero, "charm") > 0 or GotBuff(myHero, "fear") > 0 or GotBuff(myHero, "flee") > 0 or GotBuff(myHero, "snare") > 0 or GotBuff(myHero, "taunt") > 0 or GotBuff(myHero, "suppression") > 0 or GotBuff(myHero, "stun") > 0 or GotBuff(myHero, "zedultexecute") > 0 or GotBuff(myHero, "summonerexhaust") > 0  then
+				CastTargetSpell(myHero, GetItemSlot(myHero,id))
+			end
+		end
+		if IOW:Mode() == "Combo" then
+			for _,id in pairs(meeleItems) do
+				if GetItemSlot(myHero,id) > 0 and GoS:ValidTarget(unit, 550) then
+				CastTargetSpell(unit, GetItemSlot(myHero,id))
+				end
+			end
+		end
+	end
+end
+
+
+OnProcessSpell(function(unit, spell)
+	if unit and unit == myHero and spell and spell.name and spell.name:lower():find("attack") then
+	--print("Windup:"..spell.windUpTime*1000)
+		if GetTeam(spell.target)~=GetTeam(myHero) and GetObjectType(spell.target) == Obj_AI_Hero then
+				print("aa Q")
+		--RivenMenu.c.Combo:Value() and
+			targetPos = GetOrigin(unit)
+			GoS:DelayAction(
+				function()
+					CastSkillShot(_Q, targetPos.x, targetPos.y, targetPos.z) 
+				end, 
+				spell.windUpTime * 1000)
+		end
+	end
+end)
+
