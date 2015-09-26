@@ -99,7 +99,7 @@ GoS:AddGapcloseEvent(_W, 120, true)
 aaResetItems={3074,3077,3748}
 --		Hydr,Tiam,Tita
 
-meeleItems={3153,3144,3142,3143}
+meeleItems={3153,3144,3142,3143,3074,3077,3748}
 --	    Botr,Bilg,Ghos,Rand
 cleanseItems={3140,3139}
 --	     Merc,QSS
