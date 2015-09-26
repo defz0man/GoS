@@ -27,14 +27,14 @@ spellData =
 OnLoop(function(myHero)
                 myHero = GetMyHero()
                 local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)	
-				--wowistarget = GetCurrentTarget()
+				wowistarget = GetCurrentTarget()
                 myHeroPos = GoS:myHeroPos()
                 mousePos=GetMousePos()
                 unitpos=GetOrigin(unit)
                 --if ((GetCurrentHP(myHero)/(GetMaxHP(myHero)/100))) < 26 then
                      --   CastSkillShot(_E,mousePos.x,mousePos.y,mousePos.z)
              --   end
-                DrawDmgOverHpBar(target,GetCurrentHP(target),120,60,0xffffffff);
+                DrawDmgOverHpBar(unit,GetCurrentHP(unit),120,60,0xffffffff);
                         if RivenMenu.c.Combo:Value() then
                        
                                -- if GotBuff(myHero, "rivenpassiveaaboost") > 0 and ValidTarget(unit, 125) then
@@ -83,7 +83,7 @@ function DamageCalc()
         end
 end
 
-AddGapcloseEvent(_W, 120, true)
+--AddGapcloseEvent(_W, 120, true)
 
 
 --OnProcessSpell(function(unit, spell)
