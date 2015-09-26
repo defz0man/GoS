@@ -15,6 +15,7 @@ RivenMenu.c:Key("Combo", "Combo", string.byte(" "))
 
 RivenMenu:SubMenu("m", "Misc")
 RivenMenu.m:Boolean("It","Use items")
+RivenMenu.m:Boolean("Drawing","Drawings")
  
         local lvl = GetLevel(myHero)
         local ad = GetBaseDamage(myHero)
@@ -40,7 +41,7 @@ OnLoop(function(myHero)
                 --if ((GetCurrentHP(myHero)/(GetMaxHP(myHero)/100))) < 26 then
                      --   CastSkillShot(_E,mousePos.x,mousePos.y,mousePos.z)
              --   end
-				if unit then
+				if unit and RivenMenu.m.Drawing:Value() then
                 DrawDmgOverHpBar(unit,GetCurrentHP(unit),120,60,0xffffffff)
 				end
                     if RivenMenu.c.Combo:Value() then
@@ -85,7 +86,7 @@ function DamageCalc()
         for _,enemy in pairs(GoS:GetEnemyHeroes()) do
                 if GoS:ValidTarget(enemy,1000) then
                         ComboDmg = spellData[-1].dmg() + spellData[_Q].dmg() + spellData[_W].dmg() + spellData[_R].dmg()
-                        if ComboDmg>GetCurrentHP(unit) then
+                        if ComboDmg>GetCurrentHP(unit) and RivenMenu.m.Drawing:Value() then
                         local drawPos = WorldToScreen(1,unitPos.x,unitPos.y,unitPos.z)
                         DrawText( " KILL THAT BITCH ",20,drawPos.x,drawPos.y,0xffffffff)
                         end
