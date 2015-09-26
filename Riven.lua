@@ -1,7 +1,7 @@
 --laiha riven beta 0.0.1 ALPHA IOW UPDATE (Logge)
 require('Inspired')
 require('IOW')
-RivenMenu = scriptConfig("BoxBox", "BoxBox")
+RivenMenu = Menu("BoxBox", "BoxBox")
 RivenMenu:SubMenu("c", "Combo")
 RivenMenu.c:Boolean("Q", "Use Q", true)
 RivenMenu.c:Boolean("W", "Use W", true)
