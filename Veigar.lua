@@ -49,7 +49,6 @@ function Combo()
 		end
 		
 		if Config.c.R:Value() and CanUseSpell(myHero,_R) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_R)) then
-			print("Kill R: "..	GoS:CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R) + 125 + 0.7*(GetBonusAP(myHero) + 0.8*(GetBonusAP(unit))))).." VS "..GetCurrentHP(unit))
 			local RPercent=GetCurrentHP(unit)/GoS:CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R)+GetBonusAP(myHero)+125+GetBonusAP(unit)*0.8))
 			if RPercent<1 and RPercent>0.2 then 
 				CastTargetSpell(unit,_R)
