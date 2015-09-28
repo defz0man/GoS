@@ -107,7 +107,7 @@ Config.q:Boolean("AQ","Use awesome Q",true)
 Config:SubMenu("m", "Misc")
 Config.m:Boolean("AL","AutoLevel", true)
 Config.m:Boolean("It","Items", true)
-Config.m:Boolean("Debug","Print Messages",true)
+Config.m:Boolean("Debug","Print Messages", false)
 
 
 
