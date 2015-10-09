@@ -11,13 +11,13 @@ Config.c:Boolean("W", "Use W", true)
 Config.c:Boolean("AW", "Auto W on immobile", true)
 Config.c:Boolean("E", "Use E", true)
 Config.c:Boolean("R", "Use R", true)
-Config.c:Boolean("AR", "KS R", true)
+Config.c:Boolean("AR", "Auto use R", true)
 
 Config:SubMenu("f", "Farm")
 Config.f:Boolean("AQ", "Auto Q farm", true)
 
---Config:SubMenu("m", "Misc")
---Config.m.Boolean("D","Enable Drawings",true)
+Config:SubMenu("m", "Misc")
+Config.m:Boolean("D" , "Enable Drawings", true)
 
 
 local myHero=GetMyHero()
@@ -89,7 +89,7 @@ function castE()
 end
 
 function drawDmg(unit)
-	if CanUseSpell(myHero,_R)==READY and GoS:ValidTarget(unit,1000) then
+	if Config.m.D:Value() and CanUseSpell(myHero,_R)==READY and GoS:ValidTarget(unit,1000) then
 		local unit=GetCurrentTarget()
 		local RDmg=GoS:CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R) + 125 + (GetBonusAP(myHero) + 0.8*(GetBonusAP(unit)))))
 		DrawDmgOverHpBar(unit,GetCurrentHP(unit),0,RDmg,0xffffffff)
@@ -101,7 +101,7 @@ function FarmQ()
 		for i,creep in pairs(GoS:GetAllMinions(MINION_ENEMY)) do
 			if GoS:ValidTarget(creep,GetCastRange(myHero,_Q)) and GetCurrentHP(creep)<GoS:CalcDamage(myHero, creep, 0, (45*GetCastLevel(myHero,_Q)+30+GetBonusAP(myHero)*0.6)) then
 				CreepOrigin=GetOrigin(creep)
-				DrawCircle(CreepOrigin.x,CreepOrigin.y,CreepOrigin.z,75,0,3,0xffffffff) 
+				if Config.m.D:Value() then	DrawCircle(CreepOrigin.x,CreepOrigin.y,CreepOrigin.z,75,0,3,0xffffff00) end
 				QCol=Collision(GetCastRange(myHero,_Q),1200,925,70)
 				local state,Objects=QCol:__GetMinionCollision(myHero,creep,ENEMY)
 				local hitcount=0
