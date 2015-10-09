@@ -11,6 +11,7 @@ Config.c:Boolean("W", "Use W", true)
 Config.c:Boolean("AW", "Auto W on immobile", true)
 Config.c:Boolean("E", "Use E", true)
 Config.c:Boolean("R", "Use R", true)
+Config.c:Boolean("AR", "KS R", true)
 
 Config:SubMenu("f", "Farm")
 Config.f:Boolean("AQ", "Auto Q farm", true)
@@ -23,18 +24,27 @@ local myHero=GetMyHero()
 
 OnLoop(function (myHero)
 	if not IsDead(myHero) then
-		AutoW()
-		Combo()
+	local unit=GetCurrentTarget()
+		KS(unit)
+		AutoW(unit)
+		Combo(unit)
 		FarmQ()
-		drawDmg()
+		drawDmg(unit)
 	end
 end)
 
 
-function Combo()
-	local unit=GetCurrentTarget()
+function Combo(unit)
 	if IOW:Mode() == "Combo" then
-		if Config.c.Q:Value() and CanUseSpell(myHero,_Q) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_Q)) then
+			
+		if Config.c.R:Value() and CanUseSpell(myHero,_R) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_R)) then
+			local RPercent=GetCurrentHP(unit)/GoS:CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R)+GetBonusAP(myHero)+125+GetBonusAP(unit)*0.8))
+			if RPercent<1 and RPercent>0.2 then 
+				CastTargetSpell(unit,_R)
+			end
+		end	
+	
+		if Config.c.Q:Value() and CanUseSpell(myHero,_Q) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_Q)+10) then
 			local QPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),1200,GetCastRange(myHero,_Q),550,80,true,false)
 			if QPred.HitChance == 1 then				
 				CastSkillShot(_Q,QPred.PredPos.x,QPred.PredPos.y,QPred.PredPos.z)
@@ -42,7 +52,7 @@ function Combo()
 		end	
 		
 		if Config.c.W:Value() and CanUseSpell(myHero,_W) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_W)) then
-			local WPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),math.huge,GetCastRange(myHero,_W),550,80,false,false)
+			local WPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit)-10,math.huge,GetCastRange(myHero,_W),550,80,false,false)
 			if WPred.HitChance == 1 then				
 				CastSkillShot(_W,WPred.PredPos.x,WPred.PredPos.y,WPred.PredPos.z)
 			end
@@ -54,18 +64,19 @@ function Combo()
 				CastSkillShot(_E,EPred.PredPos.x,EPred.PredPos.y,EPred.PredPos.z)
 			end
 		end
-		
-		if Config.c.R:Value() and CanUseSpell(myHero,_R) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_R)) then
-			local RPercent=GetCurrentHP(unit)/GoS:CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R)+GetBonusAP(myHero)+125+GetBonusAP(unit)*0.8))
-			if RPercent<1 and RPercent>0.2 then 
-				CastTargetSpell(unit,_R)
-			end
-		end	
 	end
 end
 
-function AutoW()
-	local unit=GetCurrentTarget()
+function KS(unit)
+	if Config.c.AR:Value() and CanUseSpell(myHero,_R) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_R)) then
+		local RPercent=GetCurrentHP(unit)/GoS:CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R)+GetBonusAP(myHero)+125+GetBonusAP(unit)*0.8))
+		if RPercent<1 and RPercent>0.2 then 
+			CastTargetSpell(unit,_R)
+		end
+	end	
+end
+
+function AutoW(unit)
 	if Config.c.AW:Value() and GoS:ValidTarget(unit,GetCastRange(myHero,_W)) and GotBuff(unit, "veigareventhorizonstun") > 0 and (GotBuff(unit, "snare") > 0 or GotBuff(unit, "taunt") > 0 or GotBuff(unit, "suppression") > 0 or GotBuff(unit, "stun")) then
 	local WPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),math.huge,GetCastRange(myHero,_W),550,80,false,false)
 		if WPred.HitChance == 1 then
@@ -77,8 +88,8 @@ end
 function castE()
 end
 
-function drawDmg()
-	if CanUseSpell(myHero,_R)==READY then
+function drawDmg(unit)
+	if CanUseSpell(myHero,_R)==READY and GoS:ValidTarget(unit,1000) then
 		local unit=GetCurrentTarget()
 		local RDmg=GoS:CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R) + 125 + (GetBonusAP(myHero) + 0.8*(GetBonusAP(unit)))))
 		DrawDmgOverHpBar(unit,GetCurrentHP(unit),0,RDmg,0xffffffff)
