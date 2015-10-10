@@ -6,12 +6,7 @@ require("IOW")
 local myHero=GetMyHero()
 local delay=0
 
---FORMAT:
---Delay,spelltype,Hotkey/Name
---spelltype: 0 Normal
---spelltype: 1 Targeted
---spelltype: 2 Nuke
---spelltype: 3 Gapcloser
+
 E_ON = {
 ["Ahri"]		= {0,_R},
 ["Akali"]		= {0,_R},
