@@ -91,8 +91,8 @@ end
 function castE(unit)
 	if Config.c.E:Value() and CanUseSpell(myHero,_E) == READY and GoS:ValidTarget(unit, GetCastRange(myHero,_E)) then
 		local targetPos=GetOrigin(unit)
-		local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),math.huge,650,GetCastRange(myHero,_E),80,false,false)
-		EPred.PredPos=Vector(EPred.PredPos)+((GetOrigin(myHero)-Vector(EPred.PredPos)):normalized()*350)
+		local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),math.huge,550,GetCastRange(myHero,_E),80,false,false)
+		EPred.PredPos=Vector(EPred.PredPos)+((GetOrigin(myHero)-Vector(EPred.PredPos)):normalized()*325)
 		CastSkillShot(_E,EPred.PredPos.x,EPred.PredPos.y,EPred.PredPos.z)
 	end
 end
