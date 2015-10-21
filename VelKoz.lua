@@ -18,7 +18,7 @@ end)
 --velkozqsplitactive
 --VelkozQ
 value=4
-DegreeTable={45,-45,22.5,-22.5}
+DegreeTable={22.5,-22.5,45,-45}
 
 
 function Combo(unit)
