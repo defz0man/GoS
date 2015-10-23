@@ -17,7 +17,7 @@ end)
 
 --velkozqsplitactive
 --VelkozQ
-value=4
+value=4 --get value from silder
 DegreeTable={22.5,-22.5,45,-45}
 
 
@@ -50,7 +50,7 @@ function Combo(unit)
 					--DrawCircle(circlespot.x,circlespot.y,circlespot.z,75,0,3,0xffffff00)
 					
 					--From circlespot to enemy
-					local side1=GetPredictionForPlayer(circlespot,i,GetMoveSpeed(i),1300,250,1000,50,true,false)
+					local side1=GetPredictionForPlayer(circlespot,i,GetMoveSpeed(i),1300,250,1000,70,true,false)
 						
 					--From circlespot to me 
 					--local side2=GetPredictionForPlayer(circlespot,myHero,GetMoveSpeed(i),1300,250,1000,50,true,false)
@@ -85,14 +85,14 @@ function Combo(unit)
 				
 		if Config.c.W:Value() and IOW:Mode() == "Combo" then
 			if CanUseSpell(myHero, _W) == READY and GoS:ValidTarget(unit,GetCastRange(myHero,_W)) then
-			local WPred = GetPredictionForPlayer(GoS:myHeroPos(),unit,GetMoveSpeed(unit)*1.5,1000,250,GetCastRange(myHero,_W),50,false,true)
+			local WPred = GetPredictionForPlayer(GoS:myHeroPos(),unit,GetMoveSpeed(unit)*1.5,1000,250,GetCastRange(myHero,_W),70,false,true)
 			   CastSkillShot(_W,WPred.PredPos.x,WPred.PredPos.y,WPred.PredPos.z)
 			end
 		end
 		
 		if Config.c.E:Value() and IOW:Mode() == "Combo" then
 			if CanUseSpell(myHero, _E) == READY and GoS:ValidTarget(unit,GetCastRange(myHero,_E)) then
-			local EPred = GetPredictionForPlayer(GoS:myHeroPos(),unit,GetMoveSpeed(unit),1300,100,GetCastRange(myHero,_E),50,false,true)
+			local EPred = GetPredictionForPlayer(GoS:myHeroPos(),unit,GetMoveSpeed(unit),1300,100,GetCastRange(myHero,_E),70,false,true)
 			   CastSkillShot(_E,EPred.PredPos.x,EPred.PredPos.y,EPred.PredPos.z)
 			end
 		end
@@ -108,7 +108,7 @@ end)
 
 
 function QPred(pos,unit)
-	QPredict=GetPredictionForPlayer(pos,unit,GetMoveSpeed(unit),1300,250,750,50,true,false)
+	QPredict=GetPredictionForPlayer(pos,unit,GetMoveSpeed(unit),1300,250,750,70,true,false)
 	return QPredict
 end
 
