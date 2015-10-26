@@ -1,7 +1,6 @@
 if GetObjectName(GetMyHero()) ~= "MasterYi" then return end
 
 require("Inspired")
-require("IOW")
 
 local myHero=GetMyHero()
 local delay=0
@@ -161,9 +160,7 @@ OnProcessSpell(function(unit, spellProc)
 			elseif n%3==2 then
 				spelltype=slot
 			elseif n%3==0 then
---				PrintChat("Looking for Spell: "..GetCastName(unit,slot).." spelltype: "..spelltype)
-				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then						
-					--print("Looking for "..GetCastName(unit,slot))			--DEBUG
+				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then									
 					if (spellProc.name==GetCastName(unit,slot) or spellProc.name==slot) then
 --						if GetObjectName(unit)=="Rengar" and not GotBuff("RengarR") then return end
 						if (spelltype==0 or spelltype==1 or spelltype==3) and CanUseSpell(myHero,_Q) == READY then
