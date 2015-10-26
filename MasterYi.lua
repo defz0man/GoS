@@ -131,7 +131,7 @@ local spell2=nil
 						spell2=spell
 					end
 					QSet[GetObjectName(champ)..GetCastName(champ,spell)]=GetObjectName(champ)..GetCastName(champ,spell)
-					Config.q:Info("blubb","Dodge "..GetObjectName(champ).." "..spell2,true)
+					Config.q:Info("blubb","Cast on "..GetObjectName(champ).." "..spell2,true)
 				end
 			end
 		end
