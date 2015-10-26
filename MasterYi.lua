@@ -13,7 +13,7 @@ local spelltype=0
 --spelltype: 1 Targeted
 --spelltype: 2 Nuke
 --spelltype: 3 Gapcloser
-
+QSet={}
 Q_ON = {
 ["Aatrox"]		= {0,0,_R},
 ["Ahri"]		= {0,0,_E},
@@ -36,6 +36,7 @@ Q_ON = {
 ["Fizz"]		= {0,0,_R},
 --[Fiora"]		= {0,0,_W},
 ["Garen"]		= {0,2,_R},
+["Gnar"]		= {0,3,_E},
 ["Gragas"]		= {0,3,_E,0,0,_R},
 ["Graves"]		= {0,2,_R},
 ["Hecarim"]		= {0,3,_R},
@@ -58,7 +59,7 @@ Q_ON = {
 ["Pantheon"]		= {0,1,_W},
 ["Quinn"]		= {0,0,_Q,0,1,_E},
 ["Rammus"]		= {0,1,_E},
-["RekSai"]		= {0,3,_E},
+["RekSai"]		= {0,3,_E},			--tunnelname
 --["Renekton"]		= {0,1,_W},		--It's the aa
 ["Rumble"]		= {0,0,_R},
 ["Ryze"]		= {0,1,_W},
@@ -107,17 +108,45 @@ Config.q:Boolean("AQ","Use awesome Q",true)
 Config:SubMenu("m", "Misc")
 Config.m:Boolean("AL","AutoLevel", true)
 Config.m:Boolean("It","Items", true)
-Config.m:Boolean("Debug","Print Messages", false)
+Config.m:Boolean("Debug","Print Messages",true)
 
+-- Menu for spells
+DelayAction(function ()
+local spell=nil
+local champ=nil
+local spell2=nil
+	for _,champ in pairs(GetEnemyHeroes()) do
+		if Q_ON[GetObjectName(champ)] then
+			for n,spell in pairs(Q_ON[GetObjectName(champ)]) do
+				if n%3==0 then
+					if spell==0 then
+						spell2="Q"
+					elseif spell==1 then
+						spell2="W"
+					elseif spell==2 then
+						spell2="E"
+					elseif spell==3 then
+						spell2="R"
+					else
+						spell2=spell
+					end
+					QSet[GetObjectName(champ)..GetCastName(champ,spell)]=GetObjectName(champ)..GetCastName(champ,spell)
+					Config.q:Info("blubb","Dodge "..GetObjectName(champ).." "..spell2,true)
+				end
+			end
+		end
+	end
+	end
+,50)
 
 
 -- Start
-OnLoop(function(myHero)
+OnTick(function(myHero)
 	if not IsDead(myHero) then
-		local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)		
+		local unit = GetCurrentTarget()
 		ks()
 		ALvL()
-		UseItems()
+		UseItems(unit)
 	end
 end)
 
@@ -137,11 +166,11 @@ OnProcessSpell(function(unit, spellProc)
 					--print("Looking for "..GetCastName(unit,slot))			--DEBUG
 					if (spellProc.name==GetCastName(unit,slot) or spellProc.name==slot) then
 --						if GetObjectName(unit)=="Rengar" and not GotBuff("RengarR") then return end
-						if (spelltype==0 or spelltype==1 or spelltype==3) and CanUseSpell(myHero,_Q) == 0 then
-							if GoS:GetDistance(unit,myHero)<GetCastRange(myHero,_Q) then
-							GoS:DelayAction( 
+						if (spelltype==0 or spelltype==1 or spelltype==3) and CanUseSpell(myHero,_Q) == READY then
+							if GetDistance(unit,myHero)<GetCastRange(myHero,_Q) then
+							DelayAction( 
 								function()
-									if GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) then
+									if ValidTarget(unit,GetCastRange(myHero,_Q)) then
 										if Config.m.Debug:Value() then PrintChat("Q'd on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 										CastTargetSpell(unit,_Q)
 									end
@@ -151,8 +180,8 @@ OnProcessSpell(function(unit, spellProc)
 							if Config.m.Debug:Value() then PrintChat("Q'd on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 							jump2creep()
 							end
-						elseif spelltype==2 and CanUseSpell(myHero, _W)==0 and GoS:GetDistance(unit,myHero)<GetCastRange(myHero,_Q) and Config.c.W.Value() then
-							GoS:DelayAction(
+						elseif spelltype==2 and CanUseSpell(myHero, _W)==0 and GetDistance(unit,myHero)<GetCastRange(myHero,_Q) and Config.c.W.Value() then
+							DelayAction(
 							function()
 								if Config.m.Debug:Value() then PrintChat("W'd on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 								CastSpell(_W)
@@ -169,7 +198,7 @@ OnProcessSpell(function(unit, spellProc)
 			end
 		end
 	end
-	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and GoS:GetDistance(myHero,GoS:ClosestEnemy(pos))<250 then
+	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and GetDistance(myHero,ClosestEnemy(pos))<250 then
 		if Config.c.E:Value() and CanUseSpell(myHero, _E)==0 then
 			CastSpell(_E)
 		end
@@ -182,10 +211,10 @@ OnProcessSpell(function(unit, spellProc)
 end)
 
 function jump2creep()
-	GoS:DelayAction( 
+	DelayAction( 
 	function()
-		for _,creep in pairs(GoS:GetAllMinions(MINION_ENEMY)) do
-			if GoS:GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
+		for _,creep in pairs(GetAllMinions(MINION_ENEMY)) do
+			if GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
 				CastTargetSpell(creep,_Q)
 			end
 		end
@@ -195,8 +224,8 @@ end
 
 
 function ks()
-	for i,unit in pairs(GoS:GetEnemyHeroes()) do
-		if Config.c.KSQ:Value() and CanUseSpell(myHero,_Q) and GoS:ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < GoS:CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero)))+GetDmgShield(unit) then 
+	for i,unit in pairs(GetEnemyHeroes()) do
+		if Config.c.KSQ:Value() and CanUseSpell(myHero,_Q) and ValidTarget(unit,GetCastRange(myHero,_Q)) and GetCurrentHP(unit) < CalcDamage(myHero, unit, 0, (35*GetCastLevel(myHero,_Q)-5+GetBonusDmg(myHero)))+GetDmgShield(unit) then 
 				CastTargetSpell(unit,_Q)
 		end
 	end
@@ -222,12 +251,12 @@ aaResetItems={3074,3077,3748}
 
 meeleItems={3153,3144,3142,3143}
 --	    Botr,Bilg,Ghos,Rand
+
 cleanseItems={3140,3139}
 --	     Merc,QSS
 
-function UseItems()
+function UseItems(unit)
 	if Config.m.It:Value() then 
-	local unit = GoS:GetTarget(1500, DAMAGE_NORMAL)
 		for _,id in pairs(cleanseItems) do
 			if GetItemSlot(myHero,id) > 0 and GotBuff(myHero, "rocketgrab2") > 0 or GotBuff(myHero, "charm") > 0 or GotBuff(myHero, "fear") > 0 or GotBuff(myHero, "flee") > 0 or GotBuff(myHero, "snare") > 0 or GotBuff(myHero, "taunt") > 0 or GotBuff(myHero, "suppression") > 0 or GotBuff(myHero, "stun") > 0 or GotBuff(myHero, "zedultexecute") > 0 or GotBuff(myHero, "summonerexhaust") > 0  then
 				CastTargetSpell(myHero, GetItemSlot(myHero,id))
@@ -235,7 +264,7 @@ function UseItems()
 		end
 		if IOW:Mode() == "Combo" then
 			for _,id in pairs(meeleItems) do
-				if GetItemSlot(myHero,id) > 0 and GoS:ValidTarget(unit, 550) then
+				if GetItemSlot(myHero,id) > 0 and ValidTarget(unit, 550) then
 				CastTargetSpell(unit, GetItemSlot(myHero,id))
 				end
 			end
