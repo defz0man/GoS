@@ -210,11 +210,10 @@ end)
 function jump2creep()
 	DelayAction( 
 	function()
-		for _,creep in pairs(GetAllMinions(MINION_ENEMY)) do
+                local creep=closetstMinion(GetOrigin(myHero),MINION_ENEMY)
 			if GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
 				CastTargetSpell(creep,_Q)
 			end
-		end
 	end
 	,delay)
 end
