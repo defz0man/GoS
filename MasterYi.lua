@@ -12,7 +12,6 @@ local spelltype=0
 --spelltype: 1 Targeted
 --spelltype: 2 Nuke
 --spelltype: 3 Gapcloser
-QSet={}
 Q_ON = {
 ["Aatrox"]		= {0,0,_R},
 ["Ahri"]		= {0,0,_E},
@@ -129,7 +128,6 @@ local spell2=nil
 					else
 						spell2=spell
 					end
-					QSet[GetObjectName(champ)..GetCastName(champ,spell)]=GetObjectName(champ)..GetCastName(champ,spell)
 					Config.q:Info("blubb","Cast on "..GetObjectName(champ).." "..spell2,true)
 				end
 			end
@@ -210,10 +208,11 @@ end)
 function jump2creep()
 	DelayAction( 
 	function()
-                local creep=ClosestMinion(GetOrigin(myHero),MINION_ENEMY)
+		for _,creep in pairs(GetAllMinions(MINION_ENEMY)) do
 			if GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
 				CastTargetSpell(creep,_Q)
 			end
+		end
 	end
 	,delay)
 end
