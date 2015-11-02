@@ -33,7 +33,7 @@ OnTick(function (myHero)
 end)
 
 OnDraw(function (myHero)
-	if RDmg and CanUseSpell(myHero,_R) then
+	if GetLevel(myHero)>5 and CanUseSpell(myHero,_R) then
 		local unit=GetCurrentTarget()
 		DrawDmgOverHpBar(unit,GetCurrentHP(unit),0,RDmg,0xffffffff)
 	end
