@@ -28,14 +28,14 @@ end)
 function heals()
 	if Ready(_W) or Ready(_R) then
 		for _,champ in pairs(GetAllyHeroes()) do
-				if Config.h.AW:Value() then
-					if not IsDead(champ) and (GetCurrentHP(champ)/GetMaxHP(champ)<healvalue) and GetDistance(myHero,champ)<GetCastRange(myHero,_W) then
-						CastTargetSpell(champ,_W)
-					end
+			if Config.h.AW:Value() then
+				if not IsDead(champ) and (GetCurrentHP(champ)/GetMaxHP(champ)<healvalue) and GetDistance(myHero,champ)<GetCastRange(myHero,_W) then
+					CastTargetSpell(champ,_W)
 				end
-				if Config.h.AR:Value() then
-					if not IsDead(champ) and (GetCurrentHP(champ)/GetMaxHP(champ)<(healvalue*0.5)) then
-						CastSpell(_R)
+			end
+			if Config.h.AR:Value() then
+				if not IsDead(champ) and (GetCurrentHP(champ)/GetMaxHP(champ)<(healvalue*0.5)) then
+					CastSpell(_R)
 				end
 			end
 		end
