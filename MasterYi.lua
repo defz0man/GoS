@@ -77,7 +77,7 @@ Q_ON = {
 ["Urgot"]		= {0,1,_R},
 ["Varus"]		= {0,0,_R},
 ["Vayne"]		= {0,1,_E},
-["Veigar"]		= {10,1,_R},
+["Veigar"]		= {0,1,_R},
 ["Vi"]			= {10,1,_R},
 ["Vladimir"]		= {4950,2,_R},
 ["Xerath"]		= {0,0,_E},
@@ -106,7 +106,7 @@ Config.q:Boolean("AQ","Use awesome Q",true)
 Config:SubMenu("m", "Misc")
 Config.m:Boolean("AL","AutoLevel", true)
 Config.m:Boolean("It","Items", true)
-Config.m:Boolean("Debug","Print Messages",true)
+Config.m:Boolean("Debug","Print Messages",false)
 
 -- Menu for spells
 DelayAction(function ()
@@ -158,27 +158,27 @@ OnProcessSpell(function(unit, spellProc)
 			elseif n%3==2 then
 				spelltype=slot
 			elseif n%3==0 then
-				if slot==_Q or slot==_W or slot==_E or slot==_R or spellProc.name==slot then									
+				if slot==_Q or slot==_W or slot==_E or slot==_R or slot==spellProc.name then									
 					if (spellProc.name==GetCastName(unit,slot) or spellProc.name==slot) then
 --						if GetObjectName(unit)=="Rengar" and not GotBuff("RengarR") then return end
 						if (spelltype==0 or spelltype==1 or spelltype==3) and CanUseSpell(myHero,_Q) == READY then
 							if GetDistance(unit,myHero)<GetCastRange(myHero,_Q) then
+							if Config.m.Debug:Value() then PrintChat("Q on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 							DelayAction( 
 								function()
 									if ValidTarget(unit,GetCastRange(myHero,_Q)) then
-										if Config.m.Debug:Value() then PrintChat("Q'd on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 										CastTargetSpell(unit,_Q)
 									end
 								end
 								,delay)
 							elseif spelltype==1 and spellProc.target==myHero then 
-							if Config.m.Debug:Value() then PrintChat("Q'd on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
-							jump2creep()
+								if Config.m.Debug:Value() then PrintChat("Q on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
+								jump2creep()
 							end
 						elseif spelltype==2 and CanUseSpell(myHero, _W)==0 and GetDistance(unit,myHero)<GetCastRange(myHero,_Q) and Config.c.W.Value() then
+							if Config.m.Debug:Value() then PrintChat("W on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 							DelayAction(
 							function()
-								if Config.m.Debug:Value() then PrintChat("W'd on "..GetObjectName(unit)..":"..spellProc.name.." with "..delay.."ms delay") end
 								CastSpell(_W)
 							end
 							,delay)
@@ -193,7 +193,7 @@ OnProcessSpell(function(unit, spellProc)
 			end
 		end
 	end
-	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and GetDistance(GetOrigin(myHero))<250 then
+	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and GetObjectType(spellProc.target)==Obj_AI_Hero then
 		if Config.c.E:Value() and CanUseSpell(myHero, _E)==0 then
 			CastSpell(_E)
 		end
@@ -208,7 +208,7 @@ end)
 function jump2creep()
 	DelayAction( 
 	function()
-		local creep=ClosestMinion(GetOrigin(myHero),MINION_ENEMY)
+		creep=ClosestMinion(GetOrigin(myHero), MINION_ENEMY)
 		if GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
 			CastTargetSpell(creep,_Q)
 		end
