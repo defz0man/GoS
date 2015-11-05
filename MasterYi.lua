@@ -193,7 +193,7 @@ OnProcessSpell(function(unit, spellProc)
 			end
 		end
 	end
-	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and GetDistance(myHero,ClosestEnemy(pos))<250 then
+	if (spellProc.name:find("MasterYiBasicAttack") or spellProc.name:find("MasterYiBasicAttack2")) and GetDistance(GetOrigin(myHero))<250 then
 		if Config.c.E:Value() and CanUseSpell(myHero, _E)==0 then
 			CastSpell(_E)
 		end
