@@ -32,6 +32,7 @@ Q_ON = {
 ["Elise"]		= {0,0,"EliseHumanE"},
 ["Ezreal"]		= {0,3,_E},
 ["Fizz"]		= {0,0,_R},
+--[Fiora"]		= {0,0,_W},
 ["Garen"]		= {0,2,_R},
 ["Gnar"]		= {0,3,_E},
 ["Gragas"]		= {0,3,_E,0,0,_R},
@@ -57,14 +58,17 @@ Q_ON = {
 ["Quinn"]		= {0,0,_Q,0,1,_E},
 ["Rammus"]		= {0,1,_E},
 ["RekSai"]		= {0,3,_E},			--tunnelname
+--["Renekton"]		= {0,1,_W},		--It's the aa
 ["Rumble"]		= {0,0,_R},
 ["Ryze"]		= {0,1,_W},
 ["Sejuani"]		= {0,0,_R},
+--["Shaco"]		= {0,3,_Q},			--too fast
 ["Shen"]		= {0,3,_E},
 ["Singed"]		= {0,1,_E},
 ["Skarner"]		= {0,1,_R},
 ["Sona"]		= {0,0,_R},
 ["Syndra"]		= {20,1,_R},
+["Talon"]		= {0,2,_R},		--needs test
 ["Taric"]		= {10,1,_E},
 ["Teemo"]		= {10,1,_Q},
 ["Thresh"]		= {0,0,_E},
@@ -73,7 +77,7 @@ Q_ON = {
 ["Urgot"]		= {0,1,_R},
 ["Varus"]		= {0,0,_R},
 ["Vayne"]		= {0,1,_E},
-["Veigar"]		= {0,1,_R},
+["Veigar"]		= {10,1,_R},
 ["Vi"]			= {10,1,_R},
 ["Vladimir"]		= {4950,2,_R},
 ["Xerath"]		= {0,0,_E},
@@ -204,10 +208,9 @@ end)
 function jump2creep()
 	DelayAction( 
 	function()
-		for _,creep in pairs(GetAllMinions(MINION_ENEMY)) do
-			if GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
-				CastTargetSpell(creep,_Q)
-			end
+		local creep=ClosestMinion(GetOrigin(myHero),MINION_ENEMY)
+		if GetDistance(creep,myHero)<GetCastRange(myHero,_Q) then
+			CastTargetSpell(creep,_Q)
 		end
 	end
 	,delay)
