@@ -106,7 +106,7 @@ end
 function FarmQ()
 	if Config.f.AQ:Value() and CanUseSpell(myHero,_Q)==READY and IOW:Mode() ~= "Combo" then
 		for i,creep in pairs(minionManager.objects) do
-			if GetTeam(creep)== MINION_ENEMY and ValidTarget(creep,GetCastRange(myHero,_Q)) and GetCurrentHP(creep)<CalcDamage(myHero, creep, 0, (45*GetCastLevel(myHero,_Q)+25+GetBonusAP(myHero)*0.6)) then
+			if GetTeam(creep)== MINION_ENEMY and ValidTarget(creep,GetCastRange(myHero,_Q)) and GetCurrentHP(creep)<CalcDamage(myHero, creep, 0, (40*GetCastLevel(myHero,_Q)+25+GetBonusAP(myHero)*0.6)) then
 				CreepOrigin=GetOrigin(creep)
 				if Config.m.D:Value() then	DrawCircle(CreepOrigin.x,CreepOrigin.y,CreepOrigin.z,75,0,3,0xffffff00) end
 				QCol=Collision(GetCastRange(myHero,_Q),1200,925,70)
