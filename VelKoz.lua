@@ -1,9 +1,11 @@
+if GetObjectName(GetMyHero()) ~= "Velkoz" then return end
+
 require("Inspired")
-require("Collision")
 
 local Config=Menu("Vel","Vel")
 Config:SubMenu("c", "Combo")
 Config.c:Boolean("Q","Use Q",true)
+Config.c:Boolean("FQ","Force Q Split",true)
 Config.c:Boolean("W","Use W",true)
 Config.c:Boolean("E","Use E",true)
 
@@ -16,8 +18,8 @@ end)
 
 --velkozqsplitactive
 --VelkozQ
-value=4 --get value from silder
-DegreeTable={22.5,-22.5,45,-45}
+value=6 --get value from silder
+DegreeTable={10,-10,22.5,-22.5,45,-45}
 
 
 function Combo(unit)
@@ -26,8 +28,6 @@ function Combo(unit)
 
 			if ValidTarget(i,1500) and IOW:Mode() == "Combo" then
 					
-				EnemyPos=GetOrigin(i)
-				DrawCircle(EnemyPos.x,EnemyPos.y,EnemyPos.z,750,0,3,0xffffff00)		
 				local direct=GetPredictionForPlayer(GetOrigin(myHero),i,GetMoveSpeed(i),1300,250,750,50,true,false)
 			
 				if direct and direct.HitChance==1 then
@@ -38,36 +38,23 @@ function Combo(unit)
 				--Base Vector
 				local BVec=Vector(GetOrigin(myHero))-Vector(GetOrigin(i))
 					
-				for l=1,value,1 do
+				for l=1,value do
 				
 					--Degree Vector from table
 					local sideVec=getVec(BVec,DegreeTable[l]):normalized()*750
 						
 					--Part on the range around enemy
 					local circlespot=Vector(GetOrigin(i))+Vector(sideVec)
-					
-					
-					QCol=Collision(1500,1200,925,70)
-					local state,Objects=QCol:__GetMinionCollision(myHero,circlespot,ENEMY)
-					local hitcount=0
-				
-					for i,unit in ipairs(Objects) do 
-						return
+					local enemyCreeps={}
+					local cPos=1
+					for _,l in pairs(minionManager.objects) do
+						if GetTeam(l)==MINION_ENEMY and GetDistance(l,myHero)<2000 then
+							enemyCreeps[cPos]=l
+							cPos=cPos+1
+						end
 					end
-					--Debug1
-					--DrawCircle(circlespot.x,circlespot.y,circlespot.z,75,0,3,0xffffff00)
-					
-					--From circlespot to enemy
-					local side1=GetPredictionForPlayer(circlespot,i,GetMoveSpeed(i),1300,250,1000,70,true,false)
-						
-					--From circlespot to me 
-					--local side2=GetPredictionForPlayer(circlespot,myHero,GetMoveSpeed(i),1300,250,1000,50,true,false)
-					
-					--Check for both ways to be clear
-					if side1.HitChance==1 then
-							
-						--Debug2
-						--DrawCircle(circlespot.x,circlespot.y,circlespot.z,50,0,3,0xffffff00)
+					--print(CountObjectsOnLineSegment(GetOrigin(myHero), circlespot, 70, enemyCreeps)<1)
+					if CountObjectsOnLineSegment(GetOrigin(myHero), circlespot, 70, enemyCreeps)<1 and CountObjectsOnLineSegment(circlespot, GetOrigin(i), 70, enemyCreeps)<1 then
 							
 						--ShootQ at predcited Pos
 						CastSkillShot(_Q,circlespot.x,circlespot.y,circlespot.z)
@@ -85,7 +72,7 @@ function Combo(unit)
 			--DrawCircle(BallPos.x,BallPos.y,BallPos.z,50,0,3,0xffffff00)
 			--DrawCircle(split.PredPos.x,split.PredPos.y,split.PredPos.z,50,0,3,0xffffff00)
 			--print(((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.PredPos)):normalized())^2)
-			if split.HitChance==1 and ((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.PredPos)):normalized())^2<0.01 then
+			if (split.HitChance==1 or Config.c.FQ:Value()) and ((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.PredPos)):normalized())^2<0.01 then
 				--print("SPLIT")
 				CastSpell(_Q)
 			end
@@ -126,4 +113,4 @@ function getVec(base, deg)
 	return vek
 end
 
-print("Vel loaded")
+print("Vel loaded - Logge")
