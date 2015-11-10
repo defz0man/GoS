@@ -246,48 +246,77 @@ item[3801] = {name="Crystalline Bracer",from={1028, 1006},price=600}
 function buyItems(itemTable)
 	if lastTime+1<=GetGameTimer() and inFountain(myHero) then
 	lastTime=GetGameTimer()
-		buyPos=1
 		while itemTable[buyPos]~=nil and GetItemSlot(myHero, itemTable[buyPos])>0 do
 			buyPos=buyPos+1
 		end
 		if itemTable[buyPos]==nil then return end
-		if buyCheck(itemTable[buyPos]) then
+		if GetItemSlot(myHero, itemTable[buyPos])==0 and buyCheck(itemTable[buyPos]) then
 			print("Bought "..item[itemTable[buyPos]].name)
 		else
-			subItem=nil
-			for _,subItem in pairs(item[itemTable[buyPos]].from) do
-				if subItem and tonumber(subItem) and GetItemSlot(myHero, subItem)==0 then
-					if buyCheck(subItem) then
-						print("Bought SUBITEM: "..item[itemTable[buyPos]].name)
+			DelayAction( function() 
+				subItem=nil
+				for _,subItem in pairs(item[itemTable[buyPos]].from) do
+					if subItem and tonumber(subItem) and GetItemSlot(myHero, itemTable[buyPos])==0 and GetItemSlot(myHero, subItem)==0 then
+						print("buyCheck sub for: "..item[itemTable[buyPos]].name)
+						if buyCheck(subItem) then
+							print("Bought SUBITEM: "..item[itemTable[buyPos]].name)
+						end
+					elseif subItem==nil then
+						print("No sub items for "..item[itemTable[buyPos]].name)
 					end
 				end
-			end
+			end,150)
 		end
 	end
 end
 
 function inFountain(champ)		--Waiting for DeftLib
+	if GetTeam(myHero)==1 then
+		local basePos = Vector(1060, 150.85, 7297)
+	else
+		local basePos = Vector(14180, 163, 7942)
+	end
+	if GetDistance(GetOrigin(myHero), basePos) < 430 then
+		return true
+	else
+		return false
+	end
+--3v3
+--local basePos1 = Vector(1060, 150.85, 7297) buy
+--local basePos1 = Vector(1260, 163, 7940) heal
+--range 1200
+--team100
+
+--local basePos2 = Vector(14372, 151.96, 7295) heal
+--local basePos2_2 = Vector(14180, 163, 7942) buy
+--range 1200
+--team200
 return true
 end
 
 function buyCheck(id)
 	if GetItemSlot(myHero, id)>0 then
-	print("bought")
-	return true
+		print("already bought")
+		return true
 	end
 	BuyItem(id)
-	if GetItemSlot(myHero, id)>0 then
-		print("bought")
-		return true
-	elseif GetItemSlot(myHero, id)==0 then
-		print("not bought")
-		return false
-	end
+	DelayAction(function ()
+		print(GetItemSlot(myHero, id))
+		if GetItemSlot(myHero, id)>0 then
+			print("bought :"..item[id].name)
+			return true
+		elseif GetItemSlot(myHero, id)==0 then
+			print("not bought. BuyPos:"..buyPos)
+			print(item[id].name)
+			return false
+		end
+	end,100)
 end
 
 require("Inspired")
 
 lastTime=0
+buyPos=1
 OnTick(function(myHero)
-	buyItems({1001,3108})
+	buyItems({1001,3108,3046})
 end)
