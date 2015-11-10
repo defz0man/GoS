@@ -264,7 +264,7 @@ function buyItems(itemTable)
 	end
 end
 
-function inFountain(champ)
+function inFountain(champ) --Noddy <3
 	if GetTeam(myHero)==1 then
 		local basePos = Vector(1060, 150.85, 7297)
 	else
