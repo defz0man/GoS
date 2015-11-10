@@ -31,6 +31,7 @@ item[1063] = {name="Prospector's Ring",from={},price=950}
 item[1074] = {name="Doran's Shield (Showdown)",from={},price=440}
 item[1075] = {name="Doran's Blade (Showdown)",from={},price=440}
 item[1076] = {name="Doran's Ring (Showdown)",from={},price=400}
+item[1337] = {name="Logge's Keyboard Kappa", from={},price=1337}
 item[2003] = {name="Health Potion",from={},price=35}
 item[2004] = {name="Mana Potion",from={},price=35}
 item[2009] = {name="Total Biscuit of Rejuvenation",from={},price=0}
