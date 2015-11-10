@@ -1,3 +1,6 @@
+--LS ItemLib
+--converted by Logge
+item={}
 item[1001] = {name="Boots of Speed",from={},price=325}
 item[1004] = {name="Faerie Charm",from={},price=180}
 item[1006] = {name="Rejuvenation Bead",from={},price=180}
@@ -8,7 +11,7 @@ item[1027] = {name="Sapphire Crystal",from={},price=400}
 item[1028] = {name="Ruby Crystal",from={},price=400}
 item[1029] = {name="Cloth Armor",from={},price=300}
 item[1031] = {name="Chain Vest",from={1029},price=750}
-item[1033] = {name="Null-Magic Mantle",from={},price=500}
+item[1033] = {name="Null-Magic Mantle",from={},price=450}
 item[1036] = {name="Long Sword",from={},price=360}
 item[1037] = {name="Pickaxe",from={},price=875}
 item[1038] = {name="B. F. Sword",from={},price=1550}
