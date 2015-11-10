@@ -244,17 +244,20 @@ item[3801] = {name="Crystalline Bracer",from={1028, 1006},price=600}
 
 
 function buyItems(itemTable)
-	if inFountain(myHero) then
+	if lastTime+1<=GetGameTimer() and inFountain(myHero) then
+	lastTime=GetGameTimer()
 		buyPos=1
-		while GetItemSlot(myHero, itemTable[buyPos])>0 do
+		while itemTable[buyPos]~=nil and GetItemSlot(myHero, itemTable[buyPos])>0 do
 			buyPos=buyPos+1
 		end
-		if BuyItem(itemTable[buyPos]) then
+		if itemTable[buyPos]==nil then return end
+		if buyCheck(itemTable[buyPos]) then
 			print("Bought "..item[itemTable[buyPos]].name)
 		else
-			for _,subItem in pairs(item[itemTable[buyPos]].from do
-				if tonumber(subItem) and not GetItemSlot(myHero, subItem)>0 then
-					if buyItem(subItem) then
+			subItem=nil
+			for _,subItem in pairs(item[itemTable[buyPos]].from) do
+				if subItem and tonumber(subItem) and GetItemSlot(myHero, subItem)==0 then
+					if buyCheck(subItem) then
 						print("Bought SUBITEM: "..item[itemTable[buyPos]].name)
 					end
 				end
@@ -263,5 +266,28 @@ function buyItems(itemTable)
 	end
 end
 
-function inFountain(champ)
+function inFountain(champ)		--Waiting for DeftLib
+return true
 end
+
+function buyCheck(id)
+	if GetItemSlot(myHero, id)>0 then
+	print("bought")
+	return true
+	end
+	BuyItem(id)
+	if GetItemSlot(myHero, id)>0 then
+		print("bought")
+		return true
+	elseif GetItemSlot(myHero, id)==0 then
+		print("not bought")
+		return false
+	end
+end
+
+require("Inspired")
+
+lastTime=0
+OnTick(function(myHero)
+	buyItems({1001,3108})
+end)
