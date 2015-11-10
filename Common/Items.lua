@@ -251,18 +251,12 @@ function buyItems(itemTable)
 		end
 		if itemTable[buyPos]==nil then return end
 		if GetItemSlot(myHero, itemTable[buyPos])==0 and buyCheck(itemTable[buyPos]) then
-			print("Bought "..item[itemTable[buyPos]].name)
 		else
 			DelayAction( function() 
 				subItem=nil
 				for _,subItem in pairs(item[itemTable[buyPos]].from) do
 					if subItem and tonumber(subItem) and GetItemSlot(myHero, itemTable[buyPos])==0 and GetItemSlot(myHero, subItem)==0 then
-						print("buyCheck sub for: "..item[itemTable[buyPos]].name)
-						if buyCheck(subItem) then
-							print("Bought SUBITEM: "..item[itemTable[buyPos]].name)
-						end
-					elseif subItem==nil then
-						print("No sub items for "..item[itemTable[buyPos]].name)
+					buyCheck(subItem)
 					end
 				end
 			end,150)
@@ -270,7 +264,7 @@ function buyItems(itemTable)
 	end
 end
 
-function inFountain(champ)		--Waiting for DeftLib
+function inFountain(champ)
 	if GetTeam(myHero)==1 then
 		local basePos = Vector(1060, 150.85, 7297)
 	else
@@ -291,23 +285,18 @@ function inFountain(champ)		--Waiting for DeftLib
 --local basePos2_2 = Vector(14180, 163, 7942) buy
 --range 1200
 --team200
-return true
+return true  --debug
 end
 
 function buyCheck(id)
 	if GetItemSlot(myHero, id)>0 then
-		print("already bought")
 		return true
 	end
 	BuyItem(id)
 	DelayAction(function ()
-		print(GetItemSlot(myHero, id))
 		if GetItemSlot(myHero, id)>0 then
-			print("bought :"..item[id].name)
 			return true
 		elseif GetItemSlot(myHero, id)==0 then
-			print("not bought. BuyPos:"..buyPos)
-			print(item[id].name)
 			return false
 		end
 	end,100)
@@ -318,5 +307,6 @@ require("Inspired")
 lastTime=0
 buyPos=1
 OnTick(function(myHero)
-	buyItems({1001,3108,3046})
+	--buyItems({1001,3108,3046})
+	--example
 end)
