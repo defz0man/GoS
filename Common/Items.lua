@@ -244,7 +244,7 @@ item[3801] = {name="Crystalline Bracer",from={1028, 1006},price=600}
 
 
 function buyItems(itemTable)
-	if lastTime+1<=GetGameTimer() and inFountain(myHero) then
+	if lastTime+1.5<=GetGameTimer() and inFountain(myHero) then
 	lastTime=GetGameTimer()
 		while itemTable[buyPos]~=nil and GetItemSlot(myHero, itemTable[buyPos])>0 do
 			buyPos=buyPos+1
@@ -259,21 +259,26 @@ function buyItems(itemTable)
 					buyCheck(subItem)
 					end
 				end
-			end,150)
+			end, 150)
 		end
 	end
 end
 
-function inFountain(champ) --Noddy <3
-	if GetTeam(myHero)==1 then
-		local basePos = Vector(1060, 150.85, 7297)
+function inFountain(champ)		--Noddy <3
+	if GetMapID()==10 then		--TTT (3v3)
+		if GetTeam(myHero)==1 then
+			local basePos = Vector(1060, 150.85, 7297)
+		else
+			local basePos = Vector(14180, 163, 7942)
+		end
+		
+		if GetDistance(GetOrigin(myHero), basePos) < 430 then
+			return true
+		else
+			return false
+		end
 	else
-		local basePos = Vector(14180, 163, 7942)
-	end
-	if GetDistance(GetOrigin(myHero), basePos) < 430 then
-		return true
-	else
-		return false
+		return true		--always try (5v5,howl,crystal) => lag
 	end
 --3v3
 --local basePos1 = Vector(1060, 150.85, 7297) buy
@@ -285,7 +290,6 @@ function inFountain(champ) --Noddy <3
 --local basePos2_2 = Vector(14180, 163, 7942) buy
 --range 1200
 --team200
-return true  --debug
 end
 
 function buyCheck(id)
@@ -307,6 +311,5 @@ require("Inspired")
 lastTime=0
 buyPos=1
 OnTick(function(myHero)
-	--buyItems({1001,3108,3046})
-	--example
+	buyItems({1001,3108,3046})
 end)
