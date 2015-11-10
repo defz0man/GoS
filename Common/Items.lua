@@ -241,3 +241,27 @@ item[3726] = {name="Ranger's Trailblazer Enchantment: Devourer",from={3713, 1042
 item[3751] = {name="Bami's Cinder",from={1028},price=1000}
 item[3800] = {name="Righteous Glory",from={3010, 3801},price=2500}
 item[3801] = {name="Crystalline Bracer",from={1028, 1006},price=600}
+
+
+function buyItems(itemTable)
+	if inFountain(myHero) then
+		buyPos=1
+		while GetItemSlot(myHero, itemTable[buyPos])>0 do
+			buyPos=buyPos+1
+		end
+		if BuyItem(itemTable[buyPos]) then
+			print("Bought "..item[itemTable[buyPos]].name)
+		else
+			for _,subItem in pairs(item[itemTable[buyPos]].from do
+				if tonumber(subItem) and not GetItemSlot(myHero, subItem)>0 then
+					if buyItem(subItem) then
+						print("Bought SUBITEM: "..item[itemTable[buyPos]].name)
+					end
+				end
+			end
+		end
+	end
+end
+
+function inFountain(champ)
+end
