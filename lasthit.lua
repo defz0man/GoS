@@ -29,7 +29,7 @@ function lasthit()
 		if MINION_ENEMY == GetTeam(minion) then
 			if ValidTarget(minion, myHeroRange) and GetDistance(myHero, minion) < myHeroRange then
 				local minionInRange = minion
-				if GetCurrentHP(minionInRange) < CalcDamage(myHero,minion,GetBaseDamage(myHero)+GetBonusDmg(myHero),0) then
+				if GetCurrentHP(minionInRange) - GetDamagePrediction(minionInRange,(GetDistance(myHero,minionInRange)/1200)*1000)  < CalcDamage(myHero,minion,GetBaseDamage(myHero)+GetBonusDmg(myHero),0) then
 					AttackUnit(minionInRange)
 				end
 			end
