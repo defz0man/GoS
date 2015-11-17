@@ -43,9 +43,11 @@ function heals()
 end
 
 function AutoE(unit)
-	if CanUseSpell(myHero,_E) == READY and ValidTarget(unit,GetCastRange(myHero,_E)) and Config.c.AE:Value() and (GotBuff(unit, "veigareventhorizonstun") > 0 or (GotBuff(unit, "snare") > 0 or GotBuff(unit, "taunt") > 0 or GotBuff(unit, "suppression") > 0 or GotBuff(unit, "stun"))) then
-		local EnemyOrg=GetOrigin(unit)
-		CastSkillShot(_E,EnemyOrg.x,EnemyOrg.y,EnemyOrg.z)
+	if CanUseSpell(myHero,_E) == READY and ValidTarget(unit,GetCastRange(myHero,_E)) and Config.c.AE:Value() then
+		if (GotBuff(unit, "veigareventhorizonstun") > 0 or (GotBuff(unit, "snare") > 0 or GotBuff(unit, "taunt") > 0 or GotBuff(unit, "suppression") > 0 or GotBuff(unit, "stun"))) > 0 then
+			local EnemyOrg=GetOrigin(unit)
+			CastSkillShot(_E,EnemyOrg.x,EnemyOrg.y,EnemyOrg.z)
+		end
 	end
 end
 
