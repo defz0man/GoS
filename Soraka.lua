@@ -34,7 +34,7 @@ function heals()
 				end
 			end
 			if Config.h.AR:Value() then
-				if not IsDead(champ) and (GetCurrentHP(champ)/GetMaxHP(champ)<(healvalue*0.5)) then
+				if not IsDead(champ) and (GetCurrentHP(champ)/GetMaxHP(champ)<(healvalue*0.5)) and EnemiesAround(GetOrigin(champ), 750) then
 					CastSpell(_R)
 				end
 			end
