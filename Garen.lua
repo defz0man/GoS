@@ -1,4 +1,4 @@
-if GetObjectName(myHero) ~= "Garen" then return end
+if GetObjectName(GetMyHero()) ~= "Garen" then return end
 
 require('Inspired')
 
