@@ -24,6 +24,7 @@ VMenu.p:Slider("hR", "HitChance R", 20, 0, 100, 1)
 VMenu:SubMenu("d", "Draw")
 VMenu.d:Boolean("dD","Draw Damage", true)
 VMenu.d:Boolean("dQ","Draw Q", true)
+VMenu.d:Boolean("dW","Draw W", true)
 VMenu.d:Boolean("dE","Draw E", true)
 VMenu.d:Boolean("dR","Draw R", true)
 
@@ -56,7 +57,10 @@ OnDraw(function(myHero)
 		if ValidTarget(unit,2000) and VMenu.d.dD:Value() then
 			local DmgDraw=0
 			if Ready(_Q) and VMenu.d.dQ:Value() then
-				DmgDraw = DmgDraw + CalcDamage(myHero, unit, GetCastLevel(myHero,_Q)*55-40+GetBonusDmg(unit)*1.6 ,0) + StackDamage(unit)
+				DmgDraw = DmgDraw + CalcDamage(myHero, unit, GetCastLevel(myHero,_Q)*55-40+GetBonusDmg(unit)*1.6 ,0)
+			end
+			if Ready(_Q) or Ready(_E) and VMenu.d.dW:Value() then
+				DmgDraw = DmgDraw + StackDamage(unit)
 			end
 			if Ready(_E) and VMenu.d.dE:Value() then
 				DmgDraw = DmgDraw + CalcDamage(myHero, unit, GetCastLevel(myHero,_E)*35+30+GetBonusDmg(unit)*.6 ,0)
