@@ -90,7 +90,7 @@ function combo(unit)
 		end
 		
 		--Q2
-		if VMenu.c.Q:Value() and Ready(_Q) and ValidTarget(unit, qRange+200) and qCharge then
+		if VMenu.c.Q:Value() and Ready(_Q) and ValidTarget(unit, qRange) and qCharge then
 			local VarusQ = { delay = 0.1, speed = 1850, width = 70, range = qRange }
 			local QPred = GetPrediction(unit, VarusQ)
 			--DrawCircle(GetOrigin(myHero),qRange,0,3,0xffffff00)
