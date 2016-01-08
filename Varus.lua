@@ -31,12 +31,32 @@ VMenu.d:Boolean("dW","Draw W", true)
 VMenu.d:Boolean("dE","Draw E", true)
 VMenu.d:Boolean("dR","Draw R", true)
 
+VMenu:SubMenu("i", "Items")
+VMenu.i:Boolean("iC","Use Items only in Combo", true)
+VMenu.i:Boolean("iO","Use offensive Items", true)
+VMenu.i:Boolean("iM","Toggle iMuramana", true)
+
+VMenu:SubMenu("a", "AutoLvl")
+VMenu.a:Boolean("aL", "Use AutoLvl", true)
+VMenu.a:DropDown("aLS", "AutoLvL", 1, {"Q-W-E","Q-E-W"})
+VMenu.a:Slider("sL", "Start AutoLvl with LvL x", 1, 1, 18, 1)
+VMenu.a:Boolean("hL", "Humanize LvLUP", true)
+
 --Var
 qTime = 0
 qCharge = false
 qRange = 0
 VarusE = { delay = 0.1, speed = 1700, width = 55, range = 925, radius = 275 }
 VarusR = { delay = 0.1, speed = 1850, width = 120, range = 1075}
+iMura = false
+local item={GetItemSlot(myHero,3144),GetItemSlot(myHero,3142),GetItemSlot(myHero,3153)}
+--						 cutlassl 				 gb 			 bork 
+
+--Lvlup table
+lTable={
+[1]={_Q,_W,_E,_Q,_Q,_R,_Q,_W,_Q,_W,_R,_W,_W,_E,_E,_R,_E,_E},
+[2]={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
+}
 
 wTrack = {}
 DelayAction( function()
@@ -52,6 +72,8 @@ OnTick(function(myHero)
 		local unit = GetCurrentTarget()
 		ks()
 		combo(unit)
+		items(unit)
+		lvlUp()
 	end
 end)
 
@@ -127,6 +149,8 @@ OnUpdateBuff(function(unit,buffProc)
 		qTime = GetTickCount()
 	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
 		wTrack[GetObjectName(unit)]=buffProc.Count
+	elseif unit == myHero and buffProc.Name == "Muramana" then
+		iMura = true
 	end
 end)
 
@@ -135,6 +159,8 @@ OnRemoveBuff(function(unit,buffProc)
 		qCharge = false
 	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
 		wTrack[GetObjectName(unit)]=0
+	elseif unit == myHero and buffProc.Name == "Muramana" then
+		iMura = false
 	end
 end)
 
@@ -143,7 +169,7 @@ function ks()
 		
 		--Smark KS
 		if VMenu.ks.KSS:Value() and ValidTarget(unit, 1075) and Ready(_R) then
-			if Ready(_Q) and VMenu.ks.KSQ:Value() and (GetCurrentHP(unit)+GetDmgShield(unit)) < CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5 , GetCastLevel(myHero,_R) * 75 + 25 + GetBonusAP(unit) + 3 * GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) *.01) and GetCurrentHP(unit)+GetDmgShield(unit) > CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5,GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) * .01* wTrack[GetObjectName(unit)]) then
+			if Ready(_Q) and VMenu.ks.KSQ:Value() and (GetCurrentHP(unit)+GetDmgShield(unit)) < CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5 , GetCastLevel(myHero,_R) * 75 + 25 + GetBonusAP(unit) + 3 * GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) *.01) and (GetCurrentHP(unit)+GetDmgShield(unit)) > CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5,GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) * .01* wTrack[GetObjectName(unit)]) then
 				local RPred=GetPrediction(unit, VarusR)
 				local VarusQ = { delay = 0.1, speed = 1850, width = 70, range = qRange }
 				local QPred = GetPrediction(unit, VarusQ)
@@ -197,6 +223,41 @@ function StackDamage(unit)
 		return CalcDamage(myHero, unit, 0, wDmg*wTrack[GetObjectName(unit)])
 	else
 		return 0
+	end
+end
+
+function items(unit)
+	if VMenu.i.iO:Value() and ValidTarget(unit,500) then
+		if IOW:Mode() == "Combo" or not VMenu.i.iC:Value() then
+			for _,i in pairs(item) do
+				if i>0 then
+					CastTargetSpell(unit,i)
+				end
+			end
+		end
+	end
+	if VMenu.i.iM:Value() and not iMura and ValidTarget(unit,700) then
+		if GetItemSlot(myHero,3042)>0 then
+			CastSpell(GetItemSlot(myHero,3042))
+		elseif GetItemSlot(myHero,3043)>0 then
+			CastSpell(GetItemSlot(myHero,3043))
+		end
+	elseif VMenu.i.iM:Value() and iMura and not ValidTarget(unit,700) then
+		if GetItemSlot(myHero,3042)>0 then
+			CastSpell(GetItemSlot(myHero,3042))
+		elseif GetItemSlot(myHero,3043)>0 then
+			CastSpell(GetItemSlot(myHero,3043))
+		end
+	end
+end
+
+function lvlUp()
+	if VMenu.a.aL:Value() and GetLevelPoints(myHero) >= 1 and GetLevel(myHero) >= VMenu.a.sL:Value() then
+		if VMenu.a.hL:Value() then
+			DelayAction(function() LevelSpell(lTable[VMenu.a.aLS:Value()][GetLevel(myHero)-GetLevelPoints(myHero)+1]) end, math.random(500,750))
+		else
+			LevelSpell(lTable[VMenu.a.aLS:Value()][GetLevel(myHero)-GetLevelPoints(myHero)+1])
+		end
 	end
 end
 
