@@ -3,6 +3,10 @@ if GetObjectName(GetMyHero()) ~= "Varus" then return end
 require("Inspired")
 require("OpenPredict")
 
+local version = 1.0
+
+AutoUpdate("/LoggeL/GoS/master/Varus.lua","/LoggeL/GoS/master/Varus.version","Varus.lua",0.9)
+
 -- Menu
 VMenu = Menu("Varus", "Varus")
 VMenu:SubMenu("c", "Combo")
