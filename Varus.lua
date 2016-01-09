@@ -5,7 +5,7 @@ require("OpenPredict")
 
 local version = 1
 
-AutoUpdate("/LoggeL/GoS/master/Varus.lua","/LoggeL/GoS/master/Varus.version","Varus.lua",version)
+--AutoUpdate("/LoggeL/GoS/master/Varus.lua","/LoggeL/GoS/master/Varus.version","Varus.lua",version)
 
 -- Menu
 VMenu = Menu("Varus", "Varus")
