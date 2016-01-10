@@ -28,7 +28,7 @@ VMenu.p:Slider("hQ", "HitChance Q", 20, 0, 100, 1)
 VMenu.p:Slider("hE", "HitChance E", 20, 0, 100, 1)
 VMenu.p:Slider("hR", "HitChance R", 20, 0, 100, 1)
 
-VMenu:SubMenu("d", "Draw")
+VMenu:SubMenu("d", "Draw Damage")
 VMenu.d:Boolean("dD","Draw Damage", true)
 VMenu.d:Boolean("dQ","Draw Q", true)
 VMenu.d:Boolean("dW","Draw W", true)
@@ -46,6 +46,10 @@ VMenu.a:DropDown("aLS", "AutoLvL", 1, {"Q-W-E","Q-E-W"})
 VMenu.a:Slider("sL", "Start AutoLvl with LvL x", 1, 1, 18, 1)
 VMenu.a:Boolean("hL", "Humanize LvLUP", true)
 
+VMenu:SubMenu("s","Skin")
+VMenu.s:Boolean("uS", "Use Skin", false)
+VMenu.s:Slider("sV", "Skin Number", 0, 0, 7, 1)
+
 --Var
 qTime = 0
 qCharge = false
@@ -53,6 +57,7 @@ qRange = 0
 VarusE = { delay = 0.1, speed = 1700, width = 55, range = 925, radius = 275 }
 VarusR = { delay = 0.1, speed = 1850, width = 120, range = 1075}
 iMura = false
+cSkin=VMenu.s.sV:Value()
 local item={GetItemSlot(myHero,3144),GetItemSlot(myHero,3142),GetItemSlot(myHero,3153)}
 --						 cutlassl 				 gb 			 bork 
 
@@ -78,6 +83,7 @@ OnTick(function(myHero)
 		combo(unit)
 		items(unit)
 		lvlUp()
+		skin()
 	end
 end)
 
@@ -104,6 +110,9 @@ OnDraw(function(myHero)
 		end
 	end
 end)
+
+
+--Functions
 
 function combo(unit)
 	if qCharge and (1000 + (GetTickCount() - qTime) * 0.4) < 1625 then
@@ -146,27 +155,6 @@ function combo(unit)
 		end		
 	end
 end
-
-OnUpdateBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "varusqlaunch" then 
-		qCharge = true
-		qTime = GetTickCount()
-	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
-		wTrack[GetObjectName(unit)]=buffProc.Count
-	elseif unit == myHero and buffProc.Name == "Muramana" then
-		iMura = true
-	end
-end)
-
-OnRemoveBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "varusqlaunch" then 
-		qCharge = false
-	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
-		wTrack[GetObjectName(unit)]=0
-	elseif unit == myHero and buffProc.Name == "Muramana" then
-		iMura = false
-	end
-end)
 
 function ks()
 	for i,unit in pairs(GetEnemyHeroes()) do
@@ -264,5 +252,35 @@ function lvlUp()
 		end
 	end
 end
+
+function skin()
+	if VMenu.s.uS:Value() and VMenu.s.sV:Value() ~= cSkin then
+		HeroSkinChanger(GetMyHero(),VMenu.s.sV:Value()) 
+		cSkin = VMenu.s.sV:Value()
+	end
+end
+
+--CALLBACKS
+
+OnUpdateBuff(function(unit,buffProc)
+	if unit == myHero and buffProc.Name == "varusqlaunch" then 
+		qCharge = true
+		qTime = GetTickCount()
+	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
+		wTrack[GetObjectName(unit)]=buffProc.Count
+	elseif unit == myHero and buffProc.Name == "Muramana" then
+		iMura = true
+	end
+end)
+
+OnRemoveBuff(function(unit,buffProc)
+	if unit == myHero and buffProc.Name == "varusqlaunch" then 
+		qCharge = false
+	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
+		wTrack[GetObjectName(unit)]=0
+	elseif unit == myHero and buffProc.Name == "Muramana" then
+		iMura = false
+	end
+end)
 
 PrintChat("Varus Loaded - Enjoy your game - Logge")
