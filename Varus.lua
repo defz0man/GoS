@@ -12,6 +12,7 @@ VMenu = Menu("Varus", "Varus")
 VMenu:SubMenu("c", "Combo")
 VMenu.c:Boolean("Q", "Use Q", true)
 VMenu.c:Slider("sQ", "Stacks to use Q", 0, 0, 3, 1)
+VMenu.c:Boolean("cQ", "Always fully charge Q", false)
 VMenu.c:Boolean("E", "Use E", true)
 VMenu.c:Slider("sE", "Stacks to use E", 1, 0, 3, 1)
 VMenu.c:Boolean("R", "Use R", true)
@@ -39,6 +40,13 @@ VMenu:SubMenu("i", "Items")
 VMenu.i:Boolean("iC","Use Items only in Combo", true)
 VMenu.i:Boolean("iO","Use offensive Items", true)
 VMenu.i:Boolean("iM","Toggle iMuramana", true)
+VMenu.i:Boolean("iQ","Use QSS/Merc", true)
+VMenu.i:Boolean("cStun","Cleanse Stun", true)
+VMenu.i:Boolean("cTaunt","Cleanse Taunt", true)
+VMenu.i:Boolean("cSnare","Cleanse Snare", true)
+VMenu.i:Boolean("cFear","Cleanse Fear", true)
+VMenu.i:Boolean("cCharm","Cleanse Charm", true)
+VMenu.i:Boolean("cSupp","Cleanse Suppression", true)
 
 VMenu:SubMenu("a", "AutoLvl")
 VMenu.a:Boolean("aL", "Use AutoLvl", true)
@@ -57,7 +65,7 @@ qRange = 0
 VarusE = { delay = 0.1, speed = 1700, width = 55, range = 925, radius = 275 }
 VarusR = { delay = 0.1, speed = 1850, width = 120, range = 1075}
 iMura = false
-cSkin=VMenu.s.sV:Value()
+cSkin=0
 local item={GetItemSlot(myHero,3144),GetItemSlot(myHero,3142),GetItemSlot(myHero,3153)}
 --						 cutlassl 				 gb 			 bork 
 
@@ -92,7 +100,7 @@ OnDraw(function(myHero)
 		if ValidTarget(unit,2000) and VMenu.d.dD:Value() then
 			local DmgDraw=0
 			if Ready(_Q) and VMenu.d.dQ:Value() then
-				DmgDraw = DmgDraw + CalcDamage(myHero, unit, GetCastLevel(myHero,_Q)*55-40+GetBonusDmg(unit)*1.6 ,0)
+				DmgDraw = DmgDraw + qDmg(unit)
 			end
 			if Ready(_Q) or Ready(_E) and VMenu.d.dW:Value() then
 				DmgDraw = DmgDraw + StackDamage(unit)
@@ -120,7 +128,6 @@ function combo(unit)
 	elseif not qCharge then
 		qRange = 900
 	end
-	
 	if IOW:Mode() == "Combo" then
 		--Q1
 		if VMenu.c.Q:Value() and Ready(_Q) and ValidTarget(unit, 1500) and not qCharge and wTrack[GetObjectName(unit)] >= VMenu.c.sQ:Value() then
@@ -134,7 +141,9 @@ function combo(unit)
 			--DrawCircle(GetOrigin(myHero),qRange,0,3,0xffffff00)
 			
 			if QPred and QPred.hitChance >= (VMenu.p.hQ:Value()/100) then
-				CastSkillShot2(_Q, QPred.castPos)
+				if not VMenu.c.cQ:Value() or qRange > 1500 then
+					CastSkillShot2(_Q, QPred.castPos)
+				end
 			end
 		end
 		
@@ -161,7 +170,7 @@ function ks()
 		
 		--Smark KS
 		if VMenu.ks.KSS:Value() and ValidTarget(unit, 1075) and Ready(_R) then
-			if Ready(_Q) and VMenu.ks.KSQ:Value() and (GetCurrentHP(unit)+GetDmgShield(unit)) < CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5 , GetCastLevel(myHero,_R) * 75 + 25 + GetBonusAP(unit) + 3 * GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) *.01) and (GetCurrentHP(unit)+GetDmgShield(unit)) > CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5,GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) * .01* wTrack[GetObjectName(unit)]) then
+			if Ready(_Q) and VMenu.ks.KSQ:Value() and (GetCurrentHP(unit)+GetDmgShield(unit)) < CalcDamage(myHero, unit, qDmg(unit) , GetCastLevel(myHero,_R) * 75 + 25 + GetBonusAP(unit) + 2 * GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) *.01) and (GetCurrentHP(unit)+GetDmgShield(unit)) > CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5,GetMaxHP(unit) * ((1.25 + GetCastLevel(myHero,_W) * 0.75) + GetBonusAP(unit) * 0.02) * .01* wTrack[GetObjectName(unit)]) then
 				local RPred=GetPrediction(unit, VarusR)
 				local VarusQ = { delay = 0.1, speed = 1850, width = 70, range = qRange }
 				local QPred = GetPrediction(unit, VarusQ)
@@ -178,21 +187,21 @@ function ks()
 		end
 	
 		--Q1
-		if VMenu.ks.KSQ:Value() and Ready(_Q) and ValidTarget(unit,1500) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, GetCastLevel(myHero,_Q) * 50 - 40 + GetBonusDmg(unit) * 1.5 ,0) + StackDamage(unit) then 
+		if VMenu.ks.KSQ:Value() and Ready(_Q) and ValidTarget(unit,1500) and GetCurrentHP(unit) + GetDmgShield(unit) <  qDmg(unit)*1.5 + StackDamage(unit) then 
 			if not qCharge then
 				CastSkillShot(_Q,GetOrigin(myHero))	
 		--Q2
-			elseif qCharge then
+			elseif qCharge and GetCurrentHP(unit) + GetDmgShield(unit) <  qDmg(unit) + StackDamage(unit) then
 				local VarusQ = { delay = 0.1, speed = 1850, width = 70, range = qRange }
 				local QPred = GetPrediction(unit, VarusQ)
-					if QPred and QPred.hitChance >= (VMenu.p.hQ:Value()/100) then
-						CastSkillShot2(_Q, QPred.castPos)
-					end
+				if QPred and QPred.hitChance >= (VMenu.p.hQ:Value()/100) then
+					CastSkillShot2(_Q, QPred.castPos)
+				end
 			end
 		end
 		
 		--E
-		if VMenu.ks.KSE:Value() and Ready(_E) and ValidTarget(unit,GetCastRange(myHero,_E)) and GetCurrentHP(unit)+GetDmgShield(unit) <  CalcDamage(myHero, unit, GetCastLevel(myHero,_E)*35+30+GetBonusDmg(unit)*.6 ,0) + StackDamage(unit) then 
+		if VMenu.ks.KSE:Value() and Ready(_E) and ValidTarget(unit,GetCastRange(myHero,_E)) and GetCurrentHP(unit)+GetDmgShield(unit) <  CalcDamage(myHero, unit, GetCastLevel(myHero,_E)*35+30+GetBonusDmg(myHero)*.6 ,0) + StackDamage(unit) then 
 			local EPred=GetCircularAOEPrediction(unit, VarusE)
 			if EPred and EPred.hitChance >= (VMenu.p.hE:Value()/100) then
 				CastSkillShot(_E,EPred.castPos)
@@ -200,7 +209,7 @@ function ks()
 		end
 		
 		--R
-		if VMenu.ks.KSR:Value() and Ready(_R) and ValidTarget(unit,1075) and GetCurrentHP(unit)+GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,GetCastLevel(myHero,_R)*75+25+GetBonusAP(unit)) then 
+		if VMenu.ks.KSR:Value() and Ready(_R) and ValidTarget(unit,1075) and GetCurrentHP(unit)+GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,GetCastLevel(myHero,_R)*75+25+GetBonusAP(myHero)) then 
 			local RPred=GetPrediction(unit, VarusR)
 			if RPred and RPred.hitChance >= (VMenu.p.hR:Value()/100) then
 				CastSkillShot(_R,RPred.castPos)
@@ -211,11 +220,29 @@ end
 
 function StackDamage(unit)
 	if wTrack[GetObjectName(unit)] then
-		local wDmg = GetMaxHP(unit)*((1.25+GetCastLevel(myHero,_W)*0.75)+GetBonusAP(unit)*0.02)*.01
+		local wDmg = GetMaxHP(unit)*((1.25+GetCastLevel(myHero,_W)*0.75)+GetBonusAP(myHero)*0.02)*.01
 		return CalcDamage(myHero, unit, 0, wDmg*wTrack[GetObjectName(unit)])
 	else
 		return 0
 	end
+end
+
+function qDmg(unit)
+	local delta = GetTickCount() - qTime
+	local qMax = GetCastLevel(myHero,_Q)*55-30+GetBonusDmg(myHero)*1.6+GetBaseDamage(myHero)*1.6
+	local qMin = qMax/16*10
+	local qCur = 0
+	--print("max "..CalcDamage(myHero, unit, qMax ,0)+StackDamage(unit))
+	--print("min "..CalcDamage(myHero, unit, qMin ,0)+StackDamage(unit))
+	qCur = qMin + (qMax - qMin) * delta / 2000
+	if qCur > qMax and qCharge then 
+		qCur = qMax
+	elseif not qCharge then
+		qCur = qMin
+	elseif not Ready(_Q) then
+		qCur = 0
+	end
+	return CalcDamage(myHero, unit, qCur ,0)
 end
 
 function items(unit)
@@ -241,6 +268,13 @@ function items(unit)
 			CastSpell(GetItemSlot(myHero,3043))
 		end
 	end
+	if VMenu.i.iM:Value() and iCC then
+		if GetItemSlot(myHero,3140)>0 then
+			CastSpell(GetItemSlot(myHero,3140))
+		elseif GetItemSlot(myHero,3139)>0 then
+			CastSpell(GetItemSlot(myHero,3139))
+		end
+	end
 end
 
 function lvlUp()
@@ -260,6 +294,8 @@ function skin()
 	end
 end
 
+
+
 --CALLBACKS
 
 OnUpdateBuff(function(unit,buffProc)
@@ -271,6 +307,21 @@ OnUpdateBuff(function(unit,buffProc)
 	elseif unit == myHero and buffProc.Name == "Muramana" then
 		iMura = true
 	end
+	if unit == myHero then
+		if VMenu.i.cStun:Value() and buffProc.Type == 5 then
+			iCC = true
+		elseif VMenu.i.cTaunt:Value() and buffProc.Type == 8 then
+			iCC = true
+		elseif VMenu.i.cSnare:Value() and buffProc.Type == 11 then
+			iCC = true
+		elseif VMenu.i.cFear:Value() and buffProc.Type == 21 then
+			iCC = true
+		elseif VMenu.i.cCharm:Value() and buffProc.Type == 22 then
+			iCC = true
+		elseif VMenu.i.cSupp:Value() and buffProc.Type == 24 then
+			iCC = true
+		end
+	end
 end)
 
 OnRemoveBuff(function(unit,buffProc)
@@ -280,6 +331,21 @@ OnRemoveBuff(function(unit,buffProc)
 		wTrack[GetObjectName(unit)]=0
 	elseif unit == myHero and buffProc.Name == "Muramana" then
 		iMura = false
+	end
+	if unit == myHero then
+		if VMenu.i.cStun:Value() and buffProc.Type == 5 then
+			iCC = false
+		elseif VMenu.i.cTaunt:Value() and buffProc.Type == 8 then
+			iCC = false
+		elseif VMenu.i.cSnare:Value() and buffProc.Type == 11 then
+			iCC = false
+		elseif VMenu.i.cFear:Value() and buffProc.Type == 21 then
+			iCC = false
+		elseif VMenu.i.cCharm:Value() and buffProc.Type == 22 then
+			iCC = false
+		elseif VMenu.i.cSupp:Value() and buffProc.Type == 24 then
+			iCC = false
+		end
 	end
 end)
 
