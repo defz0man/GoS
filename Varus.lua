@@ -1,10 +1,10 @@
 if GetObjectName(GetMyHero()) ~= "Varus" then return end
 
 require("Inspired")
-require("OpenPredict")
+if not pcall( require, "OpenPredict" ) then PrintChat("This script doesn't work without OpenPredict! Download it!") return end
 
 local version = 1
-
+ 
 --AutoUpdate("/LoggeL/GoS/master/Varus.lua","/LoggeL/GoS/master/Varus.version","Varus.lua",version)
 
 -- Menu
