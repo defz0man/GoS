@@ -68,7 +68,7 @@ OnTick(function(myHero)
 		ks()
 		combo(unit)
 		farm()
-		--items(unit)
+		items(unit)
 		lvlUp()
 		skin()
 	end
@@ -82,7 +82,7 @@ OnDraw(function(myHero)
 				DmgDraw = DmgDraw + getQdmg()
 			end
 			if Ready(_E) and NMenu.d.dE:Value() then
-				DmgDraw = DmgDraw + CalcDamage(myHero, unit, 0, 15+40*GetCastLevel(myHero,_E)*GetBonusAP(myHero))
+				DmgDraw = DmgDraw + CalcDamage(myHero, unit, 0, 15+40*GetCastLevel(myHero,_E)+GetBonusAP(myHero)*6)
 			end
 			if DmgDraw > GetCurrentHP(unit) then
 				DmgDraw = GetCurrentHP(unit)
@@ -91,7 +91,7 @@ OnDraw(function(myHero)
 		end
 	end
 	for _, creep in pairs(minionManager.objects) do
-		if NMenu.d.dQM:Value() and ValidTarget(creep,1000) and GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, getQdmg, 0) then
+		if NMenu.d.dQM:Value() and ValidTarget(creep,1000) and GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, getQdmg(), 0) then
 			DrawCircle(GetOrigin(creep),50,0,3,GoS.Red)
 		end
 	end
@@ -111,12 +111,12 @@ function combo(unit)
 		
 		--W
 		if Ready(_W) and NMenu.c.W:Value() and ValidTarget(unit, GetCastRange(myHero,_W)) and GetPercentHP(unit) < NMenu.c.WHP:Value() then
-			CastTargetSpell(_W,unit)
+			CastTargetSpell(unit,_W)
 		end		
 		
 		--E
 		if Ready(_E) and NMenu.c.E:Value() and ValidTarget(unit, GetCastRange(myHero,_E)) then
-			local NasusE=GetCircularAOEPrediction(unit, NasusE)
+			local EPred=GetCircularAOEPrediction(unit, NasusE)
 			if EPred and EPred.hitChance >= (NMenu.p.hE:Value()/100) then
 				CastSkillShot(_E,EPred.castPos)
 			end
@@ -145,7 +145,7 @@ function ks()
 	for i,unit in pairs(GetEnemyHeroes()) do
 		
 		--E
-		if NMenu.ks.KSE:Value() and Ready(_E) and ValidTarget(unit,GetCastRange(myHero,_E)) and GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShiled(unit) <  CalcDamage(myHero, unit, 0, 15+40*GetCastLevel(myHero,_E)*GetBonusAP(myHero)) then 
+		if NMenu.ks.KSE:Value() and Ready(_E) and ValidTarget(unit,GetCastRange(myHero,_E)) and GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit) <  CalcDamage(myHero, unit, 0, 15+40*GetCastLevel(myHero,_E)+GetBonusAP(myHero)*6) then 
 			local NasusE=GetCircularAOEPrediction(unit, NasusE)
 			if EPred and EPred.hitChance >= (NMenu.p.hE:Value()/100) then
 				CastSkillShot(_E,EPred.castPos)
@@ -212,4 +212,4 @@ OnRemoveBuff(function(unit,buffProc)
 	end
 end)
 
-PrintChat("Nasus Loaded - Enjoy your game - Logge")
+PrintChat("Varus Loaded - Enjoy your game - Logge")
