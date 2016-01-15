@@ -3,13 +3,17 @@ if GetObjectName(GetMyHero()) ~= "Velkoz" then return end
 require("Inspired")
 require("OpenPredict")
 
-local VelM=Menu("Vel","Vel")
+local VelM = Menu("Vel","Vel")
 VelM:SubMenu("c", "Combo")
 VelM.c:Boolean("Q","Use Q",true)
 VelM.c:Boolean("FQ","Force Q Split",true)
 VelM.c:Boolean("W","Use W",true)
 VelM.c:Boolean("E","Use E",true)
 
+VelM:SubMenu("p", "Prediction")
+VelM.p:Slider("hQ", "HitChance Q", 20, 0, 100, 1)
+VelM.p:Slider("hE", "HitChance E", 20, 0, 100, 1)
+VelM.p:Slider("hR", "HitChance R", 20, 0, 100, 1)
 
 --velkozqsplitactive
 --VelkozQ
@@ -19,12 +23,11 @@ DegreeTable={22.5,-22.5,45,-45}
 VelQ = { delay = 0.1, speed = 1300, width = 75, range = 1000}
 VelQ2 ={ delay = 0.1, speed = 1300, width = 75, range = 1000}
 VelW = { delay = 0.1, speed = 1700, width = 55, range = GetCastRange(myHero,_W)}
-VelE = { delay = 0.1, speed = 1700, width = 55, range = GetCastRange(myHero,_E), radius = 200 }
+VelE = { delay = 0.1, speed = 1700, range = GetCastRange(myHero,_E), radius = 200 }
 
 
 
 OnTick(function(myHero)
-	--print(Vector(3,1,1)*Vector(1,1,3))
 	if not IsDead(myHero) then
 		local unit = GetCurrentTarget()
 		Combo(unit)
@@ -37,7 +40,7 @@ end)
 function Combo(unit)
 	for _,i in pairs(GetEnemyHeroes()) do
 		if VelM.c.Q:Value() and GetCastName(myHero,_Q)=="VelkozQ" and ValidTarget(i,1400) and IOW:Mode() == "Combo"  then
-			local direct=GetPrediction(unit,VelQ)
+			local direct=GetPrediction(i,VelQ)
 		
 			if direct and direct.hitChance>.25 then
 				QStart=GetOrigin(myHero)
@@ -71,12 +74,13 @@ function Combo(unit)
 				end
 			end
 		end	
-	--if q traveling
+		
+		--if q traveling
 		if GetCastName(myHero,_Q)~="VelkozQ" and ValidTarget(i,2000) then
 			local split=GetPrediction(i, VelQ2, GetOrigin(QBall))
 			local BallVec = Vector(GetOrigin(QBall))-Vector(QStart)
 			--print((((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.castPos)):normalized())^2))
-			if (split.hitChance>.25 or VelM.c.FQ:Value()) and ((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.castPos)):normalized())^2<0.05 then
+			if (split.hitChance>.25 or VelM.c.FQ:Value()) and ((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.castPos)):normalized())^2<0.02 then
 				--print("SPLIT")
 				CastSpell(_Q)
 			end
@@ -84,16 +88,16 @@ function Combo(unit)
 	end
 			
 	if VelM.c.W:Value() and IOW:Mode() == "Combo" then
-		if CanUseSpell(myHero, _W) == READY and ValidTarget(unit,GetCastRange(myHero,_W)) then
-			local WPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit)*1.5,1000,250,GetCastRange(myHero,_W),70,false,true)
-			CastSkillShot(_W,WPred.PredPos.x,WPred.PredPos.y,WPred.PredPos.z)
+		if Ready(_W) and ValidTarget(unit,GetCastRange(myHero,_W)) then
+			local WPred = GetPrediction(unit, VelW)
+			CastSkillShot(_W,WPred.castPos)
 		end
 	end
 	
 	if VelM.c.E:Value() and IOW:Mode() == "Combo" then
-		if CanUseSpell(myHero, _E) == READY and ValidTarget(unit,GetCastRange(myHero,_E)) then
-			local EPred = GetPredictionForPlayer(GetOrigin(myHero),unit,GetMoveSpeed(unit),1300,100,GetCastRange(myHero,_E),70,false,true)
-			CastSkillShot(_E,EPred.PredPos.x,EPred.PredPos.y,EPred.PredPos.z)
+		if Ready(_E) and ValidTarget(unit,GetCastRange(myHero,_E)) then
+			local EPred = GetCircularAOEPrediction(unit, VelE)
+			CastSkillShot(_E,EPred.castPos)
 		end
 	end
 end
