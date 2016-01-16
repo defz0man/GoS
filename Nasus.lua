@@ -9,6 +9,8 @@ local version = 1
 NMenu = Menu("Nasus", "Nasus")
 NMenu:SubMenu("c", "Combo")
 NMenu.c:Boolean("Q", "Use Q", true)
+NMenu.c:Boolean("QP", "Use HP Pred for Q", true)
+NMenu.c:Slider("QDM", "Q DMG mod", 0, -10, 10, 1)
 NMenu.c:Boolean("W", "Use W", true)
 NMenu.c:Slider("WHP", "Use W at %HP", 20, 1, 100, 1)
 NMenu.c:Boolean("E", "Use E", true)
@@ -21,10 +23,8 @@ NMenu.f:Boolean("QLH", "Use Q in LastHit", true)
 NMenu.f:Boolean("QA", "Always use Q", true)
 
 NMenu:SubMenu("ks", "Killsteal")
+NMenu.ks:Boolean("KSQ","Killsteal with Q", true)
 NMenu.ks:Boolean("KSE","Killsteal with E", true)
-
-NMenu:SubMenu("p", "Prediction")
-NMenu.p:Slider("hE", "HitChance E", 20, 0, 100, 1)
 
 NMenu:SubMenu("d", "Draw Damage")
 NMenu.d:Boolean("dD","Draw Damage", true)
@@ -117,7 +117,7 @@ function combo(unit)
 		--E
 		if Ready(_E) and NMenu.c.E:Value() and ValidTarget(unit, GetCastRange(myHero,_E)) then
 			local EPred=GetCircularAOEPrediction(unit, NasusE)
-			if EPred and EPred.hitChance >= (NMenu.p.hE:Value()/100) then
+			if EPred and EPred.hitChance >= 0.2 then
 				CastSkillShot(_E,EPred.castPos)
 			end
 		end		
@@ -132,7 +132,7 @@ end
 function farm()
 	if (Ready(_Q) or CanUseSpell(myHero,_Q) == 8) and ((NMenu.f.QLC:Value() and IOW:Mode() == "LaneClear") or (NMenu.f.QLH:Value() and IOW:Mode() == "LastHit") or (NMenu.f.QA:Value() and IOW:Mode() ~= "Combo")) then
 		for _, creep in pairs(minionManager.objects) do
-			if ValidTarget(creep,GetRange(myHero)+GetHitBox(myHero)+GetHitBox(creep)/2) and GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, qDmg, 0) then
+			if ValidTarget(creep,GetRange(myHero)+GetHitBox(myHero)+GetHitBox(creep)/2) and ((GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, qDmg, 0) and NMenu.c.QP:Value()) or (GetCurrentHP(creep)<CalcDamage(myHero, creep, qDmg, 0) and not NMenu.c.QP:Value())) then
 				CastSpell(_Q)
 				AttackUnit(creep)
 				break
@@ -144,10 +144,16 @@ end
 function ks()
 	for i,unit in pairs(GetEnemyHeroes()) do
 		
+		--Q
+		if NMenu.ks.KSQ:Value() and Ready(_Q) and ValidTarget(unit, GetCastRange(myHero,_Q)) and GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit) < CalcDamage(myHero, unit, qDmg, 0) then
+			CastSpell(_Q)
+			AttackUnit(unit)
+		end
+		
 		--E
 		if NMenu.ks.KSE:Value() and Ready(_E) and ValidTarget(unit,GetCastRange(myHero,_E)) and GetCurrentHP(unit)+GetDmgShield(unit)+GetMagicShield(unit) <  CalcDamage(myHero, unit, 0, 15+40*GetCastLevel(myHero,_E)+GetBonusAP(myHero)*6) then 
 			local NasusE=GetCircularAOEPrediction(unit, NasusE)
-			if EPred and EPred.hitChance >= (NMenu.p.hE:Value()/100) then
+			if EPred and EPred.hitChance >= .2 then
 				CastSkillShot(_E,EPred.castPos)
 			end
 		end
@@ -167,7 +173,7 @@ function items(unit)
 end
 
 function getQdmg()
-	local base = 10 + 20*GetCastLevel(myHero,_Q) + GetBaseDamage(myHero) + GetBuffData(myHero,"nasusqstacks").Stacks
+	local base = 10 + 20*GetCastLevel(myHero,_Q) + GetBaseDamage(myHero) + GetBuffData(myHero,"nasusqstacks").Stacks + NMenu.c.QDM:Value()
 	if 		(Sheen or Ready(GetItemSlot(myHero,3078))) and GetItemSlot(myHero,3078)>0 then base = base + GetBaseDamage(myHero)*2 
 	elseif 	(Sheen or Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3057)>0 then base = base + GetBaseDamage(myHero)
 	elseif 	(Sheen or Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3025)>0 then base = base + GetBaseDamage(myHero)*1.25 
@@ -197,19 +203,15 @@ end
 --CALLBACKS
 
 OnUpdateBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "NasusQ" then
-		qActive = true
-	elseif unit == myHero and buffProc.Name == "sheen" then
+	if unit == myHero and buffProc.Name == "sheen" then
 		Sheen = true
 	end
 end)
 
 OnRemoveBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "NasusQ" then
-		qActive = false
-	elseif unit == myHero and buffProc.Name == "sheen" then
+	if unit == myHero and buffProc.Name == "sheen" then
 		Sheen = false
 	end
 end)
 
-PrintChat("Varus Loaded - Enjoy your game - Logge")
+PrintChat("Nasus Loaded - Enjoy your game - Logge")
