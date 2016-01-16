@@ -15,20 +15,26 @@ VelM.p:Slider("hQ", "HitChance Q", 20, 0, 100, 1)
 VelM.p:Slider("hE", "HitChance E", 20, 0, 100, 1)
 VelM.p:Slider("hR", "HitChance R", 20, 0, 100, 1)
 
+VelM:SubMenu("a", "Advanced")
+VelM.a:Slider("eQ", "Extra Q", 5 , 1, 20, 1)
+
 --velkozqsplitactive
 --VelkozQ
 value=4 --get value from silder
 DegreeTable={22.5,-22.5,45,-45}
 
-VelQ = { delay = 0.1, speed = 1300, width = 75, range = 1000}
+VelQ = { delay = 0.1, speed = 1300, width = 75, range = 750}
 VelQ2 ={ delay = 0.1, speed = 1300, width = 75, range = 1000}
-VelW = { delay = 0.1, speed = 1700, width = 55, range = GetCastRange(myHero,_W)}
-VelE = { delay = 0.1, speed = 1700, range = GetCastRange(myHero,_E), radius = 200 }
-
+VelW = { delay = 0.1, speed = 1700, width = 75, range = 1050}
+VelE = { delay = 0.1, speed = 1700, range = 850, radius = 200 }
+ccTrack={}
+for _,i in pairs(GetEnemyHeroes()) do
+	ccTrack[GetObjectName(i)] = false
+end
 
 
 OnTick(function(myHero)
-	if not IsDead(myHero) then
+	if not IsDead(myHero) and not rCast then
 		local unit = GetCurrentTarget()
 		Combo(unit)
 	end
@@ -42,7 +48,7 @@ function Combo(unit)
 		if VelM.c.Q:Value() and GetCastName(myHero,_Q)=="VelkozQ" and ValidTarget(i,1400) and IOW:Mode() == "Combo"  then
 			local direct=GetPrediction(i,VelQ)
 		
-			if direct and direct.hitChance>.25 then
+			if direct and direct.hitChance>.25 and not direct:mCollision(1) then
 				QStart=GetOrigin(myHero)
 				CastSkillShot(_Q,direct.castPos)
 				break
@@ -55,14 +61,14 @@ function Combo(unit)
 			
 				--Degree Vector from table
 				local sideVec=getVec(BVec,DegreeTable[l]):normalized()*dist
-				DrawCircle(sideVec+GetOrigin(myHero) ,50,0,3,GoS.Green)
+				--DrawCircle(sideVec+GetOrigin(myHero) ,50,0,3,GoS.Green)
 				
 				local circlespot = sideVec+GetOrigin(myHero)
 				local QPred = GetPrediction(i, VelQ2, circlespot)
 				--print(DegreeTable[l]..":"..sideVec.x)
 				
 				--Part on the range around enemy
-				DrawCircle(circlespot,50,0,3,GoS.Red)
+				--DrawCircle(circlespot,50,0,3,GoS.Red)
 				--print(CountObjectsOnLineSegment(GetOrigin(myHero), circlespot, 70, enemyCreeps)<1)
 				if not QPred:mCollision(1) then
 						
@@ -78,28 +84,36 @@ function Combo(unit)
 		--if q traveling
 		if GetCastName(myHero,_Q)~="VelkozQ" and ValidTarget(i,2000) then
 			local split=GetPrediction(i, VelQ2, GetOrigin(QBall))
-			local BallVec = Vector(GetOrigin(QBall))-Vector(QStart)
-			--print((((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.castPos)):normalized())^2))
-			if (split.hitChance>.25 or VelM.c.FQ:Value()) and ((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.castPos)):normalized())^2<0.02 then
-				--print("SPLIT")
+			if ((Vector(GetOrigin(QBall))-Vector(QStart)):normalized()*(Vector(GetOrigin(QBall))-Vector(split.castPos)):normalized())^2 < VelM.a.eQ:Value()/1000 then
 				CastSpell(_Q)
 			end
 		end
 	end
-			
-	if VelM.c.W:Value() and IOW:Mode() == "Combo" then
-		if Ready(_W) and ValidTarget(unit,GetCastRange(myHero,_W)) then
+	
+	if IOW:Mode() == "Combo" then		
+		if VelM.c.W:Value() and Ready(_W) and ValidTarget(unit,1050) then
 			local WPred = GetPrediction(unit, VelW)
 			CastSkillShot(_W,WPred.castPos)
 		end
-	end
-	
-	if VelM.c.E:Value() and IOW:Mode() == "Combo" then
-		if Ready(_E) and ValidTarget(unit,GetCastRange(myHero,_E)) then
+			
+		if VelM.c.E:Value() and Ready(_E) and ValidTarget(unit,850) then
 			local EPred = GetCircularAOEPrediction(unit, VelE)
 			CastSkillShot(_E,EPred.castPos)
 		end
-	end
+		
+		if ValidTarget(unit,GetCastRange(myHero,_R)*.8) and Ready(_R) and EnemiesAround(GetOrigin(myHero),400) == 0 then
+			if GetDistance(GetOrigin(myHero),GetOrigin(enemy)) then
+				local RTick = 30 + 20 * GetCastLevel(myHero,_R) + GetBonusAP(myHero) * .06
+				local Passive = 25 + 10 * GetLevel(myHero)
+				local ticks = (GetCastRange(myHero,_R) - GetDistance(GetOrigin(unit),GetOrigin(myHero))) / (GetMoveSpeed(unit)*.8)
+				if ccTrack[GetObjectName(unit)] and rTime > GetGameTimer() then ticks = ticks + (rTime - GetGameTimer())*4 end
+				DrawDmgOverHpBar(unit, GetCurrentHP(unit), CalcDamage(myHero, unit, 0, RTick * ticks) + Passive * 0.6, 0, GoS.White)
+				if GetCurrentHP(unit) < CalcDamage(myHero, unit, 0, RTick * ticks * 4) + Passive * 0.6 then
+					CastSkillShot(_R, GetOrigin(unit))
+				end
+			end
+		end
+	end	
 end
 
 OnProcessSpell(function(unit,spellProc)
@@ -116,20 +130,10 @@ OnCreateObj(function(Object,myHero)
 end)
 
 function getVec(base, deg)
-	local mult=1/deg
-	--x' = x cos θ - y sin θ
-   -- y' = x sin θ + y cos θ
-	--[[if deg<0 then
-		local perp=Vector(base):perpendicular2()
-	else
-		local perp=Vector(base):perpendicular()
-	end 	
-	local vek=(Vector(base)-Vector(perp))*mult--]]
 	local x,y,z=base:unpack()
 	x=x*math.cos(degrad(deg))-z*math.sin(degrad(deg))
 	z=z*math.cos(degrad(deg))+x*math.sin(degrad(deg))
 	vek=Vector(x,y,z)
-	--vek=Vector(base)+Vector(vek)
 	return vek
 end
 
@@ -137,5 +141,28 @@ function degrad(deg)
 	deg=(deg/180)*math.pi
 	return deg
 end
+
+--Callback
+
+OnUpdateBuff(function(unit,buffProc)
+	if unit ~= myHero and (buffProc.Type == 29 or buffProc.Type == 11 or buffProc.Type == 24 or buffProc.Type == 30) then 
+		ccTrack[GetObjectName(unit)] = true
+		rTime = buffProc.ExpireTime
+	elseif unit == myHero and buffProc.Name == "VelkozR" then
+		IOW.movementEnabled = false
+		IOW.attacksEnabled = false
+		rCast = true
+	end
+end)
+
+OnRemoveBuff(function(unit,buffProc)
+	if unit ~= myHero and (buffProc.Type == 29 or buffProc.Type == 11 or buffProc.Type == 24 or buffProc.Type == 30) then 
+		ccTrack[GetObjectName(unit)] = false
+	elseif unit == myHero and buffProc.Name == "VelkozR" then
+		IOW.movementEnabled = true
+		IOW.attacksEnabled = true
+		rCast = false
+	end
+end)
 
 print("Vel loaded - Logge")
