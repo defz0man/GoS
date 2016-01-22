@@ -180,7 +180,7 @@ function ks()
 						CastSkillShot(_Q,GetOrigin(myHero))	
 							DelayAction( function()
 								CastSkillShot2(_Q, GetOrigin(unit)) 
-							end,50)
+							end,0.050)
 					end,50)
 				end
 			end
@@ -280,7 +280,7 @@ end
 function lvlUp()
 	if VMenu.a.aL:Value() and GetLevelPoints(myHero) >= 1 and GetLevel(myHero) >= VMenu.a.sL:Value() then
 		if VMenu.a.hL:Value() then
-			DelayAction(function() LevelSpell(lTable[VMenu.a.aLS:Value()][GetLevel(myHero)-GetLevelPoints(myHero)+1]) end, math.random(500,750))
+			DelayAction(function() LevelSpell(lTable[VMenu.a.aLS:Value()][GetLevel(myHero)-GetLevelPoints(myHero)+1]) end, math.random(0.500,0.750))
 		else
 			LevelSpell(lTable[VMenu.a.aLS:Value()][GetLevel(myHero)-GetLevelPoints(myHero)+1])
 		end
