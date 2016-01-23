@@ -154,7 +154,7 @@ function eRange()
 	local maxRange = 1050+GetCastLevel(myHero,2)*150 
 	local t = 0.75+GetCastLevel(myHero,2)*0.15
 	local currentRange = (maxRange) * ((GetTickCount()- eTime)/t)
-	if currentRange > than maxRange then
+	if currentRange > maxRange then
 		currentRange = maxRange
 	end
 	return currentRange
