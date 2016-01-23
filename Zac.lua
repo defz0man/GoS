@@ -153,9 +153,9 @@ function combo(unit)
 end
 
 function eRange()
-	local maxRange = 1050+GetCastLevel(myHero,2)*150 
-	local t = 0.75+GetCastLevel(myHero,2)*0.15
-	local currentRange = (maxRange) * ((GetTickCount()- eTime)/t)
+	local maxRange = 1050 + GetCastLevel(myHero,2) * 150 
+	local mt = 0.75 + GetCastLevel(myHero,2) * 0.15
+	local currentRange = (maxRange) * ((GetTickCount()- eTime)/mt)
 	if currentRange > maxRange then
 		currentRange = maxRange
 	end
