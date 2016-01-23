@@ -48,9 +48,9 @@ ZMenu.s:Slider("sV", "Skin Number", 0, 0, 7, 1)
 --Locals
 local eTime = 0
 local eCharge = false
-local qRange = 550 + GetHitbox(myHero)/2
-local wRange = 350 + GetHitbox(myHero)/2
-local rRAnge = 300 + GetHitbox(myHero)/2
+local qRange = 550 + GetHitBox(myHero)/2
+local wRange = 350 + GetHitBox(myHero)/2
+local rRAnge = 300 + GetHitBox(myHero)/2
 local ZacQ = { delay = 0.3, speed = math.huge , width = 100, range = qRange}
 local ZacE = { delay = 0.1, speed = 1700, range = eRange(), radius = 300}
 local Move = { delay = 0.5, speed = math.huge, width = 50, range = math.huge}
