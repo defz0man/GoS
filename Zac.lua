@@ -38,7 +38,7 @@ ZMenu.i:Boolean("iO","Use defensive Items", true)
 
 ZMenu:SubMenu("a", "AutoLvl")
 ZMenu.a:Boolean("aL", "Use AutoLvl", true)
-ZMenu.a:DropDown("aLS", "AutoLvL", 1, {"Q-W-E","Q-E-W"})
+ZMenu.a:DropDown("aLS", "AutoLvL", 3, {"Q-W-E","Q-E-W","E-Q-W"})
 ZMenu.a:Slider("sL", "Start AutoLvl with LvL x", 1, 1, 18, 1)
 ZMenu.a:Boolean("hL", "Humanize LvLUP", true)
 
@@ -75,7 +75,6 @@ local dmg={
 
 -- Start
 OnTick(function(myHero)
-	DrawCircle(GetOrigin(myHero),eRange(),0,3,GoS.White)
 	if not IsDead(myHero) then
 		local unit = GetCurrentTarget()
 		ks()
@@ -222,7 +221,6 @@ end)
 
 OnUpdateBuff(function(unit,buffProc)
 	if unit == myHero and buffProc.Name == "ZacE" then
-		print("E spell")
 		eCharge = true
 		eTime = GetTickCount()
 		IOW.movementEnabled = false
@@ -232,7 +230,6 @@ end)
 
 OnRemoveBuff(function(unit,buffProc)
 	if unit == myHero and buffProc.Name == "ZacE" then
-		print("E end")
 		eCharge = false
 		IOW.movementEnabled = true
 		IOW.attacksEnabled = true
