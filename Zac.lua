@@ -1,4 +1,4 @@
-if GetObjectName(GetMyHero()) == "Zac" then return end
+if GetObjectName(GetMyHero()) ~= "Zac" then return end
 
 require("Inspired")
 if not pcall( require, "OpenPredict" ) then PrintChat("This script doesn't work without OpenPredict! Download it!") return end
@@ -66,10 +66,10 @@ local lTable={
 
 --dmg table
 local dmg={ 
-["Q"] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
-["W"] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
-["E"] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
-["R"] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
+[0] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
+[1] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
+[2] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
+[3] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
 }
 
 -- Start
@@ -139,7 +139,7 @@ function combo(unit)
 		
 		--E
 		if ZMenu.c.E:Value() and not eCharge and eRdy and ValidTarget(unit, 1050 + GetCastLevel(myHero,2)*150) then
-			CastSpell(2)
+			CastSkillShot(2,GetOrigin(unit))
 		elseif eCharge and ZMenu.c.E:Value() then
 			local ZacE = { delay = 0.1, speed = 1700, range = eRange(), radius = 300}
 			local EPred=GetCircularAOEPrediction(unit, ZacE)
@@ -214,14 +214,20 @@ end)
 
 OnUpdateBuff(function(unit,buffProc)
 	if unit == myHero and buffProc.Name == "zace" then
+		print("E spell")
 		eCharge = true
 		eTime = GetTickCount()
+		IOW.movementEnabled = false
+		IOW.attacksEnabled = false
 	end
 end)
 
 OnRemoveBuff(function(unit,buffProc)
 	if unit == myHero and buffProc.Name == "zace" then
+		print("E end")
 		eCharge = false
+		IOW.movementEnabled = true
+		IOW.attacksEnabled = true
 	end
 end)
 
