@@ -23,6 +23,7 @@ ZMenu.ks:Boolean("KSR","Killsteal with R", true)
 
 ZMenu:SubMenu("p", "Prediction")
 ZMenu.p:Slider("hQ", "HitChance Q", 20, 0, 100, 1)
+ZMenu.p:Slider("hE", "HitChance E", 20, 0, 100, 1)
 
 ZMenu:SubMenu("d", "Draw Damage")
 ZMenu.d:Boolean("dD","Draw Damage", true)
