@@ -165,6 +165,8 @@ function shield()
 			CastTargetSpell(i,2)
 		end
 	end
+	local movePos = GetPrediction(myHero, Move).castPos
+	local ePos = GetOrigin(ClosestEnemy(GetOrigin(myHero)))
 	if IOW:Mode() == "Combo" and KMenu.sh.sG:Value() and KMenu.sh[eHeroes[GetObjectName(myHero)]]:Value() and GetDistance(ePos,GetOrigin(myHero))>GetDistance(ePos,movePos) then
 			CastTargetSpell(myHero,2)
 	end
