@@ -18,6 +18,7 @@ KMenu:SubMenu("sh", "Shield")
 KMenu.sh:Slider("sP", "Shield ally under %HP", 50, 0, 100, 1)
 KMenu.sh:Boolean("sG", "Use shield as GapCloser", false)
 KMenu.sh:Boolean("sT", "Shield Turretshot", true)
+KMenu.sh:Boolean("sL", "Shield LowHealth", true)
 
 eHeroes = {}
 DelayAction( function()
@@ -163,6 +164,9 @@ function shield()
 		if IOW:Mode() == "Combo" and KMenu.sh.sG:Value() and KMenu.sh[eHeroes[GetObjectName(i)]]:Value() and GetDistance(ePos,GetOrigin(i))>GetDistance(ePos,movePos) and GetDistance(GetOrigin(myHero),GetOrigin(i))< eRange then
 			CastTargetSpell(i,2)
 		end
+	end
+	if IOW:Mode() == "Combo" and KMenu.sh.sG:Value() and KMenu.sh[eHeroes[GetObjectName(myHero)]]:Value() and GetDistance(ePos,GetOrigin(myHero))>GetDistance(ePos,movePos) then
+			CastTargetSpell(myHero,2)
 	end
 end
 
