@@ -65,14 +65,6 @@ local lTable={
 [3]={_Q,_W,_E,_Q,_Q,_R,_Q,_Q,_W,_E,_R,_W,_E,_W,_E,_R,_W,_E}
 }
 
---dmg table
-local dmg={ 
-[0] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
-[1] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
-[2] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
-[3] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
-}
-
 -- Start
 OnTick(function(myHero)
 	if not IsDead(myHero) then
@@ -92,6 +84,7 @@ OnDraw(function(myHero)
 	local rRdy = Ready(_R)
 	for i,unit in pairs(GetEnemyHeroes()) do
 		if ValidTarget(unit,2000) and ZMenu.d.dD:Value() then
+			local dmg=dmgCalc(unit)
 			local DmgDraw=0
 			if qRdy and ZMenu.d.dQ:Value() then
 				DmgDraw = dmg.Q
@@ -166,6 +159,7 @@ function ks()
 	local wRdy = Ready(_W)
 	local rRdy = Ready(_R)
 	for i,unit in pairs(GetEnemyHeroes()) do
+		local dmg=dmgCalc(unit)
 		
 		--W
 		if ZMenu.ks.KSW:Value() and wRdy and ValidTarget(unit,wRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmg.W) then
@@ -212,6 +206,17 @@ function skin()
 		HeroSkinChanger(GetMyHero(),ZMenu.s.sV:Value()) 
 		cSkin = ZMenu.s.sV:Value()
 	end
+end
+
+--dmg table
+function dmgCalc(unit)
+	local dmg={ 
+	[0] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
+	[1] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
+	[2] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
+	[3] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
+	}
+	return dmgCalc
 end
 
 --CALLBACKS
