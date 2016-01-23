@@ -143,7 +143,7 @@ function combo(unit)
 		elseif eCharge and ZMenu.c.E:Value() then
 			local ZacE = { delay = 0.1, speed = 1700, range = eRange(), radius = 300}
 			local EPred=GetCircularAOEPrediction(unit, ZacE)
-			if EPred and EPred.hitChance >= (VMenu.p.hE:Value()/100) then
+			if EPred and EPred.hitChance >= (ZMenu.p.hE:Value()/100) then
 				CastSkillShot(2,EPred.castPos)
 			end
 		end	
@@ -151,7 +151,13 @@ function combo(unit)
 end
 
 function eRange()
-	return GetCastRange(myHero,_E)
+	local maxRange = 1050+GetCastLevel(myHero,2)*150 
+	local t = 0.75+GetCastLevel(myHero,2)*0.15
+	local currentRange = (maxRange) * ((GetTickCount()- eTime)/t)
+	if currentRange > than maxRange then
+		currentRange = maxRange
+	end
+	return currentRange
 end
 
 function ks()
@@ -213,7 +219,7 @@ OnProcessSpell(function(unit,spellProc)
 end)
 
 OnUpdateBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "zace" then
+	if unit == myHero and buffProc.Name == "ZacE" then
 		print("E spell")
 		eCharge = true
 		eTime = GetTickCount()
@@ -223,7 +229,7 @@ OnUpdateBuff(function(unit,buffProc)
 end)
 
 OnRemoveBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "zace" then
+	if unit == myHero and buffProc.Name == "ZacE" then
 		print("E end")
 		eCharge = false
 		IOW.movementEnabled = true
