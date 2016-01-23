@@ -75,6 +75,7 @@ local dmg={
 
 -- Start
 OnTick(function(myHero)
+	DrawCircle(GetOrigin(myHero),eRange(),0,3,GoS.White)
 	if not IsDead(myHero) then
 		local unit = GetCurrentTarget()
 		ks()
