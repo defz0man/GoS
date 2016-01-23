@@ -148,7 +148,6 @@ function combo(unit)
 		--Q
 		if KMenu.c.Q:Value() and qRdy and ValidTarget(unit, qRange) then
 			local QPred = GetPrediction(unit, KarmaQ)
-			--DrawCircle(GetOrigin(myHero),qRange,0,3,0xffffff00)
 			
 			if QPred and QPred.hitChance >= (KMenu.p.hQ:Value()/100) and not QPred:mCollision(1) then
 				CastSkillShot(_Q, QPred.castPos)
@@ -190,7 +189,7 @@ function ks()
 end
 
 function items(unit)
-	if KMenu.i.iO:Value() and ValidTarget(unit,500) then
+	if KMenu.i.iO:Value() and ValidTarget(unit,700) then
 		if IOW:Mode() == "Combo" or not KMenu.i.iC:Value() then
 			for _,i in pairs(item) do
 				if i>0 then
@@ -223,14 +222,6 @@ OnProcessSpell(function(unit,spellProc)
 	if Ready(2) and KMenu.sh.sT:Value() and GetObjectType(unit) == Obj_AI_Turret and GetDistance(GetOrigin(spellProc.target),GetOrigin(myHero))<eRange and GetObjectType(spellProc.target) == Obj_AI_Hero and GetTeam(spellProc.target) == MINION_ALLY and GetPercentHP(spellProc.target)<= KMenu.sh.sP:Value() and KMenu.sh[eHeroes[GetObjectName(spellProc.target)]]:Value() then
 		CastTargetSpell(spellProc.target,2)
 	end
-end)
-
-OnUpdateBuff(function(unit,buffProc)
-
-end)
-
-OnRemoveBuff(function(unit,buffProc)
-
 end)
 
 PrintChat("Karma Loaded - Enjoy your game - Logge")
