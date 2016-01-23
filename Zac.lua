@@ -47,8 +47,8 @@ ZMenu.s:Boolean("uS", "Use Skin", false)
 ZMenu.s:Slider("sV", "Skin Number", 0, 0, 7, 1)
 
 --Locals
-local eTime = 0
-local eCharge = false
+eTime = 0
+eCharge = false
 local qRange = 550 + GetHitBox(myHero)/2
 local wRange = 350 + GetHitBox(myHero)/2
 local rRAnge = 300 + GetHitBox(myHero)/2
