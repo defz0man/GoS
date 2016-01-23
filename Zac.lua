@@ -146,7 +146,7 @@ function combo(unit)
 			local ZacE = { delay = 0.1, speed = 1700, range = eRange(), radius = 300}
 			local EPred=GetCircularAOEPrediction(unit, ZacE)
 			if EPred and EPred.hitChance >= (ZMenu.p.hE:Value()/100) then
-				CastSkillShot(2,EPred.castPos)
+				CastSkillShot2(2,EPred.castPos)
 			end
 		end	
 	end
@@ -155,7 +155,7 @@ end
 function eRange()
 	local maxRange = 1050 + GetCastLevel(myHero,2) * 150 
 	local mt = 750 + GetCastLevel(myHero,2) * 150
-	local currentRange = (maxRange) * ((GetTickCount()- eTime)/mt)
+	local currentRange = maxRange * ((GetTickCount()- eTime)/mt)
 	if currentRange > maxRange then
 		currentRange = maxRange
 	end
