@@ -1,4 +1,4 @@
-if GetObjectName(GetMyHero()) ~= "Zac" then return end
+if GetObjectName(GetMyHero()) == "Zac" then return end
 
 require("Inspired")
 if not pcall( require, "OpenPredict" ) then PrintChat("This script doesn't work without OpenPredict! Download it!") return end
@@ -52,7 +52,6 @@ local qRange = 550 + GetHitBox(myHero)/2
 local wRange = 350 + GetHitBox(myHero)/2
 local rRAnge = 300 + GetHitBox(myHero)/2
 local ZacQ = { delay = 0.3, speed = math.huge , width = 100, range = qRange}
-local ZacE = { delay = 0.1, speed = 1700, range = eRange(), radius = 300}
 local Move = { delay = 0.5, speed = math.huge, width = 50, range = math.huge}
 local cSkin = 0
 local item = {GetItemSlot(myHero,3143),GetItemSlot(myHero,3748),GetItemSlot(myHero,3146)}
@@ -68,7 +67,7 @@ local lTable={
 --dmg table
 local dmg={ 
 ["Q"] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
-["W"] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(unit)*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
+["W"] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
 ["E"] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
 ["R"] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
 }
@@ -152,7 +151,7 @@ function combo(unit)
 end
 
 function eRange()
-	
+	return GetCastRange(myHero,_E)
 end
 
 function ks()
