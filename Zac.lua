@@ -159,7 +159,7 @@ function ks()
 	local wRdy = Ready(_W)
 	local rRdy = Ready(_R)
 	for i,unit in pairs(GetEnemyHeroes()) do
-		local dmg=dmgCalc(unit)
+		local dmg = dmgCalc(unit)
 		
 		--W
 		if ZMenu.ks.KSW:Value() and wRdy and ValidTarget(unit,wRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmg.W) then
@@ -211,10 +211,10 @@ end
 --dmg table
 function dmgCalc(unit)
 	local dmg={ 
-	[0] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
-	[1] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
-	[2] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
-	[3] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
+	["Q"] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
+	["W"] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
+	["E"] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
+	["R"] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
 	}
 	return dmgCalc
 end
