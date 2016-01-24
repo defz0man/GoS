@@ -38,7 +38,7 @@ ZMenu.i:Boolean("iO","Use defensive Items", true)
 
 ZMenu:SubMenu("a", "AutoLvl")
 ZMenu.a:Boolean("aL", "Use AutoLvl", true)
-ZMenu.a:DropDown("aLS", "AutoLvL", 3, {"Q-W-E","Q-E-W","E-Q-W"})
+ZMenu.a:DropDown("aLS", "AutoLvL", 1, {"E-Q-W","Q-W-E","Q-E-W"})
 ZMenu.a:Slider("sL", "Start AutoLvl with LvL x", 1, 1, 18, 1)
 ZMenu.a:Boolean("hL", "Humanize LvLUP", true)
 
@@ -55,14 +55,14 @@ local rRAnge = 300 + GetHitBox(myHero)/2
 local ZacQ = { delay = 0.3, speed = math.huge , width = 100, range = qRange}
 local Move = { delay = 0.5, speed = math.huge, width = 50, range = math.huge}
 local cSkin = 0
-local item = {GetItemSlot(myHero,3143),GetItemSlot(myHero,3748),GetItemSlot(myHero,3146)}
+local item = {3143,3748,3146}
 --						 Rand 				 hydra Kappa 				 gb 
 
 --Lvlup table
 local lTable={
-[1]={_Q,_W,_E,_Q,_Q,_R,_Q,_W,_Q,_W,_R,_W,_W,_E,_E,_R,_E,_E},
-[2]={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W},
-[3]={_Q,_W,_E,_Q,_Q,_R,_Q,_Q,_W,_E,_R,_W,_E,_W,_E,_R,_W,_E}
+[1]={_Q,_W,_E,_Q,_Q,_R,_Q,_Q,_W,_E,_R,_W,_E,_W,_E,_R,_W,_E},
+[2]={_Q,_W,_E,_Q,_Q,_R,_Q,_W,_Q,_W,_R,_W,_W,_E,_E,_R,_E,_E},
+[3]={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
 }
 
 -- Start
@@ -131,7 +131,7 @@ function combo(unit)
 		end
 		
 		--E
-		if ZMenu.c.E:Value() and not eCharge and eRdy and ValidTarget(unit, 1050 + GetCastLevel(myHero,2)*150) then
+		if ZMenu.c.E:Value() and not eCharge and eRdy and ValidTarget(unit, 1050 + GetCastLevel(myHero,2)*130) then
 			CastSkillShot(2,GetOrigin(unit))
 		elseif eCharge and ZMenu.c.E:Value() then
 			local ZacE = { delay = 0.1, speed = 1700, range = eRange(), radius = 300}
@@ -181,8 +181,8 @@ function items(unit)
 	if ZMenu.i.iO:Value() and ValidTarget(unit,500) then
 		if IOW:Mode() == "Combo" or not ZMenu.i.iC:Value() then
 			for _,i in pairs(item) do
-				if i>0 then
-					CastTargetSpell(unit,i)
+				if GetItemSlot(myHero,i)>0 and Ready(GetItemSlot(myHero,i)) then
+					CastTargetSpell(unit,GetItemSlot(myHero,i))
 				end
 			end
 		end
