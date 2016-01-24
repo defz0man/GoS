@@ -64,20 +64,13 @@ local eRange = 800
 local KarmaQ = { delay = 0.1, speed = 1700, width = 100, range = qRange}
 local Move = { delay = 0.5, speed = math.huge, width = 50, range = math.huge}
 local cSkin = 0
-local item = {GetItemSlot(myHero,3092),GetItemSlot(myHero,3142),GetItemSlot(myHero,3153)}
---						 FrostQuell 				 gb 			 bork 
+local item = {3092,3142,3153}
+--	FrostQuell 	 gb 	bork 
 
 --Lvlup table
 local lTable={
 [1]={_Q,_W,_E,_Q,_Q,_R,_Q,_W,_Q,_W,_R,_W,_W,_E,_E,_R,_E,_E},
 [2]={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
-}
---dmg table
-local dmg={ 
-["Q"] = 35 + 45*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.6 , 
-["Q2"] = 10 + 45*GetCastLevel(myHero,0) + 50*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.9 ,
-["Q3"] = -50 + 100*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.6,
-["W"] = 10 + 50*GetCastLevel(myHero,1) + GetBonusAP(myHero)*.9
 }
 
 -- Start
@@ -101,12 +94,12 @@ OnDraw(function(myHero)
 		if ValidTarget(unit,2000) and KMenu.d.dD:Value() then
 			local DmgDraw=0
 			if rRdy and qRdy and KMenu.d.dQ:Value() and KMenu.d.dR:Value() then
-				DmgDraw = dmg.Q2
+				DmgDraw = dmgCalc["Q2"]
 			elseif qRdy and KMenu.d.dQ:Value() then
-				DmgDraw = dmg.Q
+				DmgDraw = dmgCalc["Q"]
 			end
 			if wRdy and KMenu.d.dW:Value() then
-				DmgDraw = DmgDraw + dmg.W
+				DmgDraw = DmgDraw + dmgCalc["W"]
 			end
 			DmgDraw = CalcDamage(myHero, unit, 0, DmgDraw)
 			if DmgDraw > GetCurrentHP(unit) then
@@ -178,9 +171,9 @@ function ks()
 		--Q
 		local QPred = GetPrediction(unit, KarmaQ)
 		if KMenu.ks.KSQ:Value() and qRdy and ValidTarget(unit,qRange) and QPred and QPred.hitChance >= (KMenu.p.hQ:Value()/100) and not QPred:mCollision(1) then
-			if GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmg.Q) then
+			if GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc["Q"]) then
 				CastSkillShot(0, QPred.castPos)				
-			elseif rRy and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 , dmg.Q2) then
+			elseif rRy and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 , dmgCalc["Q2"]) then
 				CastSpell(3)
 				DelayAction(function() CastSkillShot(0,QPred.castPos) end,0.01)
 			end
@@ -192,8 +185,8 @@ function items(unit)
 	if KMenu.i.iO:Value() and ValidTarget(unit,700) then
 		if IOW:Mode() == "Combo" or not KMenu.i.iC:Value() then
 			for _,i in pairs(item) do
-				if i>0 then
-					CastTargetSpell(unit,i)
+				if GetItemSlot(myHero,i)>0 and Ready(GetItemSlot(myHero,i)) then
+					CastTargetSpell(unit,GetItemSlot(myHero,i))
 				end
 			end
 		end
@@ -215,6 +208,17 @@ function skin()
 		HeroSkinChanger(GetMyHero(),KMenu.s.sV:Value()) 
 		cSkin = KMenu.s.sV:Value()
 	end
+end
+
+--dmg table
+function dmgCalc(spell)
+	local dmg={ 
+	["Q"] = 35 + 45*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.6 , 
+	["Q2"] = 10 + 45*GetCastLevel(myHero,0) + 50*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.9 ,
+	["Q3"] = -50 + 100*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.6,
+	["W"] = 10 + 50*GetCastLevel(myHero,1) + GetBonusAP(myHero)*.9
+	}
+	return dmg[spell]
 end
 
 --CALLBACKS
