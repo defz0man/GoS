@@ -212,11 +212,11 @@ end
 function dmgCalc(unit)
 	local dmg={ 
 	["Q"] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
-	["W"] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(GetCurrentTarget())*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
+	["W"] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(unit)*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
 	["E"] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
 	["R"] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
 	}
-	return dmgCalc
+	return dmg
 end
 
 --CALLBACKS
