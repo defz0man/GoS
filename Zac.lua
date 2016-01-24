@@ -86,16 +86,16 @@ OnDraw(function(myHero)
 		if ValidTarget(unit,2000) and ZMenu.d.dD:Value() then
 			local DmgDraw=0
 			if qRdy and ZMenu.d.dQ:Value() then
-				DmgDraw = dmgCalc(unit,0)
+				DmgDraw = dmgCalc(0,unit)
 			end
 			if wRdy and ZMenu.d.dW:Value() then
-				DmgDraw = DmgDraw + dmgCalc(unit,1)
+				DmgDraw = DmgDraw + dmgCalc(1,unit)
 			end
 			if wRdy and ZMenu.d.dE:Value() then
-				DmgDraw = DmgDraw + dmgCalc(unit,2)
+				DmgDraw = DmgDraw + dmgCalc(2,unit)
 			end
 			if wRdy and ZMenu.d.dR:Value() then
-				DmgDraw = DmgDraw + dmgCalc(unit,3)
+				DmgDraw = DmgDraw + dmgCalc(3,unit)
 			end
 			DmgDraw = CalcDamage(myHero, unit, 0, DmgDraw)
 			if DmgDraw > GetCurrentHP(unit) then
@@ -160,18 +160,18 @@ function ks()
 	for i,unit in pairs(GetEnemyHeroes()) do
 		
 		--W
-		if ZMenu.ks.KSW:Value() and wRdy and ValidTarget(unit,wRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(unit,1)) then
+		if ZMenu.ks.KSW:Value() and wRdy and ValidTarget(unit,wRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(1,unit)) then
 			CastSpell(1)
 		end
 		
 		--Q
 		local QPred = GetPrediction(unit, ZacQ)
-		if ZMenu.ks.KSQ:Value() and qRdy and ValidTarget(unit,qRange) and QPred and QPred.hitChance >= (ZMenu.p.hQ:Value()/100) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(unit,0)) then
+		if ZMenu.ks.KSQ:Value() and qRdy and ValidTarget(unit,qRange) and QPred and QPred.hitChance >= (ZMenu.p.hQ:Value()/100) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(0,unit)) then
 			CastSkillShot(0, QPred.castPos)				
 		end
 		
 		--R
-		if ZMenu.ks.KSR:Value() and rRdy and ValidTarget(unit,rRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(unit,3)) then
+		if ZMenu.ks.KSR:Value() and rRdy and ValidTarget(unit,rRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(3,unit)) then
 			CastSpell(3)
 		end
 	end
