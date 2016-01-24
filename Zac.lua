@@ -84,19 +84,18 @@ OnDraw(function(myHero)
 	local rRdy = Ready(_R)
 	for i,unit in pairs(GetEnemyHeroes()) do
 		if ValidTarget(unit,2000) and ZMenu.d.dD:Value() then
-			local dmg=dmgCalc(unit)
 			local DmgDraw=0
 			if qRdy and ZMenu.d.dQ:Value() then
-				DmgDraw = dmg.Q
+				DmgDraw = dmgCalc(unit,0)
 			end
 			if wRdy and ZMenu.d.dW:Value() then
-				DmgDraw = DmgDraw + dmg.W
+				DmgDraw = DmgDraw + dmgCalc(unit,1)
 			end
 			if wRdy and ZMenu.d.dE:Value() then
-				DmgDraw = DmgDraw + dmg.E
+				DmgDraw = DmgDraw + dmgCalc(unit,2)
 			end
 			if wRdy and ZMenu.d.dR:Value() then
-				DmgDraw = DmgDraw + dmg.R
+				DmgDraw = DmgDraw + dmgCalc(unit,3)
 			end
 			DmgDraw = CalcDamage(myHero, unit, 0, DmgDraw)
 			if DmgDraw > GetCurrentHP(unit) then
@@ -159,21 +158,20 @@ function ks()
 	local wRdy = Ready(_W)
 	local rRdy = Ready(_R)
 	for i,unit in pairs(GetEnemyHeroes()) do
-		local dmg = dmgCalc(unit)
 		
 		--W
-		if ZMenu.ks.KSW:Value() and wRdy and ValidTarget(unit,wRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmg.W) then
+		if ZMenu.ks.KSW:Value() and wRdy and ValidTarget(unit,wRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(unit,1)) then
 			CastSpell(1)
 		end
 		
 		--Q
 		local QPred = GetPrediction(unit, ZacQ)
-		if ZMenu.ks.KSQ:Value() and qRdy and ValidTarget(unit,qRange) and QPred and QPred.hitChance >= (ZMenu.p.hQ:Value()/100) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmg.Q) then
+		if ZMenu.ks.KSQ:Value() and qRdy and ValidTarget(unit,qRange) and QPred and QPred.hitChance >= (ZMenu.p.hQ:Value()/100) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(unit,0)) then
 			CastSkillShot(0, QPred.castPos)				
 		end
 		
 		--R
-		if ZMenu.ks.KSR:Value() and rRdy and ValidTarget(unit,rRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmg.R) then
+		if ZMenu.ks.KSR:Value() and rRdy and ValidTarget(unit,rRange) and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc(unit,3)) then
 			CastSpell(3)
 		end
 	end
@@ -209,14 +207,14 @@ function skin()
 end
 
 --dmg table
-function dmgCalc(unit)
+function dmgCalc(spell,unit)
 	local dmg={ 
-	["Q"] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
-	["W"] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(unit)*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
-	["E"] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
-	["R"] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
+	[0] = 30 + 40*GetCastLevel(myHero,0) + GetBonusAP(myHero)*.5 , 
+	[1] = 25 + 15*GetCastLevel(myHero,1) + GetMaxHP(unit)*(.03*GetCastLevel(myHero,1)+GetBonusAP(myHero)*.02) ,
+	[2] = 30 + 50*GetCastLevel(myHero,2) + GetBonusAP(myHero)*.7 , 
+	[3] = 70 + 70*GetCastLevel(myHero,3) + GetBonusAP(myHero)*.4 
 	}
-	return dmg
+	return dmg[spell]
 end
 
 --CALLBACKS
