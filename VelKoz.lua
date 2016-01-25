@@ -41,6 +41,7 @@ OnTick(function(myHero)
 	local unit = GetCurrentTarget()
 	if not IsDead(myHero) and not rCast then
 		Combo(unit)
+	end
 end)
 
 
