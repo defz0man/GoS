@@ -94,12 +94,12 @@ OnDraw(function(myHero)
 		if ValidTarget(unit,2000) and KMenu.d.dD:Value() then
 			local DmgDraw=0
 			if rRdy and qRdy and KMenu.d.dQ:Value() and KMenu.d.dR:Value() then
-				DmgDraw = dmgCalc["Q2"]
+				DmgDraw = dmgCalc("Q2")
 			elseif qRdy and KMenu.d.dQ:Value() then
-				DmgDraw = dmgCalc["Q"]
+				DmgDraw = dmgCalc("Q")
 			end
 			if wRdy and KMenu.d.dW:Value() then
-				DmgDraw = DmgDraw + dmgCalc["W"]
+				DmgDraw = DmgDraw + dmgCalc("W")
 			end
 			DmgDraw = CalcDamage(myHero, unit, 0, DmgDraw)
 			if DmgDraw > GetCurrentHP(unit) then
@@ -171,9 +171,9 @@ function ks()
 		--Q
 		local QPred = GetPrediction(unit, KarmaQ)
 		if KMenu.ks.KSQ:Value() and qRdy and ValidTarget(unit,qRange) and QPred and QPred.hitChance >= (KMenu.p.hQ:Value()/100) and not QPred:mCollision(1) then
-			if GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc["Q"]) then
+			if GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 ,dmgCalc("Q")) then
 				CastSkillShot(0, QPred.castPos)				
-			elseif rRy and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 , dmgCalc["Q2"]) then
+			elseif rRy and GetCurrentHP(unit) + GetDmgShield(unit) <  CalcDamage(myHero, unit, 0 , dmgCalc("Q2")) then
 				CastSpell(3)
 				DelayAction(function() CastSkillShot(0,QPred.castPos) end,0.01)
 			end
