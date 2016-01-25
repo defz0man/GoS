@@ -54,7 +54,6 @@ function Combo(unit)
 			if direct and direct.hitChance>.25 and not direct:mCollision(1) then
 				QStart=GetOrigin(myHero)
 				CastSkillShot(_Q,direct.castPos)
-				break
 			end
 				
 			--Base Vector
