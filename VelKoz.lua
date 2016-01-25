@@ -3,6 +3,8 @@ if GetObjectName(GetMyHero()) ~= "Velkoz" then return end
 require("Inspired")
 require("OpenPredict")
 
+LoadIOW()
+
 local VelM = Menu("Vel","Vel")
 VelM:SubMenu("c", "Combo")
 VelM.c:Boolean("Q","Use Q",true)
@@ -22,6 +24,8 @@ VelM.a:Slider("eQ", "Extra Q", 5 , 1, 20, 1)
 --VelkozQ
 value=4 --get value from silder
 DegreeTable={22.5,-22.5,45,-45}
+local rCast = false
+
 
 VelQ = { delay = 0.1, speed = 1300, width = 75, range = 750}
 VelQ2 ={ delay = 0.1, speed = 1300, width = 75, range = 1000}
@@ -34,10 +38,9 @@ end
 
 
 OnTick(function(myHero)
+	local unit = GetCurrentTarget()
 	if not IsDead(myHero) and not rCast then
-		local unit = GetCurrentTarget()
 		Combo(unit)
-	end
 end)
 
 
