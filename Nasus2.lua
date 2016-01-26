@@ -75,29 +75,6 @@ OnTick(function(myHero)
 	end
 end)
 
-OnDraw(function(myHero)
-	for i,unit in pairs(GetEnemyHeroes()) do
-		if ValidTarget(unit,2000) and NMenu.d.dD:Value() then
-			local DmgDraw=0
-			if Ready(_Q) and NMenu.d.dQ:Value() then
-				DmgDraw = DmgDraw + getQdmg()
-			end
-			if Ready(_E) and NMenu.d.dE:Value() then
-				DmgDraw = DmgDraw + CalcDamage(myHero, unit, 0, 15+40*GetCastLevel(myHero,_E)+GetBonusAP(myHero)*6)
-			end
-			if DmgDraw > GetCurrentHP(unit) then
-				DmgDraw = GetCurrentHP(unit)
-			end
-			DrawDmgOverHpBar(unit,GetCurrentHP(unit),DmgDraw,0,0xffffffff)
-		end
-	end
-	for _, creep in pairs(minionManager.objects) do
-		if NMenu.d.dQM:Value() and ValidTarget(creep,1000) and GetCurrentHP(creep)<CalcDamage(myHero, creep, getQdmg(), 0) then
-			DrawCircle(GetOrigin(creep),50,0,3,GoS.Red)
-		end
-	end
-end)
-
 
 --Functions
 
@@ -118,7 +95,6 @@ function combo(unit)
 		--E
 		if Ready(_E) and NMenu.c.E:Value() and ValidTarget(unit, GetCastRange(myHero,_E)) then
 				CastSkillShot(_E,GetOrigin(unit))
-			end
 		end		
 	end
 	
