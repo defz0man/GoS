@@ -4,16 +4,18 @@ require("Inspired")
 if not pcall( require, "OpenPredict" ) then PrintChat("This script doesn't work without OpenPredict! Download it!") return end
 
 local version = 1
- 
 
 -- Menu
 ZMenu = Menu("Zac", "Zac")
 ZMenu:SubMenu("c", "Combo")
+ZMenu.c:Slider("pB", "Pick up blobs (range)", 200, 100, 500, 1)
+ZMenu.c:Boolean("dR", "Draw Pickup range", true)
 ZMenu.c:Boolean("Q", "Use Q", true)
 ZMenu.c:Boolean("W", "Use W", true)
+ZMenu.c:Boolean("aW", "Auto use W", false)
 ZMenu.c:Boolean("E", "Use E", true)
-ZMenu.c:Slider("rE", "E range (cursor)", 300, 100, 500, 1)
 ZMenu.c:Boolean("R", "Use R", true)
+--ZMenu.c:Slider("aR", "Auto R if x enemys", 3, 1, 5, 1)
 
 
 ZMenu:SubMenu("ks", "Killsteal")
@@ -26,11 +28,7 @@ ZMenu.p:Slider("hQ", "HitChance Q", 20, 0, 100, 1)
 ZMenu.p:Slider("hE", "HitChance E", 20, 0, 100, 1)
 
 ZMenu:SubMenu("d", "Draw Damage")
-ZMenu.d:Boolean("dD","Draw Damage", true)
-ZMenu.d:Boolean("dQ","Draw Q", true)
-ZMenu.d:Boolean("dW","Draw W", true)
-ZMenu.d:Boolean("dE","Draw E", true)
-ZMenu.d:Boolean("dR","Draw R", true)
+ZMenu.d:Info("dD","Use Paint.lua instead")
 
 ZMenu:SubMenu("i", "Items")
 ZMenu.i:Boolean("iC","Use Items only in Combo", true)
@@ -49,9 +47,10 @@ ZMenu.s:Slider("sV", "Skin Number", 0, 0, 7, 1)
 --Locals
 eTime = 0
 eCharge = false
-local qRange = 550 + GetHitBox(myHero)/2
-local wRange = 350 + GetHitBox(myHero)/2
-local rRAnge = 300 + GetHitBox(myHero)/2
+local blobb={}
+local qRange = 550 + GetHitBox(myHero)*.5
+local wRange = 350 + GetHitBox(myHero)*.5
+local rRAnge = 300 + GetHitBox(myHero)*.5
 local ZacQ = { delay = 0.3, speed = math.huge , width = 100, range = qRange}
 local Move = { delay = 0.5, speed = math.huge, width = 50, range = math.huge}
 local cSkin = 0
@@ -78,44 +77,32 @@ OnTick(function(myHero)
 end)
 
 OnDraw(function(myHero)
-	local qRdy = Ready(_Q)
-	local wRdy = Ready(_W)
-	local eRdy = Ready(_E)
-	local rRdy = Ready(_R)
-	for i,unit in pairs(GetEnemyHeroes()) do
-		if ValidTarget(unit,2000) and ZMenu.d.dD:Value() then
-			local DmgDraw=0
-			if qRdy and ZMenu.d.dQ:Value() then
-				DmgDraw = dmgCalc(0,unit)
-			end
-			if wRdy and ZMenu.d.dW:Value() then
-				DmgDraw = DmgDraw + dmgCalc(1,unit)
-			end
-			if wRdy and ZMenu.d.dE:Value() then
-				DmgDraw = DmgDraw + dmgCalc(2,unit)
-			end
-			if wRdy and ZMenu.d.dR:Value() then
-				DmgDraw = DmgDraw + dmgCalc(3,unit)
-			end
-			DmgDraw = CalcDamage(myHero, unit, 0, DmgDraw)
-			if DmgDraw > GetCurrentHP(unit) then
-				DmgDraw = GetCurrentHP(unit)
-			end
-			DrawDmgOverHpBar(unit,GetCurrentHP(unit),0,DmgDraw,0xffffffff)
-		end
+	if not IsDead(myHero) and ZMenu.c.dR:Value() and GetDistance(GetMousePos(),GetOrigin(myHero))<1500 then
+		DrawCircle(GetMousePos(),ZMenu.c.pB:Value(),0,3,GoS.White)
 	end
-end)
+end)	
 
 
 --Functions
 
 function combo(unit)
+	local qRdy = Ready(0)
+	local wRdy = Ready(1)
+	local eRdy = Ready(2)
+	local rRdy = Ready(3)
+	
+	--Auto W
+	if ZMenu.c.aW:Value() and wRdy and ValidTarget(unit, wRange) then
+		CastSpell(1)
+	end
+	
+	--[[Auto R
+	if ZMenu.c.R:Value() and rRdy and EnemiesAround(GetOrigin(myHero), 300 + GetHitBox(myHero)*.5) >= ZMenu.c.aR:Value() then
+		CastSpell(3)
+	end--]]
+
 
 	if IOW:Mode() == "Combo" then
-		local qRdy = Ready(0)
-		local wRdy = Ready(1)
-		local eRdy = Ready(2)
-		local rRdy = Ready(3)
 		
 		--Q
 		if ZMenu.c.Q:Value() and qRdy and ValidTarget(unit, qRange) then
@@ -132,7 +119,11 @@ function combo(unit)
 		
 		--E
 		if ZMenu.c.E:Value() and not eCharge and eRdy and ValidTarget(unit, 1050 + GetCastLevel(myHero,2)*130) then
-			CastSkillShot(2,GetOrigin(unit))
+			local ZacE = { delay = 0.1, speed = 750, range = eRange(), radius = 300}
+			local EPred=GetCircularAOEPrediction(unit, ZacE)
+			if GetDistance(EPred.castPos,GetOrigin(unit)) < 1050 + GetCastLevel(myHero,2) * 150 then
+				CastSkillShot(2,GetOrigin(unit))
+			end
 		elseif eCharge and ZMenu.c.E:Value() then
 			local ZacE = { delay = 0.1, speed = 1700, range = eRange(), radius = 300}
 			local EPred=GetCircularAOEPrediction(unit, ZacE)
@@ -140,6 +131,20 @@ function combo(unit)
 				CastSkillShot2(2,EPred.castPos)
 			end
 		end	
+		
+		local cB = nil
+		local lDist = math.huge
+		for _,i in pairs(blobb) do
+			if GetDistance(GetMousePos(),GetOrigin(blobb)) then
+				cB = i
+			end
+		end
+		if cB and GetDistance(GetOrigin(cB),GetOrigin(myHero)) < ZMenu.c.pB:Value() then
+			IOW.forcePos = GetOrigin(cB)
+		else
+			IOW.forcePos = false
+		end
+		
 	end
 end
 
@@ -220,6 +225,18 @@ end
 --CALLBACKS
 OnProcessSpell(function(unit,spellProc)
 
+end)
+
+OnCreateObj(function(Object,myHero)
+	if GetObjectBaseName(Object) == "Zac_Base_P_Chunk.troy" then
+	blobb[Object]=Object
+	end
+end)
+
+OnDeleteObj(function(Object,myHero)
+	if GetObjectBaseName(Object) == "Zac_Base_P_Chunk.troy" then
+	blobb[Object]=nil
+	end
 end)
 
 OnUpdateBuff(function(unit,buffProc)
