@@ -10,9 +10,6 @@ end
 local IMenu = Menu("Ignite","Ignite")
 IMenu:Boolean("i","Auto Ignite", true)
 
-
-
-
 OnTick(function(myHero)
 if IMenu.i:Value() and IsReady(Ignite) then
   for _,enemy in pairs(GetEnemyHeroes()) do
