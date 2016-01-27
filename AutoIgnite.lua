@@ -1,5 +1,7 @@
 if not Ignite then return end
 
+require('Inspired')
+
 local IMenu = Menu("Ignite","Ignite")
 IMenu:Boolean("i","Auto Ignite", true)
 
@@ -9,4 +11,6 @@ if IMenu.i:Value() and IsReady(Ignite) then
     CastTargetSpell(enemy, Ignite)
    end
   end
+end
+
 end
