@@ -1,7 +1,7 @@
 if not Ignite then return end
 
 local IMenu = Menu("Ignite","Ignite")
-IMenu:Boolean("i","Auto Ignite", true")
+IMenu:Boolean("i","Auto Ignite", true)
 
 if IMenu.i:Value() and IsReady(Ignite) then
   for _,enemy in pairs(GetEnemyHeroes()) do
