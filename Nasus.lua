@@ -174,9 +174,9 @@ end
 
 function getQdmg()
 	local base = 10 + 20*GetCastLevel(myHero,_Q) + GetBaseDamage(myHero) + GetBuffData(myHero,"nasusqstacks").Stacks + NMenu.c.QDM:Value()
-	if 		(Sheen or Ready(GetItemSlot(myHero,3078))) and GetItemSlot(myHero,3078)>0 then base = base + GetBaseDamage(myHero)*2 
-	elseif 	(Sheen or Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3057)>0 then base = base + GetBaseDamage(myHero)
-	elseif 	(Sheen or Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3025)>0 then base = base + GetBaseDamage(myHero)*1.25 
+	if 		(Ready(GetItemSlot(myHero,3078))) and GetItemSlot(myHero,3078)>0 then base = base + GetBaseDamage(myHero)*2 
+	elseif 	(Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3057)>0 then base = base + GetBaseDamage(myHero)
+	elseif 	(Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3025)>0 then base = base + GetBaseDamage(myHero)*1.25 
 	end
 	return base
 end
@@ -201,17 +201,6 @@ end
 
 
 --CALLBACKS
-
-OnUpdateBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "sheen" then
-		Sheen = true
-	end
-end)
-
-OnRemoveBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "sheen" then
-		Sheen = false
-	end
-end)
+--thanks Noddy
 
 PrintChat("Nasus Loaded - Enjoy your game - Logge")
