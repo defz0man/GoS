@@ -50,7 +50,7 @@ NMenu.s:Slider("sV", "Skin Number", 0, 0, 10, 1)
 NasusE = { delay = 0.1, speed = math.huge, range = GetCastRange(myHero,_E), radius = 390}
 cSkin = 0
 Stacks = 0
-local item = {GetItemSlot(myHero,3144),GetItemSlot(myHero,3142),GetItemSlot(myHero,3153)}
+local item = {3144,3142,3153}
 --						 cutlassl 				 gb 			 bork 
 
 --Lvlup table
@@ -164,8 +164,8 @@ function items(unit)
 	if NMenu.i.iO:Value() and ValidTarget(unit,500) then
 		if IOW:Mode() == "Combo" or not NMenu.i.iC:Value() then
 			for _,i in pairs(item) do
-				if i>0 then
-					CastTargetSpell(unit,i)
+				if GetItemSlot(myHero,i)>0 then
+					CastTargetSpell(unit,GetItemSlot(myHero,i))
 				end
 			end
 		end
