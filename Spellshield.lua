@@ -5,6 +5,7 @@ local SMenu = Menu("SMenu","SpellShield")
 SMenu:Boolean("uS","Use Spellshield",true)
 
 local multi = 2
+local fT = 0.75
 
 
 --Spell Table Plaintext
@@ -524,7 +525,7 @@ local s = {
 
 ------------------------------------------------TABLES ENDS HERE--------------------------------------------------------
 
---Function
+
 OnProcessSpell(function(unit, spellProc)
 	if s[GetObjectName(unit)] and SMenu.uS:Value() and GetTeam(unit)~=GetTeam(myHero) then
 		for d,i in pairs(s[GetObjectName(unit)]) do
@@ -536,10 +537,10 @@ OnProcessSpell(function(unit, spellProc)
 				i.radius = i.radius or i.width/2 or math.huge	
 				i.collision = i.collision or false
 				
-				
 				--Simple Kappa Linear
 				if i.type == "linear" or i.type == "cone" then
 					local cPred = GetPrediction(myHero,i)
+					local dT = i.delay + GetDistance(myHero, cPred.castPos) / i.speed
 					
 					if GetDistance(spellProc.startPos,spellProc.endPos)<GetDistance(spellProc.startPos,cPred.castPos) then return end
 					
@@ -552,28 +553,36 @@ OnProcessSpell(function(unit, spellProc)
 					
 					CP = Vector(VectorIntersection(S1,R1,S2,R2).x,spellProc.startPos.y, VectorIntersection(S1,R1,S2,R2).y)
 					
-					local d = GetDistance(Vector(CP),cPred.castPos)
-					
-					print("Distance "..math.floor(d).." ".. spellProc.name)
-					if d<i.width*multi --[[and (i.collision or not pI:mCollision(1))]] then
-						CastSpell(2)
-					end
+					DelayAction( function()
+						local d = GetDistance(Vector(CP),cPred.castPos)
+						print("Distance "..math.floor(d).." ".. spellProc.name)
+						if d<i.width*multi --[[and (i.collision or not pI:mCollision(1))]] then
+							CastSpell(2)
+						end
+					end, dT*fT)
 				
 				--Circular
 				elseif i.type == "circular" then
 					local cPred = GetCircularAOEPrediction(myHero, i)
+					local dT = i.delay + GetDistance(myHero, cPred.castPos) / i.speed
 					local R1 = Vector(spellProc.endPos)
 					
-					local d = GetDistance(Vector(R1),cPred.castPos)
-					print("Distance "..math.floor(d).." ".. spellProc.name)
-					if d<i.radius*multi then
-						CastSpell(2)
-					end
+					
+					DelayAction( function()
+						local d = GetDistance(Vector(R1),cPred.castPos)
+						print("Distance "..math.floor(d).." ".. spellProc.name)
+						if d<i.radius*multi then
+							CastSpell(2)
+						end
+					end, dT*fT)
 				
 				--Targeted and Trash
 				elseif spellProc.target and spellProc.target == myHero then
-					print(spellProc.name.." Targeted")
-					CastSpell(2)
+					local dT = i.delay + GetDistance(myHero, spellProc.startPos) / i.speed
+					DelayAction( function()
+						print(spellProc.name.." Targeted")
+						CastSpell(2)
+					end, dT*fT)
 				else
 					print(spellProc.name.." Error")
 				end
@@ -586,5 +595,5 @@ end)
 OnTick(function(myHero)
 	--DrawCircle(cPred.castPos,50,0,3,GoS.Green)
 	--DrawCircle(pe2,50,0,3,GoS.White)
-	if CP then DrawCircle(CP,50,5,3,GoS.Green) end
+	DrawCircle(CP,50,5,3,GoS.Green)
 end)
