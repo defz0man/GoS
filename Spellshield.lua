@@ -551,15 +551,15 @@ OnProcessSpell(function(unit, spellProc)
 					local S2 = Vector(cPred.castPos + ((Vector(spellProc.endPos) - Vector(spellProc.startPos))*.5):perpendicular())
 					local R2 = GetOrigin(myHero)
 					
-					CP = Vector(VectorIntersection(S1,R1,S2,R2).x,spellProc.startPos.y, VectorIntersection(S1,R1,S2,R2).y)
+					CollP = Vector(VectorIntersection(S1,R1,S2,R2).x,spellProc.startPos.y, VectorIntersection(S1,R1,S2,R2).y)
 					
 					DelayAction( function()
-						local d = GetDistance(Vector(CP),cPred.castPos)
+						local d = GetDistance(Vector(CollP),cPred.castPos)
 						print("Distance "..math.floor(d).." ".. spellProc.name)
 						if d<i.width*multi --[[and (i.collision or not pI:mCollision(1))]] then
 							CastSpell(2)
 						end
-					end, dT*fT)
+					end, dT*fT*0.001)
 				
 				--Circular
 				elseif i.type == "circular" then
@@ -574,7 +574,7 @@ OnProcessSpell(function(unit, spellProc)
 						if d<i.radius*multi then
 							CastSpell(2)
 						end
-					end, dT*fT)
+					end, dT*fT*0.001)
 				
 				--Targeted and Trash
 				elseif spellProc.target and spellProc.target == myHero then
@@ -582,7 +582,7 @@ OnProcessSpell(function(unit, spellProc)
 					DelayAction( function()
 						print(spellProc.name.." Targeted")
 						CastSpell(2)
-					end, dT*fT)
+					end, dT*fT*0.001)
 				else
 					print(spellProc.name.." Error")
 				end
@@ -593,7 +593,10 @@ end)
 
 
 OnTick(function(myHero)
+	--print(VectorIntersection(Vector(1,2,3),Vector(2,3,4),Vector(5,6,7),Vector(8,9,10)))
 	--DrawCircle(cPred.castPos,50,0,3,GoS.Green)
 	--DrawCircle(pe2,50,0,3,GoS.White)
-	DrawCircle(CP,50,5,3,GoS.Green)
+	if CollP then DrawCircle(CollP,50,5,3,GoS.Green) end
 end)
+
+print("SpellShield loaded")
