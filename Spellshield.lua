@@ -3,6 +3,8 @@ require('OpenPredict')
 
 local SMenu = Menu("SMenu","SpellShield")
 SMenu:Boolean("uS","Use Spellshield",true)
+SMenu:Slider("hV","Humaize Value",75,0,100,0)
+SMenu:Slider("wM","Width Mulitplicator",2,1,5,1)
 
 local multi = 2
 local fT = 0.75
@@ -527,7 +529,7 @@ local s = {
 
 
 OnProcessSpell(function(unit, spellProc)
-	if s[GetObjectName(unit)] and SMenu.uS:Value() and GetTeam(unit)~=GetTeam(myHero) then
+	if Ready(2) and s[GetObjectName(unit)] and SMenu.uS:Value() and GetTeam(unit) ~= GetTeam(myHero) then
 		for d,i in pairs(s[GetObjectName(unit)]) do
 			if i.name and i.name == spellProc.name then
 				i.speed = i.speed or math.huge
@@ -536,6 +538,9 @@ OnProcessSpell(function(unit, spellProc)
 				i.width = i.width or 100
 				i.radius = i.radius or i.width/2 or math.huge	
 				i.collision = i.collision or false
+				
+				dT = SMenu.hV:Value() * .01
+				multi = SMenu.wM:Value()
 				
 				--Simple Kappa Linear
 				if i.type == "linear" or i.type == "cone" then
