@@ -44,6 +44,7 @@ end)
 OnDeleteObj(function(Object,myHero)
 	if GetObjectBaseName(Object)=="ThreshLantern" then 
 		lantern = nil
+		Lt = nil
 	end
 end)
 
