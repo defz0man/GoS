@@ -3,7 +3,6 @@ local tr = false
 for _,i in pairs(GetAllyHeroes()) do
 	if GetObjectName(i)=="Thresh" then
 		tr = true
-		break
 	end
 end
 if not tr then return end
