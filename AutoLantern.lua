@@ -1,12 +1,11 @@
 require('Inspired')
-
+local tr = false
 for _,i in pairs(GetAllyHeroes()) do
 	if GetObjectName(i)=="Thresh" then
-		local tr = true
+		tr = true
 		break
 	end
 end
-
 if not tr then return end
 
 local lantern = nil
