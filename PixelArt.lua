@@ -8,7 +8,7 @@ require('Inspired')
 4 = yellow
 5 = red
 --]]
-
+local res = GetResolution()
 local color = {ARGB(255,255,255,255), ARGB(255,50,50,50), ARGB(255,71,71,71), ARGB(255,0,0,0), ARGB(255,255,255,0),  ARGB(255,255,0,0)}
 
 local pixelArt = {
@@ -37,13 +37,13 @@ local pixelArt = {
 }
 local xp = 0
 OnDraw(function(myHero)
-	if xp > 1500 then xp = 0 else xp = xp + 1 end
+	if xp > .9 then xp = 0 else xp = xp + res.x*.0000005 end
 	for y=1,#pixelArt do
 		for x=1,#pixelArt[y] do
-			if pixelArt[y][x] ~= 9 and y<xp*math.random(.3,.5) then
-				FillRect(xp+x*5,750+y*5,5,5,color[pixelArt[y][x]+1])
+			if pixelArt[y][x] ~= 9 and y<xp*math.random(75,150) then
+				FillRect(xp*res.x+x*6,res.y*.75+y*6,6,6,color[pixelArt[y][x]+1])
 			end
 		end
 	end
-	DrawText("Script made by Logge",30,xp+100,800,GoS.White)
+	DrawText("Script made by Logge",30,xp*res.x+100,res.y*.80,GoS.White)
 end)
