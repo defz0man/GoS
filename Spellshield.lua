@@ -3,7 +3,7 @@ require('OpenPredict')
 
 local SMenu = Menu("SMenu","SpellShield")
 SMenu:Boolean("uS","Use Spellshield",true)
-SMenu:Slider("hV","Humaize Value",75,0,100,0)
+SMenu:Slider("hV","Humaize Value",75,0,100,1)
 SMenu:Slider("wM","Width Mulitplicator",2,1,5,1)
 
 local multi = 2
