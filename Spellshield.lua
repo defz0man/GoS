@@ -3,11 +3,11 @@ require('OpenPredict')
 
 local SMenu = Menu("SMenu","SpellShield")
 SMenu:Boolean("uS","Use Spellshield",true)
-SMenu:Slider("hV","Humaize Value",75,0,100,1)
-SMenu:Slider("wM","Width Mulitplicator",2,1,5,1)
+SMenu:Slider("hV","Humaize Value",50,0,100,1)
+SMenu:Slider("wM","Width Mulitplicator",15,10,50,1)
 
 local multi = 2
-local fT = 0.75
+local fT = .75
 
 
 --Spell Table Plaintext
@@ -51,17 +51,17 @@ local s = {
 	["Azir"] = {
 		[_Q] = { displayname = "Conquering Sands", name = "AzirQ", speed = 2500, delay = 0.250, range = 880, width = 100, collision = false, aoe = false, type = "linear"},
 		[_W] = { displayname = "Arise!", name = "AzirW", range = 520},
-		[_E] = { displayname = "Shifting Sands", name = "AzirE", range = 1100, delay = 0.25, speed = 1200, width = 60, collision = true, aoe = false, type = "linear"},
+		--[_E] = { displayname = "Shifting Sands", name = "AzirE", range = 1100, delay = 0.25, speed = 1200, width = 60, collision = true, aoe = false, type = "linear"},
 		[_R] = { displayname = "Emperor's Divide", name = "AzirR", speed = 1300, delay = 0.2, range = 520, width = 600, collision = false, aoe = true, type = "linear"}
 	},
 	["Bard"] = {
 		[_Q] = { displayname = "Cosmic Binding", name = "BardQ", objname = "BardQMissile", speed = 1100, delay = 0.25, range = 850, width = 108, collision = true, aoe = false, type = "linear"},
-	        [_R] = { displayname = "Tempered Fate", name = "BardR", objname = "BardR", speed = 2100, delay = 0.5, range = 3400, width = 350, collision = false, aoe = false, type = "circular"}
+	    [_R] = { displayname = "Tempered Fate", name = "BardR", objname = "BardR", speed = 2100, delay = 0.5, range = 3400, width = 350, collision = false, aoe = false, type = "circular"}
 	},
 	["Blitzcrank"] = {
 		[_Q] = { displayname = "Rocket Grab", name = "RocketGrab", objname = "RocketGrabMissile", speed = 1800, delay = 0.250, range = 900, width = 70, collision = true, type = "linear"},
-		[_W] = { displayname = "Overdrive", name = "OverDrive", range = 2500},
-		[_E] = { displayname = "Power Fist", name = "PowerFist", range = 225},
+		--[_W] = { displayname = "Overdrive", name = "OverDrive", range = 2500},
+		--[_E] = { displayname = "Power Fist", name = "PowerFist", range = 225},
 		[_R] = { displayname = "Static Field", name = "StaticField", speed = math.huge, delay = 0.25, range = 0, width = 500, collision = false, aoe = false, type = "circular"}
 	},
 	["Brand"] = {
@@ -379,8 +379,8 @@ local s = {
 		[_E] = { name = "ShyvanaFireball", objname = "ShyvanaFireballMissile", speed = 1500, delay = 0.250, range = 925, width = 60, collision = false, aoe = false, type = "linear"}
 	},
 	["Sivir"] = {
-		[_Q] = { name = "SivirQ", objname = "SivirQMissile", speed = 1330, delay = 0.250, range = 1075, width = 0, collision = false, aoe = false, type = "linear"},
-		[-1] = { name = "SivirQReturn", objname = "SivirQMissileReturn", speed = 1330, delay = 0.250, range = 1075, width = 0, collision = false, aoe = false, type = "linear"}
+		[_Q] = { name = "SivirQ", objname = "SivirQMissile", speed = 1330, delay = 0.250, range = 1075, width = 100, collision = false, aoe = false, type = "linear"},
+		--[-1] = { name = "SivirQReturn", objname = "SivirQMissileReturn", speed = 1330, delay = 0.250, range = 1075, width = 0, collision = false, aoe = false, type = "linear"}
 	},
 	["Skarner"] = {
 		[_E] = { name = "SkarnerFracture", objname = "SkarnerFractureMissile", speed = 1200, delay = 0.600, range = 350, width = 60, collision = false, aoe = false, type = "linear"}
@@ -528,6 +528,16 @@ local s = {
 ------------------------------------------------TABLES ENDS HERE--------------------------------------------------------
 
 
+--Pre start function (Menu)
+
+for _,i in pairs(GetEnemyHeroes()) do
+	if s[GetObjectName(unit)] then
+		for n,l in pairs(i) do
+			SMenu:Boolean(GetObjectName(i)..l.name,"Spellshield "..l.displayname or l.name,true)
+		end
+	end
+end
+
 OnProcessSpell(function(unit, spellProc)
 	if Ready(2) and s[GetObjectName(unit)] and SMenu.uS:Value() and GetTeam(unit) ~= GetTeam(myHero) then
 		for d,i in pairs(s[GetObjectName(unit)]) do
@@ -539,14 +549,15 @@ OnProcessSpell(function(unit, spellProc)
 				i.radius = i.radius or i.width/2 or math.huge	
 				i.collision = i.collision or false
 				
-				dT = SMenu.hV:Value() * .01
-				multi = SMenu.wM:Value()
+				fT = SMenu.hV:Value() * .01
+				multi = SMenu.wM:Value() * .1
 				
 				--Simple Kappa Linear
 				if i.type == "linear" or i.type == "cone" then
 					local cPred = GetPrediction(myHero,i)
-					local dT = i.delay + GetDistance(myHero, cPred.castPos) / i.speed
-					
+					local dT = i.delay + GetDistance(spellProc.startPos, cPred.castPos) / i.speed
+					print("Delay "..i.delay)
+					print("TravelTime "..GetDistance(spellProc.startPos, cPred.castPos) / i.speed)
 					if GetDistance(spellProc.startPos,spellProc.endPos)<GetDistance(spellProc.startPos,cPred.castPos) then return end
 					
 					--Line-Line junction check
@@ -557,14 +568,14 @@ OnProcessSpell(function(unit, spellProc)
 					local R2 = GetOrigin(myHero)
 					
 					CollP = Vector(VectorIntersection(S1,R1,S2,R2).x,spellProc.startPos.y, VectorIntersection(S1,R1,S2,R2).y)
-					
 					DelayAction( function()
 						local d = GetDistance(Vector(CollP),cPred.castPos)
-					--	print("Distance "..math.floor(d).." ".. spellProc.name)
-						if d<i.width*multi --[[and (i.collision or not pI:mCollision(1))]] then
+						print("Distance "..math.floor(d).." ".. spellProc.name)
+						print("Time "..dT*fT)
+						if (d<i.width*multi or GetDistance(myHero,CollP)<i.width*multi) --[[and (i.collision or not pI:mCollision(1))]] then
 							CastSpell(2)
 						end
-					end, dT*fT*0.001)
+					end, dT*fT)
 				
 				--Circular
 				elseif i.type == "circular" then
@@ -572,24 +583,23 @@ OnProcessSpell(function(unit, spellProc)
 					local dT = i.delay + GetDistance(myHero, cPred.castPos) / i.speed
 					local R1 = Vector(spellProc.endPos)
 					
-					
 					DelayAction( function()
 						local d = GetDistance(Vector(R1),cPred.castPos)
-					--	print("Distance "..math.floor(d).." ".. spellProc.name)
-						if d<i.radius*multi then
+						print("Distance "..math.floor(d).." ".. spellProc.name)
+						if d<i.radius*multi or GetDistance(myHero,spellProc.endPos)<i.radius*multi then
 							CastSpell(2)
 						end
-					end, dT*fT*0.001)
+					end, dT*fT)
 				
 				--Targeted and Trash
 				elseif spellProc.target and spellProc.target == myHero then
 					local dT = i.delay + GetDistance(myHero, spellProc.startPos) / i.speed
 					DelayAction( function()
-					--	print(spellProc.name.." Targeted")
+						print(spellProc.name.." Targeted")
 						CastSpell(2)
-					end, dT*fT*0.001)
+					end, dT*fT)
 				else
-					--print(spellProc.name.." Error")
+					print(spellProc.name.." Error")
 				end
 			end
 		end
@@ -601,7 +611,7 @@ OnTick(function(myHero)
 	--print(VectorIntersection(Vector(1,2,3),Vector(2,3,4),Vector(5,6,7),Vector(8,9,10)))
 	--DrawCircle(cPred.castPos,50,0,3,GoS.Green)
 	--DrawCircle(pe2,50,0,3,GoS.White)
-	--if CollP then DrawCircle(CollP,50,5,3,GoS.Green) end
+	if CollP then DrawCircle(CollP,50,5,3,GoS.Green) end
 end)
 
 print("SpellShield loaded")
