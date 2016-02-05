@@ -1,7 +1,7 @@
 require('Inspired')
 
-local FLMenu = Menu("FL","FappyLeauge")
-FLMenu:Boolean("a","Activate FlappyLeauge",true)
+local FLMenu = Menu("FL","FappyLeague")
+FLMenu:Boolean("a","Activate FappyLeague",true)
 FLMenu:Boolean("o","Only when dead",true)
 FLMenu:Boolean("b","Block Input",true)
 
