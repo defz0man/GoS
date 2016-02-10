@@ -3,9 +3,11 @@ if GetObjectName(GetMyHero()) ~= "Annie" then return end	--Checks if our hero is
 require("Inspired")											--Loads the Inspired lib
 
 local AnnieMenu = Menu("Annie", "Annie")						--Create a New Menu and call it AnnieMenu (the user only sees "Annie")
-AnnieMenu:SubMenu("Combo", "Combo")								--Create a New SubMenu and call it Combo
+AnnieMenu:SubMenu("Combo", "Combo")							--Create a New SubMenu and call it Combo
 AnnieMenu.Combo:Boolean("Q", "Use Q", true)						--Add a button to toggle the usage of Q
 AnnieMenu.Combo:Boolean("W", "Use W", true)						--Add a button to toggle the usage of W
+AnnieMenu.Combo:Boolean("R", "Use R", true)						--Add a button to toggle the usage of R
+AnnieMenu.Combo:Boolean("KSQ", "Killsteal with Q", true)		--Add a button to killsteal with Q
 
 
 OnTick(function (myHero)									--The code inside the Function runs every tick
@@ -34,7 +36,45 @@ OnTick(function (myHero)									--The code inside the Function runs every tick
 			local targetPos = GetOrigin(target)		--saves the XYZ coordinates of the target to the variable
 			CastSkillShot(_W , targetPos)			--Since the W is a skillshot (select area), we have to cast it at a point on the ground (targetPos)
 		end		--Ends the W logic
+		
+		if AnnieMenu.Combo.R:Value() and Ready(_R) and ValidTarget(target, 600) then		--Same check as Q/W
+			--[[
+				Now we need to predict the ult into the enemy path using the function:
+				GetPredictionForPlayer(startPos, targetUnit, targetMovespeed, SpellSpeed, SpellDelay, SpellRange, SpellWidth, SpellCollision, additionalHitbox)
+				EXPLANATION OF EACH PARAMETER:
+				startPos = GetOrigin(myHero)	that's our current spot
+				targetUnit = target				that's our current target
+				targetMovespeed = GetMoveSpeed(target) current MS of the target
+				SpellSpeed = math.huge because it doesn't have to travel, it just appears
+				SpellDelay = 75 the time in ms that we need to cast the spell
+				SpellRange = 600 the range of R (see wiki)
+				SpellWidth = 150 = radius/2 (see wiki)
+				SpellCollision = false because the ult doesn't stop if it hits a creep
+			]]
+			local RPred = GetPredictionForPlayer(GetOrigin(myHero), target, GetMoveSpeed(target), math.huge, 75, 600, 150, false, true)
+			if RPred.HitChance == 1 then		--If it has calcuated that we can hit the enemy
+				CastSkillShot(_R,RPred.PredPos)			--Cast ult at predicted position
+			end		--Ends CastR logic
+		end	--Ends the R logic
 	end		--Ends the Combo Mode
-end)
+	
+	--We start the Killsteal Part now, this NEEDS to be out of the Combo mode, because it has to run even if the user doesn't press Space
+	for _, enemy in pairs(GetEnemyHeroes()) do 		--This will cycle 5 times and pass one hero to enemy each cycle
+		if AnnieMenu.Combo.Q:Value() and AnnieMenu.Combo.KSQ:Value() and Ready(_Q) and ValidTarget(enemy, 625) then	--same checks as in combo but with KS menu (see ValidTarget now uses enemy)
+			--[[
+				Q Dmg Calc
+				MAGIC DAMAGE: 80 / 115 / 150 / 185 / 220 (+ 80% AP)
+				Level 0: 45
+				Level 1: 80
+				Level 2: 115 ...
+				Formula 45 + 35 * CastLevel of Q + AP *0.8
+				CalcDamage(startUnit, targetUnit, normalDamage, magicDamage)
+			--]]
+			if GetCurrentHP(enemy) < CalcDamage(myHero, enemy, 0, 45 + 35 * GetCastLevel(myHero,_Q) + GetBonusAP(myHero) * 0.8) then	--Check if the HP of enemy is lower than Q Dmg
+				CastTargetSpell(enemy , _Q)			-- Cast Q
+			end										--End dmg check for Q
+		end				--end basic check for Q
+	end			--end KS
+end)		--End script
 
 print("Annie loaded")	--Little message to show that the script has injected without breaking
