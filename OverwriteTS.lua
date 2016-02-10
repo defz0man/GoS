@@ -46,13 +46,27 @@ OnTick(function(myHero)
 			end
 		end
 		if bestUnit then 
-			IOW.forceTarget = bestUnit 
+			IOW.forceTarget = focusUnit or bestUnit 
 		end
 	end
 end)
 
 OnDraw(function(myHero)
+	bestUnit = focusUnit or bestUnit
 	if bestUnit then 
 		DrawText("Best Target: "..GetObjectName(bestUnit),10,1,300,GoS.White)
+		DrawCircle(GetOrigin(bestUnit),GetHitBox(bestUnit),5,3,GoS.Yellow)
+	end
+end)
+
+OnWndMsg(function(msg, key)
+	if msg == 513 then
+		focusUnit = nil
+		for _,i in pairs(GetEnemyHeroes()) do 
+			if GetDistance(GetOrigin(i),GetMousePos())<GetHitBox(i)*1.5 then
+				focusUnit = i
+				--print("You clicked "..GetObjectName(i))
+			end
+		end
 	end
 end)
