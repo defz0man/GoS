@@ -53,7 +53,6 @@ end)
 
 OnDraw(function(myHero)
 	if bestUnit then 
-		IOW.forceTarget = bestUnit 
 		DrawText("Best Target: "..GetObjectName(bestUnit),10,1,300,GoS.White)
 	end
 end)
