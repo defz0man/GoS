@@ -3,8 +3,6 @@ if GetObjectName(GetMyHero()) ~= "Velkoz" then return end
 require("Inspired")
 require("OpenPredict")
 
-LoadIOW()
-
 local VelM = Menu("Vel","Vel")
 VelM:SubMenu("c", "Combo")
 VelM.c:Boolean("Q","Use Q",true)
