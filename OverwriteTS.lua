@@ -63,7 +63,7 @@ OnWndMsg(function(msg, key)
 	if msg == 513 then
 		focusUnit = nil
 		for _,i in pairs(GetEnemyHeroes()) do 
-			if GetDistance(GetOrigin(i),GetMousePos())<GetHitBox(i)*1.5 then
+			if GetDistance(GetOrigin(i),GetMousePos())<GetHitBox(i)*1.5 and not IsDead(i) then
 				focusUnit = i
 				--print("You clicked "..GetObjectName(i))
 			end
