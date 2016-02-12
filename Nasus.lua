@@ -91,7 +91,7 @@ OnDraw(function(myHero)
 		end
 	end
 	for _, creep in pairs(minionManager.objects) do
-		if NMenu.d.dQM:Value() and ValidTarget(creep,1000) and GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, getQdmg(), 0) then
+		if NMenu.d.dQM:Value() and ValidCreep(creep,1000) and GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, getQdmg(), 0) then
 			DrawCircle(GetOrigin(creep),50,0,3,GoS.Red)
 		end
 	end
@@ -132,7 +132,7 @@ end
 function farm()
 	if (Ready(_Q) or CanUseSpell(myHero,_Q) == 8) and ((NMenu.f.QLC:Value() and IOW:Mode() == "LaneClear") or (NMenu.f.QLH:Value() and IOW:Mode() == "LastHit") or (NMenu.f.QA:Value() and IOW:Mode() ~= "Combo")) then
 		for _, creep in pairs(minionManager.objects) do
-			if ValidTarget(creep,GetRange(myHero)+GetHitBox(myHero)+GetHitBox(creep)/2) and ((GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, qDmg, 0) and NMenu.c.QP:Value()) or (GetCurrentHP(creep)<CalcDamage(myHero, creep, qDmg, 0) and not NMenu.c.QP:Value())) then
+			if ValidCreep(creep,GetRange(myHero)+GetHitBox(myHero)+GetHitBox(creep)) and GetCurrentHP(creep)<qDmg*2 and ((GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, qDmg, 0) and NMenu.c.QP:Value()) or (GetCurrentHP(creep)<CalcDamage(myHero, creep, qDmg, 0) and not NMenu.c.QP:Value())) then
 				CastSpell(_Q)
 				AttackUnit(creep)
 				break
@@ -198,7 +198,13 @@ function skin()
 	end
 end
 
-
+function ValidCreep(creep, range)
+	if creep and not IsDead(creep) and GetTeam(creep) == MINION_ENEMY and GetDistance(GetOrigin(myHero), GetOrigin(creep)) < range then
+		return true
+	else 
+		return false
+	end
+end
 
 --CALLBACKS
 --thanks Noddy
