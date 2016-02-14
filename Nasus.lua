@@ -199,7 +199,7 @@ function skin()
 end
 
 function ValidCreep(creep, range)
-	if creep and not IsDead(creep) and GetTeam(creep) == MINION_ENEMY and GetDistance(GetOrigin(myHero), GetOrigin(creep)) < range then
+	if creep and not IsDead(creep) and GetTeam(creep) == MINION_ENEMY and IsTargetable(creep) and GetDistance(GetOrigin(myHero), GetOrigin(creep)) < range then
 		return true
 	else 
 		return false
