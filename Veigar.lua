@@ -123,7 +123,7 @@ function FarmQ()
 			if GetTeam(creep) ~= MINION_ALLY and ValidTarget(creep,1000) and GetCurrentHP(creep)<CalcDamage(myHero, creep, 0, (40*GetCastLevel(myHero,_Q)+25+GetBonusAP(myHero)*0.6)) then
 				if VMenu.m.D:Value() then DrawCircle(GetOrigin(creep),75,0,3,0xffffff00) end
 				local QPred = GetPrediction(creep,VeigarQ)				
-				if QPred:mCollision(1) or QPred:mCollision(0) then
+				if QPred:mCollision(1) or not QPred:mCollision() then
 					CastSkillShot(_Q,QPred.castPos)
 				end
 			end
