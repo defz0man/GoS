@@ -51,7 +51,6 @@ OnTick(function (myHero)
 				dX[GetObjectName(champ)][i][2] = last + dX[GetObjectName(champ)][i][2]
 				lock = true
 			end
-			print(dX[GetObjectName(champ)][i][1])
 		end
 		if DrawMenu.dAA:Value() and DrawMenu.dAAc:Value() then 
 			aa[GetObjectName(champ)] = math.ceil(GetCurrentHP(champ)/(CalcDamage(myHero, champ, GetBaseDamage(myHero)+GetBonusDmg(myHero),0)*(GetCritChance(myHero)+1)))
