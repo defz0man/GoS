@@ -62,7 +62,7 @@ function Combo(unit)
 	
 		if VMenu.c.Q:Value() and Ready(0) and ValidTarget(unit, GetCastRange(myHero,_Q)+10) then
 			local QPred = GetPrediction(unit,VeigarQ)
-			if QPred.hitChance >= (VMenu.p.hQ:Value()/100) and not QPred:mCollision(2) then				
+			if QPred.hitChance >= (VMenu.p.hQ:Value()/100) and (not QPred:mCollision() or #QPred:mCollision() < 2) then				
 				CastSkillShot(_Q,QPred.castPos)
 			end
 		end	
@@ -122,8 +122,8 @@ function FarmQ()
 		for i,creep in pairs(minionManager.objects) do
 			if GetTeam(creep) ~= MINION_ALLY and ValidTarget(creep,1000) and GetCurrentHP(creep)<CalcDamage(myHero, creep, 0, (40*GetCastLevel(myHero,_Q)+25+GetBonusAP(myHero)*0.6)) then
 				if VMenu.m.D:Value() then DrawCircle(GetOrigin(creep),75,0,3,0xffffff00) end
-				local QPred = GetPrediction(creep,VeigarQ)				
-				if QPred:mCollision(1) or not QPred:mCollision() then
+				local QPred = GetPrediction(creep,VeigarQ)			
+				if not QPred:mCollision() or #QPred:mCollision() < 2 then
 					CastSkillShot(_Q,QPred.castPos)
 				end
 			end
