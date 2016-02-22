@@ -132,7 +132,7 @@ end
 function farm()
 	if (Ready(_Q) or CanUseSpell(myHero,_Q) == 8) and ((NMenu.f.QLC:Value() and IOW:Mode() == "LaneClear") or (NMenu.f.QLH:Value() and IOW:Mode() == "LastHit") or (NMenu.f.QA:Value() and IOW:Mode() ~= "Combo")) then
 		for _, creep in pairs(minionManager.objects) do
-			if ValidCreep(creep,GetRange(myHero)+GetHitBox(myHero)+GetHitBox(creep)) and GetCurrentHP(creep)<qDmg*2 and ((GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, qDmg, 0) and NMenu.c.QP:Value()) or (GetCurrentHP(creep)<CalcDamage(myHero, creep, qDmg, 0) and not NMenu.c.QP:Value())) then
+			if ValidCreep(creep,175) and GetCurrentHP(creep)<qDmg*2 and ((GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, qDmg, 0) and NMenu.c.QP:Value()) or (GetCurrentHP(creep)<CalcDamage(myHero, creep, qDmg, 0) and not NMenu.c.QP:Value())) then
 				CastSpell(_Q)
 				AttackUnit(creep)
 				break
