@@ -47,14 +47,15 @@ NMenu.s:Boolean("uS", "Use Skin", false)
 NMenu.s:Slider("sV", "Skin Number", 0, 0, 10, 1)
 
 --Var
-NasusE = { delay = 0.1, speed = math.huge, range = GetCastRange(myHero,_E), radius = 390}
-cSkin = 0
-Stacks = 0
+local NasusE = { delay = 0.1, speed = math.huge, range = GetCastRange(myHero,_E), radius = 390}
+local cSkin = 0
+local Stacks = 0
+local qDmg = 0
 local item = {3144,3142,3153}
 --						 cutlassl 				 gb 			 bork 
 
 --Lvlup table
-lTable={
+local lTable={
 [1]={_Q,_W,_E,_Q,_Q,_R,_Q,_W,_Q,_W,_R,_W,_W,_E,_E,_R,_E,_E},
 [2]={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
 }
@@ -75,7 +76,6 @@ OnTick(function(myHero)
 end)
 
 OnDraw(function(myHero)
-	local qDmg = getQdmg()
 	for i,unit in pairs(GetEnemyHeroes()) do
 		if ValidTarget(unit,2000) and NMenu.d.dD:Value() then
 			local DmgDraw=0
