@@ -75,11 +75,12 @@ OnTick(function(myHero)
 end)
 
 OnDraw(function(myHero)
+	local qDmg = getQdmg()
 	for i,unit in pairs(GetEnemyHeroes()) do
 		if ValidTarget(unit,2000) and NMenu.d.dD:Value() then
 			local DmgDraw=0
 			if Ready(_Q) and NMenu.d.dQ:Value() then
-				DmgDraw = DmgDraw + getQdmg()
+				DmgDraw = DmgDraw + qDmg
 			end
 			if Ready(_E) and NMenu.d.dE:Value() then
 				DmgDraw = DmgDraw + CalcDamage(myHero, unit, 0, 15+40*GetCastLevel(myHero,_E)+GetBonusAP(myHero)*6)
@@ -91,7 +92,7 @@ OnDraw(function(myHero)
 		end
 	end
 	for _, creep in pairs(minionManager.objects) do
-		if NMenu.d.dQM:Value() and ValidCreep(creep,1000) and GetHealthPrediction(creep, GetWindUp(myHero))<CalcDamage(myHero, creep, getQdmg(), 0) then
+		if NMenu.d.dQM:Value() and ValidCreep(creep,1000) and GetCurrentHP(creep)<CalcDamage(myHero,creep,qDmg,0) then
 			DrawCircle(GetOrigin(creep),50,0,3,GoS.Red)
 		end
 	end
