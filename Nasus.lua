@@ -32,10 +32,6 @@ NMenu.d:Boolean("dQ","Draw Q", true)
 NMenu.d:Boolean("dE","Draw E", true)
 NMenu.d:Boolean("dQM","Draw Q (Minions)", true)
 
-NMenu:SubMenu("i", "Items")
-NMenu.i:Boolean("iC","Use Items only in Combo", true)
-NMenu.i:Boolean("iO","Use offensive Items", true)
-
 NMenu:SubMenu("a", "AutoLvl")
 NMenu.a:Boolean("aL", "Use AutoLvl", true)
 NMenu.a:DropDown("aLS", "AutoLvL", 1, {"Q-W-E","Q-E-W"})
@@ -51,7 +47,6 @@ local NasusE = { delay = 0.1, speed = math.huge, range = GetCastRange(myHero,_E)
 local cSkin = 0
 local Stacks = 0
 local qDmg = 0
-local item = {3144,3142,3153}
 --						 cutlassl 				 gb 			 bork 
 
 --Lvlup table
@@ -69,7 +64,6 @@ OnTick(function(myHero)
 		ks()
 		combo(unit)
 		farm()
-		items(unit)
 		lvlUp()
 		skin()
 	end
@@ -156,18 +150,6 @@ function ks()
 			local NasusE=GetCircularAOEPrediction(unit, NasusE)
 			if EPred and EPred.hitChance >= .2 then
 				CastSkillShot(_E,EPred.castPos)
-			end
-		end
-	end
-end
-
-function items(unit)
-	if NMenu.i.iO:Value() and ValidTarget(unit,500) then
-		if IOW:Mode() == "Combo" or not NMenu.i.iC:Value() then
-			for _,i in pairs(item) do
-				if GetItemSlot(myHero,i)>0 then
-					CastTargetSpell(unit,GetItemSlot(myHero,i))
-				end
 			end
 		end
 	end
