@@ -39,7 +39,6 @@ VMenu.d:Boolean("dR","Draw R", true)
 VMenu:SubMenu("i", "Items")
 VMenu.i:Boolean("iC","Use Items only in Combo", true)
 VMenu.i:Boolean("iO","Use offensive Items", true)
-VMenu.i:Boolean("iM","Toggle iMuramana", true)
 VMenu.i:Boolean("iQ","Use QSS/Merc", true)
 VMenu.i:Boolean("cStun","Cleanse Stun", true)
 VMenu.i:Boolean("cTaunt","Cleanse Taunt", true)
@@ -299,13 +298,11 @@ end
 --CALLBACKS
 
 OnUpdateBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "varusqlaunch" then 
+	if unit == myHero and buffProc.Name:lower() == "varusqlaunch" then 
 		qCharge = true
 		qTime = GetTickCount()
-	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
+	elseif unit ~= myHero and buffProc.Name:lower() == "varuswdebuff" then
 		wTrack[GetObjectName(unit)]=buffProc.Count
-	elseif unit == myHero and buffProc.Name == "Muramana" then
-		iMura = true
 	end
 	if unit == myHero then
 		if VMenu.i.cStun:Value() and buffProc.Type == 5 then
@@ -325,12 +322,10 @@ OnUpdateBuff(function(unit,buffProc)
 end)
 
 OnRemoveBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "varusqlaunch" then 
+	if unit == myHero and buffProc.Name:lower() == "varusqlaunch" then 
 		qCharge = false
-	elseif unit ~= myHero and buffProc.Name == "varuswdebuff" then
+	elseif unit ~= myHero and buffProc.Name:lower() == "varuswdebuff" then
 		wTrack[GetObjectName(unit)]=0
-	elseif unit == myHero and buffProc.Name == "Muramana" then
-		iMura = false
 	end
 	if unit == myHero then
 		if VMenu.i.cStun:Value() and buffProc.Type == 5 then
