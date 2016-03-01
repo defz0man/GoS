@@ -63,7 +63,6 @@ qCharge = false
 qRange = 0
 VarusE = { delay = 0.1, speed = 1700, width = 55, range = 925, radius = 275 }
 VarusR = { delay = 0.1, speed = 1850, width = 120, range = 1075}
-iMura = false
 cSkin=0
 local item={GetItemSlot(myHero,3144),GetItemSlot(myHero,3142),GetItemSlot(myHero,3153)}
 --						 cutlassl 				 gb 			 bork 
@@ -254,20 +253,7 @@ function items(unit)
 			end
 		end
 	end
-	if VMenu.i.iM:Value() and not iMura and ValidTarget(unit,700) then
-		if GetItemSlot(myHero,3042)>0 then
-			CastSpell(GetItemSlot(myHero,3042))
-		elseif GetItemSlot(myHero,3043)>0 then
-			CastSpell(GetItemSlot(myHero,3043))
-		end
-	elseif VMenu.i.iM:Value() and iMura and not ValidTarget(unit,700) then
-		if GetItemSlot(myHero,3042)>0 then
-			CastSpell(GetItemSlot(myHero,3042))
-		elseif GetItemSlot(myHero,3043)>0 then
-			CastSpell(GetItemSlot(myHero,3043))
-		end
-	end
-	if VMenu.i.iM:Value() and iCC then
+	if VMenu.i.iQ:Value() and iCC then
 		if GetItemSlot(myHero,3140)>0 then
 			CastSpell(GetItemSlot(myHero,3140))
 		elseif GetItemSlot(myHero,3139)>0 then
