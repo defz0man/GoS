@@ -1,11 +1,25 @@
-if GetObjectName(GetMyHero()) ~= "Aatrox" then return end
+--Supported Champs
+local c = {
+	["Aatrox"] = true,
+}
 
-require ('Inspired')
-require ('OpenPredict')
+local myHeroName = GetObjectName(myHero)
 
-Callback.Add("Load", function()
-  Aatrox()
-end)
+if c[myHeroName] then
+	
+	require ('Inspired')
+	require ('OpenPredict')
+	
+	Callback.Add("Load", 
+	function()	
+		_G[myHeroName]()
+		Skin()
+	end)
+
+else
+	print("|?| "..myHeroName" not supported")
+	return
+end
 
 class "Aatrox"
 
@@ -26,7 +40,7 @@ function Aatrox:__init()
 	}
 	
 	--Menu
-	self.cMenu = Menu("Aatrox", "Aatrox")
+	self.cMenu = Menu("Aatrox", "|?| Aatrox")
 	self.cMenu:SubMenu("C", "Combo")
 	self.cMenu.C:Boolean("Q", "Use Q", true)
 	self.cMenu.C:Boolean("W", "Use W", true)
@@ -85,7 +99,7 @@ function Aatrox:SpellCheck()	--SpellCheck
 end
 
 function Aatrox:Tick()
-	if IsDead(myHero) then return end
+	if myHero.dead then return end
 	
 	if (_G.IOW or _G.DAC_Loaded) then
 		
@@ -102,12 +116,12 @@ function Aatrox:Tick()
 
 		if Mode == "Combo" then
 			self:Combo()
-		elseif Mode == "Laneclear" then
+		--[[elseif Mode == "Laneclear" then
 			self:LaneClear()
 		elseif Mode == "LastHit" then
 			self:LastHit()
 		elseif Mode == "Harass" then
-			self:Harass()
+			self:Harass()--]]
 		else
 			return
 		end
@@ -190,5 +204,25 @@ function Aatrox:Stat(unit, buff)
 		self.W = "dmg"
 	end
 end
-		
-PrintChat("Aatrox Loaded")
+
+--------AATROX END-------
+
+class 'Skin'
+
+function Skin:__init()
+	self.sMenu = Menu("s","|?| Skin")
+	self.sMenu:Boolean("uS", "Use Skin", false)
+	self.sMenu:Slider("sV", "Skin Number", 0, 0, 10, 1)
+	local cSkin = 0
+	
+	Callback.Add("Tick", function() self:Change() end)
+end
+
+function Skin:Change()
+	if self.sMenu.uS:Value() and self.sMenu.sV:Value() ~= cSkin then
+		HeroSkinChanger(myHero,self.sMenu.sV:Value()) 
+		cSkin = self.sMenu.sV:Value()
+	end
+end
+
+PrintChat(myHero.charName.." Loaded")
