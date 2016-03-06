@@ -2,7 +2,7 @@
 local c = {
 	["Aatrox"] = true,
 }
-version = .01
+version = .02
 local myHeroName = GetObjectName(myHero)
 
 if c[myHeroName] then
@@ -19,6 +19,7 @@ if c[myHeroName] then
 		Items()
 		LvL()
 		Skin()
+		DmgDraw()
 		PrintChat("|?| "..myHero.charName.." Loaded")
 	end)
 
@@ -179,9 +180,9 @@ function Aatrox:KS()
 end
 
 function Aatrox:Stat(unit, buff)
-	if unit == myHero and buff.Name:lower() == "aatroxwlife" then
+	if unit == myHero and buff.Name:lower() == "self.aatroxwlife" then
 		self.W = "heal"
-	elseif unit == myHero and buff.Name:lower() == "aatroxwpower" then
+	elseif unit == myHero and buff.Name:lower() == "self.aatroxwpower" then
 		self.W = "dmg"
 	end
 end
@@ -213,7 +214,7 @@ function LvL:__init()
 	cMenu:SubMenu("A", "|?| Auto Level")
 	cMenu.A:Boolean("aL", "Use AutoLvl", true)
 	cMenu.A:DropDown("aLS", "AutoLvL", 1, {"Q-W-E","Q-E-W","W-Q-E","W-E-Q","E-Q-W","E-W-Q"})
-	cMenu.A:Slider("sL", "Start AutoLvl with LvL x", 3, 1, 18, 1)
+	cMenu.A:Slider("sL", "Start AutoLvl with LvL x", 4, 1, 18, 1)
 	cMenu.A:Boolean("hL", "Humanize LvLUP", true)
 	
 	--AutoLvl
@@ -351,13 +352,141 @@ end
 class 'Update'
 
 function Update:__init()
+
+	self.webV = "Error"
+	self.Stat = "Error"
+	self.Do = true
+
 	function AutoUpdate(data)
 		if tonumber(data) > version then
-			PrintChat("|?| New update found! Version: " .. data)
-			PrintChat("Downloading update, please wait...")
-			DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", SCRIPT_PATH .. "Questionmark.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
+			self.webV = data
+			self.State = "|?| Update to v"..self.webV
+			Callback.Add("Draw", function() self:Box() end)
+			Callback.Add("WndMsg", function(key,msg) self:Click(key,msg) end)
 		end
 	end
 
 	GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.version", AutoUpdate)
+end
+
+function Update:Box()
+	if not self.Do then return end
+	local cur = GetCursorPos()
+	FillRect(0,0,360,85,GoS.Red)
+	if cur.x < 350 and cur.y < 75 then
+		FillRect(0,0,350,75,GoS.White)
+	else
+		FillRect(0,0,350,75,GoS.Black)
+	end
+	
+	DrawText(self.State, 40, 10, 10, GoS.Green)
+	
+	FillRect(360,10,50,60,GoS.Red)
+	FillRect(365,15,40,50,GoS.White)
+	if cur.x < 370 or cur.x > 400 or cur.y<7 or cur.y > 60 then
+		DrawText("X", 60, 370,7, GoS.Black)
+	else
+		DrawText("X", 60, 370,7, GoS.Red)
+	end
+	
+end
+
+function Update:Click(key,msg)
+	local cur = GetCursorPos()
+	if key == 513 and cur.x < 350 and cur.y < 75 then
+		self.State = "Downloading..."
+		--DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", SCRIPT_PATH .. "Questionmark.lua", function() self.State = "Update Complete" PrintChat("Reload the Script with 2x F6") return	end)
+		DelayAction(function() self.State = "Update Complete" PrintChat("Reload the Script with 2x F6") Callback.Del("WndMsg", function(key,msg) end) end,1)
+	elseif key == 513 and cur.x > 370 and cur.x < 400 and cur.y > 7 and cur.y < 60 then
+		Callback.Del("Draw", function() self:Box() end)
+		self.Do = false
+	end
+end
+
+
+class 'DmgDraw'
+
+function DmgDraw:__init()
+	require('DamageLib')
+
+	self.dmgSpell = {}
+	self.spellName= {"Q","W","E","R"} 
+	self.dC = { {200,255,255,0}, {200,0,255,0}, {200,255,0,0}, {200,0,0,255} }
+	self.aa = {}
+	self.dCheck = {}
+	self.dX = {}
+	cMenu:SubMenu("D","|?| Draw Damage")
+	cMenu.D:Boolean("dAA","Count AA to kill", true)
+	cMenu.D:Boolean("dAAc","Consider Crit", true)
+	cMenu.D:Slider("dR","Draw Range", 1500, 500, 3000, 100)
+
+	for i=1,4,1 do
+		if getdmg(self.spellName[i],myHero,myHero,1,3)~=0 then
+			cMenu.D:Boolean(self.spellName[i], "Draw "..self.spellName[i], true)
+			cMenu.D:ColorPick(self.spellName[i].."c", "Color for "..self.spellName[i], self.dC[i])
+		end
+	end
+
+	DelayAction( function()
+		for _,champ in pairs(GetEnemyHeroes()) do
+			self.dmgSpell[GetObjectName(champ)]={0, 0, 0, 0}
+			self.dX[GetObjectName(champ)] = {{0,0}, {0,0}, {0,0}, {0,0}}
+		end
+	end, 0.001)
+	
+	Callback.Add("Tick", function() self:Set() end)
+	Callback.Add("Draw", function() self:Draw() end)
+	
+end
+
+function DmgDraw:Set()
+	for _,champ in pairs(GetEnemyHeroes()) do
+		self.dCheck[GetObjectName(champ)]={false,false,false,false}
+		local last = GetPercentHP(champ)*1.04
+		local lock = false
+		for i=1,4,1 do
+			if cMenu.D[self.spellName[i]] and cMenu.D[self.spellName[i]]:Value() and Ready(i-1) and GetDistance(GetOrigin(myHero),GetOrigin(champ)) < cMenu.D.dR:Value() then
+				self.dmgSpell[GetObjectName(champ)][i] = getdmg(self.spellName[i],champ,myHero,GetCastLevel(myHero,i-1))
+				self.dCheck[GetObjectName(champ)][i]=true
+			else 
+				self.dmgSpell[GetObjectName(champ)][i] = 0
+				self.dCheck[GetObjectName(champ)][i]=false
+			end
+			self.dX[GetObjectName(champ)][i][2] = self.dmgSpell[GetObjectName(champ)][i]/(GetMaxHP(champ)+GetDmgShield(champ))*104
+			self.dX[GetObjectName(champ)][i][1] = last - self.dX[GetObjectName(champ)][i][2]
+			last = last - self.dX[GetObjectName(champ)][i][2]
+			if lock then
+				self.dX[GetObjectName(champ)][i][1] = 0 
+				self.dX[GetObjectName(champ)][i][2] = 0
+			end
+			if self.dX[GetObjectName(champ)][i][1]<=0 and not lock then
+				self.dX[GetObjectName(champ)][i][1] = 0 
+				self.dX[GetObjectName(champ)][i][2] = last + self.dX[GetObjectName(champ)][i][2]
+				lock = true
+			end
+		end
+		if cMenu.D.dAA:Value() and cMenu.D.dAAc:Value() then 
+			self.aa[GetObjectName(champ)] = math.ceil(GetCurrentHP(champ)/(CalcDamage(myHero, champ, GetBaseDamage(myHero)+GetBonusDmg(myHero),0)*(GetCritChance(myHero)+1)))
+		elseif cMenu.D.dAA:Value() and not cMenu.D.dAAc:Value() then 
+			self.aa[GetObjectName(champ)] = math.ceil(GetCurrentHP(champ)/(CalcDamage(myHero, champ, GetBaseDamage(myHero)+GetBonusDmg(myHero),0)))
+		end
+	end
+end
+
+function DmgDraw:Draw()
+	for _,champ in pairs(GetEnemyHeroes()) do
+		
+		local bar = GetHPBarPos(champ)
+		if bar.x ~= 0 and bar.y ~= 0 then
+			for i=4,1,-1 do
+				if self.dCheck[GetObjectName(champ)] and self.dCheck[GetObjectName(champ)][i] then
+					FillRect(bar.x+self.dX[GetObjectName(champ)][i][1],bar.y,self.dX[GetObjectName(champ)][i][2],9,cMenu.D[self.spellName[i].."c"]:Value())
+					FillRect(bar.x+self.dX[GetObjectName(champ)][i][1],bar.y-1,2,11,GoS.Black)
+				end
+			end
+			if cMenu.D.dAA:Value() and bar.x ~= 0 and bar.y ~= 0 and self.aa[GetObjectName(champ)] then 
+				DrawText(self.aa[GetObjectName(champ)].." AA", 15, bar.x + 75, bar.y + 25, GoS.White)
+			end
+		end
+	end
 end
