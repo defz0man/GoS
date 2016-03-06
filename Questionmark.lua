@@ -2,7 +2,7 @@
 local c = {
 	["Aatrox"] = true,
 }
-version = .01
+version = .03
 local myHeroName = GetObjectName(myHero)
 
 if c[myHeroName] then
@@ -342,25 +342,24 @@ function Items:AAReset(Object,spellProc)
 			local l = GetItemSlot(myHero,self.AA[i])
 			if l>0 and CanUseSpell(myHero,l) == READY then
 				CastSpell(l)
-			end
+			end 
 		end
 	end
 end
 
+
 class 'Update'
 
 function Update:__init()
-	self:AutoUpdate()
-	GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", AutoUpdate)
-end
-
-function Update:AutoUpdate(web)
-	if tonumber(web) > tonumber(version) then
-		PrintChat("|?| New version found! " .. data)
-		PrintChat("|?| Downloading update, please wait...")
-		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", SCRIPT_PATH .. "Questionmark.lua", function() PrintChat("|?| Update Complete, please 2x F6!") return end)
-	else
-		PrintChat("ok")
+	function AutoUpdate(data)
+		if tonumber(data) > version then
+			PrintChat("|?| New update found! Version: " .. data)
+			PrintChat("Downloading update, please wait...")
+			DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", SCRIPT_PATH .. "Questionmark.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
+		else
+			PrintChat("No updates found!")
+		end
 	end
-end
 
+	GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.version", AutoUpdate)
+end
