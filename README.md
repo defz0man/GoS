@@ -1,6 +1,6 @@
 Gaming on Steroids Lua Scripts
 
-Since banned/inactive on the forum keep bugs in the GitHub Bugtracker.
+Since banned/inactive on the forum keep bugs in the GitHub Bugtracker. Also I'm safe here from the influence of specific ppl here.
 
 Make sure you've read
 http://gamingonsteroids.com/topic/10011-gos-basic-troubleshooting-guide/
