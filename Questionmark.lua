@@ -2,7 +2,7 @@
 local c = {
 	["Aatrox"] = true,
 }
-version = .03
+version = .01
 local myHeroName = GetObjectName(myHero)
 
 if c[myHeroName] then
@@ -356,8 +356,6 @@ function Update:__init()
 			PrintChat("|?| New update found! Version: " .. data)
 			PrintChat("Downloading update, please wait...")
 			DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", SCRIPT_PATH .. "Questionmark.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
-		else
-			PrintChat("No updates found!")
 		end
 	end
 
