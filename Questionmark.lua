@@ -2,26 +2,28 @@
 local c = {
 	["Aatrox"] = true,
 }
-
+version = .01
 local myHeroName = GetObjectName(myHero)
 
 if c[myHeroName] then
 	
 	require ('Inspired')
 	require ('OpenPredict')
-	if pcall( require, "Platywalk" ) then PrintChat("Please uninstall Platywalk or this scritp won't work!") return end
+	if pcall( require, "Platywalk" ) then PrintChat("Please uninstall Platywalk or this script won't work!") return end
 	
 	Callback.Add("Load", 
 	function()	
+		Update()
 		cMenu = Menu(myHeroName, "|?| "..myHeroName)
 		_G[myHeroName]()
 		Items()
 		LvL()
 		Skin()
+		PrintChat("|?| "..myHero.charName.." Loaded")
 	end)
 
 else
-	print("|?| "..myHeroName" not supported")
+	PrintChat("|?| "..myHeroName" not supported")
 	return
 end
 
@@ -345,4 +347,20 @@ function Items:AAReset(Object,spellProc)
 	end
 end
 
-PrintChat("|?| "..myHero.charName.." Loaded")
+class 'Update'
+
+function Update:__init()
+	self:AutoUpdate()
+	GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", AutoUpdate)
+end
+
+function Update:AutoUpdate(web)
+	if tonumber(web) > tonumber(version) then
+		PrintChat("|?| New version found! " .. data)
+		PrintChat("|?| Downloading update, please wait...")
+		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Questionmark.lua", SCRIPT_PATH .. "Questionmark.lua", function() PrintChat("|?| Update Complete, please 2x F6!") return end)
+	else
+		PrintChat("ok")
+	end
+end
+
