@@ -180,9 +180,9 @@ function Aatrox:KS()
 end
 
 function Aatrox:Stat(unit, buff)
-	if unit == myHero and buff.Name:lower() == "self.aatroxwlife" then
+	if unit == myHero and buff.Name:lower() == "aatroxwlife" then
 		self.W = "heal"
-	elseif unit == myHero and buff.Name:lower() == "self.aatroxwpower" then
+	elseif unit == myHero and buff.Name:lower() == "aatroxwpower" then
 		self.W = "dmg"
 	end
 end
