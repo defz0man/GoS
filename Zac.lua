@@ -240,7 +240,7 @@ OnDeleteObj(function(Object,myHero)
 end)
 
 OnUpdateBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "ZacE" then
+	if unit == myHero and buffProc.Name:lower() == "ZacE" then
 		eCharge = true
 		eTime = GetTickCount()
 		IOW.movementEnabled = false
@@ -249,7 +249,7 @@ OnUpdateBuff(function(unit,buffProc)
 end)
 
 OnRemoveBuff(function(unit,buffProc)
-	if unit == myHero and buffProc.Name == "ZacE" then
+	if unit == myHero and buffProc.Name:lower() == "ZacE" then
 		eCharge = false
 		IOW.movementEnabled = true
 		IOW.attacksEnabled = true
