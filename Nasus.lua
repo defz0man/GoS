@@ -156,7 +156,7 @@ function ks()
 end
 
 function getQdmg()
-	local base = 10 + 20*GetCastLevel(myHero,_Q) + GetBaseDamage(myHero) + GetBuffData(myHero,"nasusqstacks").Stacks + NMenu.c.QDM:Value()
+	local base = 10 + 20*GetCastLevel(myHero,_Q) + GetBaseDamage(myHero) + GetBuffData(myHero,"NasusQStacks").Stacks + NMenu.c.QDM:Value()
 	if 		(Ready(GetItemSlot(myHero,3078))) and GetItemSlot(myHero,3078)>0 then base = base + GetBaseDamage(myHero)*2 
 	elseif 	(Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3057)>0 then base = base + GetBaseDamage(myHero)
 	elseif 	(Ready(GetItemSlot(myHero,3057))) and GetItemSlot(myHero,3025)>0 then base = base + GetBaseDamage(myHero)*1.25 
