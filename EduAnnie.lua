@@ -1,6 +1,7 @@
 if GetObjectName(GetMyHero()) ~= "Annie" then return end	--Checks if our hero is named "Annie" and stops the scripts if that's not the case
 
 require("Inspired")											--Loads the Inspired lib
+require("OpenPredict")										--Loads OpenPredict (opotional)
 
 local AnnieMenu = Menu("Annie", "Annie")						--Create a New Menu and call it AnnieMenu (the user only sees "Annie")
 AnnieMenu:SubMenu("Combo", "Combo")							--Create a New SubMenu and call it Combo
@@ -8,7 +9,9 @@ AnnieMenu.Combo:Boolean("Q", "Use Q", true)						--Add a button to toggle the us
 AnnieMenu.Combo:Boolean("W", "Use W", true)						--Add a button to toggle the usage of W
 AnnieMenu.Combo:Boolean("R", "Use R", true)						--Add a button to toggle the usage of R
 AnnieMenu.Combo:Boolean("KSQ", "Killsteal with Q", true)		--Add a button to killsteal with Q
+AnnieMenu.Combo:Boolean("UOP", "Use OpenPredict for R", true)	--Adds a button so we can check if the user wants to use openPredict	[OPTIONAL]
 
+local AnnieR = {delay = 0.075, range = 600, radius = 150, speed = math.huge}		--TABLE for Annie R ONLY if you are using OpenPredict
 
 OnTick(function (myHero)									--The code inside the Function runs every tick
 	
@@ -51,10 +54,17 @@ OnTick(function (myHero)									--The code inside the Function runs every tick
 				SpellWidth = 150 = radius/2 (see wiki)
 				SpellCollision = false because the ult doesn't stop if it hits a creep
 			]]
-			local RPred = GetPredictionForPlayer(GetOrigin(myHero), target, GetMoveSpeed(target), math.huge, 75, 600, 150, false, true)
-			if RPred.HitChance == 1 then		--If it has calcuated that we can hit the enemy
-				CastSkillShot(_R,RPred.PredPos)			--Cast ult at predicted position
-			end		--Ends CastR logic
+			if not AnnieMenu.Combo.UOP:Value() then			--If the user doesn't want to use OpenPred
+				local RPred = GetPredictionForPlayer(GetOrigin(myHero), target, GetMoveSpeed(target), math.huge, 75, 600, 150, false, true)
+				if RPred.HitChance == 1 then		--If it has calcuated that we can hit the enemy
+					CastSkillShot(_R,RPred.PredPos)			--Cast ult at predicted position
+				end		--Ends CastR logic
+			else		--If the user wants to use OpenPred
+				local RPred = GetCircularAOEPrediction(target,AnnieR)	--Now we calc OpenPred Stuff from Table
+				if RPred.hitChance < 0.2 then							--Judge HitChance
+					CastSkillShot(_R,RPred.castPos)						--Cast ult at OP predicted position
+				end
+			end
 		end	--Ends the R logic
 	end		--Ends the Combo Mode
 	
