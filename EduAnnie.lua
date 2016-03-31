@@ -1,6 +1,5 @@
 if GetObjectName(GetMyHero()) ~= "Annie" then return end	--Checks if our hero is named "Annie" and stops the scripts if that's not the case
 
-require("Inspired")											--Loads the Inspired lib
 require("OpenPredict")										--Loads OpenPredict (opotional)
 
 local AnnieMenu = Menu("Annie", "Annie")						--Create a New Menu and call it AnnieMenu (the user only sees "Annie")
