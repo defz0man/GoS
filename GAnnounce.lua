@@ -6,10 +6,37 @@ local sf = {
 	{"Dlc_glados_killing_spree_ann_glados_kill_double_",1},
 	{"Dlc_glados_killing_spree_ann_glados_kill_triple_",1},
 	{"Dlc_glados_killing_spree_ann_glados_kill_ultra_",2},
-	{"Dlc_glados_killing_spree_ann_glados_kill_rampage_",2},
+	{"Dlc_glados_killing_spree_ann_glados_kill_rampage_",3},
 	{"Dlc_glados_ann_glados_followup_respaw_",13},
 	{"Dlc_glados_ann_glados_ally_neg_",26},
 }
+
+if not DirExists(SOUNDS_PATH..[[\Glados\]]) then
+	CreateDir(SOUNDS_PATH..[[\Glados\]])
+end
+
+function DL()
+	for _,i in pairs(sf) do
+		for l=1,i[2] do
+			print(i[1]..i[2])
+			if l < 10 then
+				if not FileExist(SOUNDS_PATH.. [[\Glados\]] .. i[1].."0"..l..".wav") then
+					DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/GS/" .. i[1].."0"..l..".wav" ,SOUNDS_PATH .. [[\Glados\]] .. i[1].."0"..l..".wav", function() PrintChat("Downloaded "..i[i]..l) end)
+					return 
+					else 
+				end
+			else
+				if not FileExist(SOUNDS_PATH.. [[\Glados\]] .. i[1]..l..".wav") then
+					DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/GS/"  .. i[1] .. l .. ".wav" , SOUNDS_PATH .. [[\Glados\]] .. i[1].. l ..".wav", function() PrintChat("Downloaded "..i[i]..l) end)
+					return
+					else
+				end
+			end 
+		end
+	end
+end
+
+DL()
 
 
 c[GetNetworkID(myHero)] = {unit = myHero, dead = false, deadT = nil, lDmg = nil, lDmgT = nil, killer = nil, mk = 0, mks = nil, counted = false}
@@ -64,7 +91,7 @@ OnTick( function ()
 			elseif i.mk == 4 then
 				Play("Dlc_glados_killing_spree_ann_glados_kill_ultra_",2)
 			elseif i.mk == 5 then
-				Play("Dlc_glados_killing_spree_ann_glados_kill_rampage_",2)
+				Play("Dlc_glados_killing_spree_ann_glados_kill_rampage_",3)
 			end
 			i.mko = i.mk
 		end
@@ -121,5 +148,4 @@ end
 if GetGameTimer() <= 20 then
 	Play("Dlc_glados_ann_glados_battle_prepare_",10)
 end
-
 --1:15 creeps
