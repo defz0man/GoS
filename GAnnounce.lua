@@ -1,5 +1,15 @@
 local c = {}
 local lastSound = GetGameTimer()
+local sounds = {}
+
+local sf = {
+	{"Dlc_glados_killing_spree_ann_glados_kill_double_",1},
+	{"Dlc_glados_killing_spree_ann_glados_kill_triple_",1},
+	{"Dlc_glados_killing_spree_ann_glados_kill_ultra_",2},
+	{"Dlc_glados_killing_spree_ann_glados_kill_rampage_",2},
+	{"Dlc_glados_ann_glados_followup_respaw_",13},
+	{"Dlc_glados_ann_glados_ally_neg_",26},
+}
 
 
 c[GetNetworkID(myHero)] = {unit = myHero, dead = false, deadT = nil, lDmg = nil, lDmgT = nil, killer = nil, mk = 0, mks = nil, counted = false}
@@ -27,14 +37,15 @@ OnTick( function ()
 		end
 		
 		if i.dead and not i.unit.dead and _ == GetNetworkID(myHero) then	--On Respawn
-			Play("Dlc_glados_ann_glados_followup_respaw_",17)
+			Play("Dlc_glados_ann_glados_followup_respaw_",13)
 			
 		elseif not i.dead and i.unit.dead and _ == GetNetworkID(myHero) then	--On Death (Self)
-			Play("Dlc_glados_ann_glados_ally_neg_",30)
+			Play("Dlc_glados_ann_glados_ally_neg_",26)
 		end
 		
 		
 		if not i.dead and i.unit.dead and i.killer and i.deadT and not i.counted then
+			print(GetObjectName(i.unit).." died to "..GetObjectName(i.killer))
 			c[GetNetworkID(i.killer)].mko = c[GetNetworkID(i.killer)].mk
 			c[GetNetworkID(i.killer)].mk = c[GetNetworkID(i.killer)].mk + 1
 			i.counted = true
@@ -45,7 +56,7 @@ OnTick( function ()
 			i.counted = false
 		end
 		
-		if mko and mko < i.mk then
+		if i.mko and i.mko < i.mk then
 			if i.mk == 2 then
 				Play("Dlc_glados_killing_spree_ann_glados_kill_double_",1)
 			elseif i.mk == 3 then
@@ -55,8 +66,9 @@ OnTick( function ()
 			elseif i.mk == 5 then
 				Play("Dlc_glados_killing_spree_ann_glados_kill_rampage_",2)
 			end
+			i.mko = i.mk
 		end
-		print(mko)
+		
 		
 		if i.lDmgT and GetGameTimer() - i.lDmgT >= 10 then
 			i.lDmg = nil
@@ -89,7 +101,6 @@ OnDraw( function()
 end)
 
 function Play(str,m)
-	print(GetGameTimer())
 	if GetGameTimer() - lastSound > 2 or GetGameTimer() <= 20 then
 		repeat 
 			local rnd = math.random(1,m)
@@ -98,11 +109,12 @@ function Play(str,m)
 			else
 				PlaySound(SOUNDS_PATH.. [[\Glados\]] ..str ..tostring(rnd) .. ".wav")
 			end
-		print("Ran Sound "..SOUNDS_PATH.. [[\Glados\]] ..str.. tostring(rnd) .. ".wav")
+		--print("Ran Sound "..SOUNDS_PATH.. [[\Glados\]] ..str.. tostring(rnd) .. ".wav")
 		until FileExist(SOUNDS_PATH.. [[\Glados\]] ..str.. "0"..tostring(rnd) .. ".wav")
 		lastSound = GetGameTimer()
 	else
-	print("spam catch")
+		DelayAction(function () Play(str,m) end, 2)
+		print("spam catch")
 	end
 end
 
