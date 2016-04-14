@@ -1,42 +1,35 @@
 local c = {}
 local lastSound = GetGameTimer()
 local sounds = {}
-
+local mS = 0
+local mS2 = 0
 local sf = {
-	{"Dlc_glados_killing_spree_ann_glados_kill_double_",1},
-	{"Dlc_glados_killing_spree_ann_glados_kill_triple_",1},
-	{"Dlc_glados_killing_spree_ann_glados_kill_ultra_",2},
-	{"Dlc_glados_killing_spree_ann_glados_kill_rampage_",3},
-	{"Dlc_glados_ann_glados_followup_respaw_",13},
-	{"Dlc_glados_ann_glados_ally_neg_",26},
+	{[1] = "Dlc_glados_killing_spree_ann_glados_kill_double_",[2] = 1},
+	{[1] = "Dlc_glados_killing_spree_ann_glados_kill_triple_",[2] = 1},
+	{[1] = "Dlc_glados_killing_spree_ann_glados_kill_ultra_",[2] = 2},
+	{[1] = "Dlc_glados_killing_spree_ann_glados_kill_rampage_",[2] = 3},
+	{[1] = "Dlc_glados_ann_glados_followup_respaw_",[2] = 13},
+	{[1] = "Dlc_glados_ann_glados_ally_neg_",[2] = 26},
 }
 
 if not DirExists(SOUNDS_PATH..[[\Glados\]]) then
 	CreateDir(SOUNDS_PATH..[[\Glados\]])
 end
 
-function DL()
-	for _,i in pairs(sf) do
-		for l=1,i[2] do
-			print(i[1]..i[2])
-			if l < 10 then
-				if not FileExist(SOUNDS_PATH.. [[\Glados\]] .. i[1].."0"..l..".wav") then
-					DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/GS/" .. i[1].."0"..l..".wav" ,SOUNDS_PATH .. [[\Glados\]] .. i[1].."0"..l..".wav", function() PrintChat("Downloaded "..i[i]..l) end)
-					return 
-					else 
-				end
-			else
-				if not FileExist(SOUNDS_PATH.. [[\Glados\]] .. i[1]..l..".wav") then
-					DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/GS/"  .. i[1] .. l .. ".wav" , SOUNDS_PATH .. [[\Glados\]] .. i[1].. l ..".wav", function() PrintChat("Downloaded "..i[i]..l) end)
-					return
-					else
-				end
-			end 
+for _,i in pairs(sf) do
+	mS = mS + i[2]
+end
+
+for _,i in pairs(sf) do
+	for l=1,i[2] do
+		--print(i[1]..i[2])
+		if not FileExist(SOUNDS_PATH.. "\\Glados\\" .. i[1] .. l .. ".wav") then
+			DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/GS/" .. i[1]..l..".wav" , SOUNDS_PATH .. "\\Glados\\" .. i[1]..l..".wav", function() mS2 = mS2 + 1 end)
+		else 
+			mS2 = mS2 + 1
 		end
 	end
 end
-
-DL()
 
 
 c[GetNetworkID(myHero)] = {unit = myHero, dead = false, deadT = nil, lDmg = nil, lDmgT = nil, killer = nil, mk = 0, mks = nil, counted = false}
@@ -124,6 +117,14 @@ OnDraw( function()
 			DrawText(_..": "..tostring(i),20,mph.x,mph.y+y,GoS.White)
 			y = y + 30
 		end
+	end
+	if kill then return end
+	DrawText(mS2,30,50,50,GoS.White)
+	if mS2 < mS then
+		FillRect(100,100,100+mS2/mS*1000,150,GoS.White)
+	else
+		FillRect(100,100,1000,150,GoS.Green)
+		DelayAction(function() kill = true end, 2)
 	end
 end)
 
