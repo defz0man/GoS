@@ -12,8 +12,9 @@ local sf = {
 	{[1] = "Dlc_glados_ann_glados_ally_neg_",[2] = 26},
 }
 
-if not DirExists(SOUNDS_PATH..[[\Glados\]]) then
-	CreateDir(SOUNDS_PATH..[[\Glados\]])
+if not DirExists(SOUNDS_PATH.."\\Glados\\") then
+	CreateDir(SOUNDS_PATH.."\\Glados\\")
+	print("Downloading Soundfiles...")
 end
 
 for _,i in pairs(sf) do
@@ -31,6 +32,18 @@ for _,i in pairs(sf) do
 	end
 end
 
+OnDraw( function()
+	if ___ then return end
+	DrawText(mS2,30,50,50,GoS.White)
+	if mS2 < mS then
+		FillRect(100,100,100+mS2/mS*1000,150,GoS.White)
+	else
+		FillRect(100,100,1000,150,GoS.Green)
+		DelayAction(function() ___ = true init() end, 2)
+	end
+end)
+
+function init()
 
 c[GetNetworkID(myHero)] = {unit = myHero, dead = false, deadT = nil, lDmg = nil, lDmgT = nil, killer = nil, mk = 0, mks = nil, counted = false}
 DelayAction( function() 
@@ -118,26 +131,14 @@ OnDraw( function()
 			y = y + 30
 		end
 	end
-	if kill then return end
-	DrawText(mS2,30,50,50,GoS.White)
-	if mS2 < mS then
-		FillRect(100,100,100+mS2/mS*1000,150,GoS.White)
-	else
-		FillRect(100,100,1000,150,GoS.Green)
-		DelayAction(function() kill = true end, 2)
-	end
 end)
 
 function Play(str,m)
 	if GetGameTimer() - lastSound > 2 or GetGameTimer() <= 20 then
 		repeat 
 			local rnd = math.random(1,m)
-			if rnd < 10 then
-				PlaySound(SOUNDS_PATH.. [[\Glados\]] ..str.. "0"..tostring(rnd) .. ".wav")
-			else
-				PlaySound(SOUNDS_PATH.. [[\Glados\]] ..str ..tostring(rnd) .. ".wav")
-			end
-		--print("Ran Sound "..SOUNDS_PATH.. [[\Glados\]] ..str.. tostring(rnd) .. ".wav")
+			PlaySound(SOUNDS_PATH.. [[\Glados\]] ..str..tostring(rnd) .. ".wav")
+			--print("Ran Sound "..SOUNDS_PATH.. [[\Glados\]] ..str.. tostring(rnd) .. ".wav")
 		until FileExist(SOUNDS_PATH.. [[\Glados\]] ..str.. "0"..tostring(rnd) .. ".wav")
 		lastSound = GetGameTimer()
 	else
@@ -150,3 +151,4 @@ if GetGameTimer() <= 20 then
 	Play("Dlc_glados_ann_glados_battle_prepare_",10)
 end
 --1:15 creeps
+end
