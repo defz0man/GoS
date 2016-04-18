@@ -1,6 +1,5 @@
 if GetObjectName(GetMyHero()) ~= "Nasus" then return end
 
-require("Inspired")
 if not pcall( require, "OpenPredict" ) then PrintChat("This script doesn't work without OpenPredict! Download it!") return end
 
 local version = 1
