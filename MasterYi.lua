@@ -1,7 +1,5 @@
 if GetObjectName(GetMyHero()) ~= "MasterYi" then return end
 
-require("Inspired")
-
 local myHero=GetMyHero()
 local delay=0
 local spelltype=0
