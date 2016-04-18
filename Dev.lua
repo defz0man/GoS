@@ -1,3 +1,11 @@
+local v = 1
+GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/v/dev.version", function(num)
+	if v < tonumber(num) then
+		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Dev.lua", SCRIPT_PATH .. "Dev.lua", function() PrintChat("[Dev] Updated") end)
+	end
+end)
+	
+
 local o = {}
 local s = {}
 local ind = 0
@@ -33,6 +41,7 @@ M.O:Boolean("sO", "Save ObjectInfo", false)
 M.O:Boolean("dSP","Draw SartPos (Blue)",true)
 M.O:Boolean("dEP","Draw EndPos (Black)",true)
 M.O:Boolean("dL","Draw Line (White)",true)
+M.U
 DelayAction(function()
 	if GetAllyHeroes()[1] or GetEnemyHeroes()[1] then
 		M.O:SubMenu("U","Extra Objects Units")
