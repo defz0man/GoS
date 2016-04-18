@@ -4,11 +4,13 @@ GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/v/dev.ver
 		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Dev.lua", SCRIPT_PATH .. "Dev.lua", function() PrintChat("[Dev] Updated") end)
 	end
 end)
-	
 
+local res = GetResolution()
 local o = {}
 local s = {}
+local u = {}
 local ind = 0
+local str = {[0]="Q",[1]="W",[2]="E",[3]="R"}
 local M = Menu("Dev","Dev")
 M:SubMenu("G","Global")
 M.G:Slider("T","Time for clear",5,1,30,1)
@@ -20,7 +22,7 @@ M.S:Boolean("mH", "Register myHero", true)
 M.S:Boolean("rE", "Register Enemy", false)
 M.S:Boolean("rA", "Register Ally", false)
 M.S:Boolean("pC", "Print Names", false)
-M.S:Boolean("sS", "Save SpellInfo", false)
+M.S:Boolean("sS", "Save SpellInfo", true)
 M.S:Info("","-----------")
 M.S:Boolean("dSN","Draw SpellName",true)
 M.S:Boolean("dSP","Draw StartPos (Green)",true)
@@ -37,21 +39,32 @@ M.O:Boolean("cmH", "EO [myHero]", true)
 M.O:Info("","-----------")
 M.O:Boolean("dN", "Draw Name", true)
 M.O:Boolean("dH", "Draw HitBox", true)
-M.O:Boolean("sO", "Save ObjectInfo", false)
+M.O:Boolean("sO", "Save ObjectInfo", true)
 M.O:Boolean("dSP","Draw SartPos (Blue)",true)
 M.O:Boolean("dEP","Draw EndPos (Black)",true)
 M.O:Boolean("dL","Draw Line (White)",true)
-M.U
+M:SubMenu("U","Unit info")
+M.U:Boolean("E", "Enable", false)
+M.U:Boolean("dmH", "Draw only myHero", true)
+M.U:Boolean("dIS", "Draw ItemSlots", false)
+M.U:Boolean("dCS", "Draw CastSlots", false)
+
 DelayAction(function()
+	u[myHero.networkID] = myHero
 	if GetAllyHeroes()[1] or GetEnemyHeroes()[1] then
+		M.U:SubMenu("U","Extra Units")
 		M.O:SubMenu("U","Extra Objects Units")
 		M.O.U:Boolean("E","Enable (lag)",false)
 		for _,i in pairs(GetAllyHeroes()) do
+			M.U.U:Boolean(i.networkID,i.name,false)
 			M.O.U:Boolean(i.networkID,i.name,false)
+			u[i.networkID] = i
 		end
-		if GetAllyHeroes()[1] and GetEnemyHeroes()[1] then M.O.U:Info("","------------") end
+		if GetAllyHeroes()[1] and GetEnemyHeroes()[1] then M.O.U:Info("","------------") M.U.U:Info("","------------") end
 		for _,i in pairs(GetEnemyHeroes()) do
+			M.U.U:Boolean(i.networkID,i.name,false)
 			M.O.U:Boolean(i.networkID,i.name,false)
+			u[i.networkID] = i
 		end
 	end
 end)
@@ -99,6 +112,26 @@ OnDraw(function()
 		if M.O.dL:Value() and i.o.endPos and i.o.startPos then DrawLine(WorldToScreen(0,i.o.startPos).x,WorldToScreen(0,i.o.startPos).y,WorldToScreen(0,i.o.endPos).x,WorldToScreen(0,i.o.endPos).y,2,GoS.White) end
 		off = 0
 	end
+	for _,i in pairs(u) do
+		off = 0
+		if M.U.dmH:Value() and not i.isMe then i = myHero end
+		if not M.U.E:Value() then return end
+		if i.pos2D.x > 0 and i.pos2D.y > 0 and i.pos2D.x < res.x and i.pos2D.y < res.y and ((M.U.U[i.networkID] and M.U.U[i.networkID]:Value()) or i.isMe) then
+			if M.U.dIS:Value() then
+				for y = 6,12,1 do
+					if GetItemID(i,y) > 0 then
+						DrawText("Slot "..y..": "..GetItemID(i,y),20,i.pos2D.x,i.pos2D.y+off,GoS.White) off = off + 20
+					end
+				end
+			end
+			if M.U.dCS:Value() then
+				for y=0,3 do
+					DrawText("_"..str[y]..": "..GetCastName(i,y),20,i.pos2D.x,i.pos2D.y+off,GoS.White) off = off + 20
+				end
+			end
+		end
+		off = 0
+	end
 end)
 
 OnCreateObj(function(Object)
@@ -122,7 +155,6 @@ OnCreateObj(function(Object)
 			end
 		end
 		if not found then return end
-		--print(Object.spellName)
 		o[GetGameTimer()] = {o = Object, n = Object.name}
 		if M.O.sO:Value() then
 			if not M.O.O then M.O:SubMenu("O","Saved Objects") end
@@ -131,7 +163,6 @@ OnCreateObj(function(Object)
 			M.O.O:SubMenu(n,n) 
 			M.O.O[n]:Info("1","HitBox: "..GetHitBox(Object))
 			if Object and Object.isSpell then
-				--if Object.spellOwner then M.O.O[n]:Info("2","Owner: ".. Object.spellOwner) end
 				M.O.O[n]:Info("3","SpellName: "..Object.spellName)
 			end
 		end
