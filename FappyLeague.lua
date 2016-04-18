@@ -1,5 +1,3 @@
-require('Inspired')
-
 local FLMenu = Menu("FL","FappyLeague")
 FLMenu:Boolean("a","Activate FappyLeague",true)
 FLMenu:Boolean("o","Only when dead",true)
