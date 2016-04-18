@@ -1,7 +1,5 @@
 if GetObjectName(GetMyHero()) ~= "Garen" then return end
 
-require('Inspired')
-
 Config = Menu("Garen", "Garen")
 Config:SubMenu("c", "Combo")
 Config.c:Boolean("R", "Use R", true)
