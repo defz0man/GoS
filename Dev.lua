@@ -15,19 +15,24 @@ M.S:Boolean("pC", "Print Names", false)
 M.S:Boolean("sS", "Save SpellInfo", false)
 M.S:Info("","-----------")
 M.S:Boolean("dSN","Draw SpellName",true)
-M.S:Boolean("dSP","Draw StartPos",true)
-M.S:Boolean("dEP","Draw EndPos",true)
-M.S:Boolean("dL","Draw Line",true)
+M.S:Boolean("dSP","Draw StartPos (Green)",true)
+M.S:Boolean("dEP","Draw EndPos (Red)",true)
+M.S:Boolean("dL","Draw Line (Yellow)",true)
 M.S:Boolean("dD", "Draw Details",false)
 M:SubMenu("O","Objects")
 M.O:Boolean("E","Enable",false)
-M.O:Boolean("oM", "Missiles", true)
+M.O:Boolean("oM", "only Missiles", true)
 M.O:Boolean("omH", "only my Missiles", true)
-M.O:Boolean("eO", "Extra objects (me)", false)
+M.O:Boolean("nAA", "Don't check AA", true)
+M.O:Boolean("eO", "Extra Objects", false)
+M.O:Boolean("cmH", "EO [myHero]", true)
 M.O:Info("","-----------")
 M.O:Boolean("dN", "Draw Name", true)
 M.O:Boolean("dH", "Draw HitBox", true)
 M.O:Boolean("sO", "Save ObjectInfo", false)
+M.O:Boolean("dSP","Draw SartPos (Blue)",true)
+M.O:Boolean("dEP","Draw EndPos (Black)",true)
+M.O:Boolean("dL","Draw Line (White)",true)
 DelayAction(function()
 	if GetAllyHeroes()[1] or GetEnemyHeroes()[1] then
 		M.O:SubMenu("U","Extra Objects Units")
@@ -78,7 +83,12 @@ OnDraw(function()
 	for _,i in pairs(o) do
 		off = 0 
 		if M.O.dH:Value() then DrawCircle(i.o.pos,GetHitBox(i.o),3,3,GoS.White) end
-		if M.O.dN:Value() then DrawText("name: "..i.o.name,20,i.o.pos2D.x,i.o.pos2D.y+off,GoS.White) off = off + 30 end
+		if M.O.dN:Value() and i.o.isSpell then DrawText("name: "..i.o.spellName,20,i.o.pos2D.x,i.o.pos2D.y+off,GoS.White) off = off + 30
+		elseif M.O.dN:Value() then DrawText("name: "..i.o.name,20,i.o.pos2D.x,i.o.pos2D.y+off,GoS.White) off = off + 30 end
+		if M.O.dSP:Value() and i.o.startPos then DrawCircle(i.o.startPos,50,2,3,GoS.Blue) end
+		if M.O.dEP:Value() and i.o.endPos then DrawCircle(i.o.endPos,50,2,3,GoS.Black) end
+		if M.O.dL:Value() and i.o.endPos and i.o.startPos then DrawLine(WorldToScreen(0,i.o.startPos).x,WorldToScreen(0,i.o.startPos).y,WorldToScreen(0,i.o.endPos).x,WorldToScreen(0,i.o.endPos).y,2,GoS.White) end
+		off = 0
 	end
 end)
 
@@ -86,12 +96,14 @@ OnCreateObj(function(Object)
 	if not M.O.E:Value() then return end
 	local found = false
 	DelayAction(function()
+		if Object.name ~= "missile" and M.O.oM:Value() then return end
 		if Object.name == "missile" and M.O.oM:Value() and Object.isSpell then
-			--if M.O.omH:Value() and not Object.spellOwner.isMe then return end
+			if M.O.omH:Value() and GetObjectSpellOwner(Object) ~= myHero then return end
+			if M.O.nAA:Value() and Object.spellName:lower():find("attack") then return end
 			found = true
-		else
-			if M.O.eO:Value() and GetObjectBaseName(Object):lower():find(GetObjectName(myHero):lower()) then found = true end
-			if M.O.U.E:Value() then
+		elseif M.O.eO:Value() and not M.O.oM:Value() then
+			if M.O.cmH:Value() and GetObjectBaseName(Object):lower():find(GetObjectName(myHero):lower()) then found = true end
+			if M.O.U and M.O.U.E and M.O.U.E:Value() then
 				for _,i in pairs(GetAllyHeroes()) do 
 					if M.O.U[i.networkID]:Value() and GetObjectBaseName(Object):lower():find(GetObjectName(i):lower()) then found = true end
 				end
@@ -102,7 +114,7 @@ OnCreateObj(function(Object)
 		end
 		if not found then return end
 		--print(Object.spellName)
-		o[GetGameTimer()] = {o = Object, n = Object.charName}
+		o[GetGameTimer()] = {o = Object, n = Object.name}
 		if M.O.sO:Value() then
 			if not M.O.O then M.O:SubMenu("O","Saved Objects") end
 			if Object.name == "missile" then n = Object.spellName else n = Object.name end
