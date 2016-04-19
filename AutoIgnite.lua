@@ -1,5 +1,4 @@
 --Simple Auto Ignite
-require('Inspired')
 if GetCastName(myHero,SUMMONER_1):lower() == "summonerdot" then
 	Ignite = SUMMONER_1
 elseif GetCastName(myHero,SUMMONER_2):lower() == "summonerdot" then
