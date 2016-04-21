@@ -1,4 +1,4 @@
-local v = 1
+local v = 2
 GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/v/dev.version", function(num)
 	if v < tonumber(num) then
 		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Dev.lua", SCRIPT_PATH .. "Dev.lua", function() PrintChat("[Dev] Updated") end)
@@ -36,6 +36,7 @@ M.O:Boolean("omH", "only my Missiles", true)
 M.O:Boolean("nAA", "Don't check AA", true)
 M.O:Boolean("eO", "Extra Objects", false)
 M.O:Boolean("cmH", "EO [myHero]", true)
+M.O:Boolean("aO", "ALL OBJECTS (close)", false)
 M.O:Info("","-----------")
 M.O:Boolean("dN", "Draw Name", true)
 M.O:Boolean("dH", "Draw HitBox", true)
@@ -48,6 +49,7 @@ M.U:Boolean("E", "Enable", false)
 M.U:Boolean("dmH", "Draw only myHero", true)
 M.U:Boolean("dIS", "Draw ItemSlots", false)
 M.U:Boolean("dCS", "Draw CastSlots", false)
+M:Info("1337",GetUser().. " in da game")
 
 DelayAction(function()
 	u[myHero.networkID] = myHero
@@ -116,7 +118,7 @@ OnDraw(function()
 		off = 0
 		if M.U.dmH:Value() and not i.isMe then i = myHero end
 		if not M.U.E:Value() then return end
-		if i.pos2D.x > 0 and i.pos2D.y > 0 and i.pos2D.x < res.x and i.pos2D.y < res.y and ((M.U.U[i.networkID] and M.U.U[i.networkID]:Value()) or i.isMe) then
+		if i.pos2D.x > 0 and i.pos2D.y > 0 and i.pos2D.x < res.x and i.pos2D.y < res.y and ((M.U.U and M.U.U[i.networkID] and M.U.U[i.networkID]:Value()) or i.isMe) then
 			if M.U.dIS:Value() then
 				for y = 6,12,1 do
 					if GetItemID(i,y) > 0 then
@@ -135,6 +137,7 @@ OnDraw(function()
 end)
 
 OnCreateObj(function(Object)
+	if M.O.aO:Value() and GetDistance(Object)<500 then print(Object.name) end
 	if not M.O.E:Value() then return end
 	local found = false
 	DelayAction(function()
