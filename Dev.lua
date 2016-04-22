@@ -1,4 +1,4 @@
-local v = 2
+local v = 3
 GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/v/dev.version", function(num)
 	if v < tonumber(num) then
 		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Dev.lua", SCRIPT_PATH .. "Dev.lua", function() PrintChat("[Dev] Updated") end)
@@ -26,6 +26,8 @@ M.S:Boolean("sS", "Save SpellInfo", true)
 M.S:Info("","-----------")
 M.S:Boolean("dSN","Draw SpellName",true)
 M.S:Boolean("dSP","Draw StartPos (Green)",true)
+M.S:Boolean("dHB", "Draw (test) Width", false)
+M.S:Slider("dBx", "Width", 100, 0, 750, 5)
 M.S:Boolean("dEP","Draw EndPos (Red)",true)
 M.S:Boolean("dL","Draw Line (Yellow)",true)
 M.S:Boolean("dD", "Draw Details",false)
@@ -96,6 +98,22 @@ OnDraw(function()
 		if M.S.dSP:Value() and i.s.startPos then DrawCircle(i.s.startPos,50,0,3,GoS.Green) end
 		if M.S.dEP:Value() and i.s.endPos then DrawCircle(i.s.endPos,50,0,3,GoS.Red) end
 		if M.S.dL:Value() and i.s.endPos and i.s.startPos then DrawLine(WorldToScreen(0,i.s.startPos).x,WorldToScreen(0,i.s.startPos).y,WorldToScreen(0,i.s.endPos).x,WorldToScreen(0,i.s.endPos).y,1,GoS.Yellow) end
+		if M.S.dHB:Value() then
+			local sPos = Vector(i.s.startPos)
+			local ePos = Vector(i.s.endPos)
+			local dVec = Vector(ePos - sPos)
+			DrawCircle(dVec,50,0,3,GoS.White)
+			--print(dVec)
+			sVec = dVec:normalized():perpendicular()*M.S.dBx:Value()*.5
+			
+			local TopD1 = WorldToScreen(0,sPos+sVec)
+			local TopD2 = WorldToScreen(0,sPos-sVec)
+			local BotD1 = WorldToScreen(0,ePos+sVec)
+			local BotD2 = WorldToScreen(0,ePos-sVec)
+			DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1,GoS.White)
+			DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1,GoS.White)
+			DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1,GoS.White)
+		end
 		if M.S.dD:Value() then
 			if i.s.target and i.s.target.name then DrawText("target: "..i.s.target.name or "none",20,WorldToScreen(0,i.s.startPos).x,WorldToScreen(0,i.s.startPos).y+off,GoS.White) off = off + 30 end
 			if i.s.windUpTime  then DrawText("windUpTime: "..i.s.windUpTime,20,WorldToScreen(0,i.s.startPos).x,WorldToScreen(0,i.s.startPos).y+off,GoS.White) off = off + 30 end
@@ -137,8 +155,8 @@ OnDraw(function()
 end)
 
 OnCreateObj(function(Object)
-	if M.O.aO:Value() and GetDistance(Object)<500 then print(Object.name) end
 	if not M.O.E:Value() then return end
+	if M.O.aO:Value() and GetDistance(Object)<500 then print(Object.name) end
 	local found = false
 	DelayAction(function()
 		if Object.name ~= "missile" and M.O.oM:Value() then return end
