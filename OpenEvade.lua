@@ -227,6 +227,8 @@ local s = {
 	Slot = 3,
 	spellName = "BardR",
 	spellType = "Circular",
+	killName = "BardR",
+	killTime = 1,
 	},
 },
 --end Bard
@@ -340,6 +342,7 @@ local s = {
 	charName = "Cassiopeia",
 	danger = 4,
 	name = "CassiopeiaPetrifyingGaze",
+	speed = math.huge,
 	radius = 20,
 	range = 825,
 	delay = 500,
@@ -351,12 +354,15 @@ local s = {
 	charName = "Cassiopeia",
 	danger = 1,
 	name = "CassiopeiaNoxiousBlast",
+	speed = math.huge,
 	radius = 200,
 	range = 600,
 	delay = 825,
 	Slot = 0,
 	spellName = "CassiopeiaNoxiousBlast",
 	spellType = "Circular",
+	killName = "CassiopeiaNoxiousBlast",
+	killTime = 0.2,
 	},
 	{
 	charName = "Cassiopeia",
@@ -369,6 +375,8 @@ local s = {
 	Slot = 1,
 	spellName = "CassiopeiaMiasma",
 	spellType = "Circular",
+	killName = "CassiopeiaMiasma",
+	killTime = 0.75,
 	},
 },
 --end Cassiopeia
@@ -378,6 +386,7 @@ local s = {
 	charName = "Chogath",
 	danger = 2,
 	name = "FeralScream",
+	speed = 2000,
 	radius = 20,
 	range = 650,
 	delay = 250,
@@ -389,6 +398,7 @@ local s = {
 	charName = "Chogath",
 	danger = 3,
 	name = "Rupture",
+	speed = math.huge,
 	radius = 250,
 	range = 950,
 	delay = 1200,
@@ -396,6 +406,8 @@ local s = {
 	spellName = "Rupture",
 	spellType = "Circular",
 	extraDrawHeight = 45,
+	killName = "Rupture",
+	killTime = 0.5,
 	},
 },
 --end Chogath
@@ -542,12 +554,15 @@ local s = {
 	charName = "Ekko",
 	danger = 3,
 	name = "EkkoW",
+	speed = math.huge,
 	radius = 375,
 	range = 1600,
 	delay = 3750,
 	Slot = 1,
 	spellName = "EkkoW",
 	spellType = "Circular",
+	killName = "EkkoW",
+	killTime = 1.2,
 	},
 	{
 	charName = "Ekko",
@@ -1323,6 +1338,7 @@ local s = {
 	charName = "KogMaw",
 	danger = 2,
 	name = "Living Artillery",
+	speed = math.huge,
 	radius = 235,
 	range = 2200,
 	delay = 1100,
@@ -1527,9 +1543,10 @@ local s = {
 	{
 	charName = "Lux",
 	danger = 3,
-	name = "Lux Malice Cannon",
+	missilename = "LuxMaliceCannon",
+	name = "LuxMaliceCannon",
 	speed = math.huge,
-	radius = 110,
+	radius = 190,
 	range = 3500,
 	delay = 1000,
 	Slot = 3,
@@ -2637,6 +2654,8 @@ local s = {
 	Slot = 2,
 	spellName = "ZiggsE",
 	spellType = "Circular",
+	killName = "ZiggsE",
+	killTime = 1.5,
 	},
 	{
 	charName = "Ziggs",
@@ -2649,6 +2668,8 @@ local s = {
 	Slot = 1,
 	spellName = "ZiggsW",
 	spellType = "Circular",
+	killName = "ZiggsW",
+	killTime = 1,
 	},
 	{
 	charName = "Ziggs",
@@ -2663,6 +2684,8 @@ local s = {
 	spellType = "Circular",
 	isSpecial = true,
 	noProcess = true,
+	killName = "ZiggsQ",
+	killTime = 0.2,
 	},
 	{
 	charName = "Ziggs",
@@ -2675,6 +2698,8 @@ local s = {
 	Slot = 3,
 	spellName = "ZiggsR",
 	spellType = "Circular",
+	killName = "ZiggsR",
+	killTime = 1.75,
 	},
 },
 --end Ziggs
@@ -2723,23 +2748,29 @@ local s = {
 	charName = "Zyra",
 	danger = 2,
 	name = "Deadly Bloom",
+	speed = math.huge,
 	radius = 260,
 	range = 825,
 	delay = 800,
 	Slot = 0,
 	spellName = "ZyraQFissure",
 	spellType = "Circular",
+	killName = "ZyraQFissure",
+	killTime = 0.3,
 	},
 	{
 	charName = "Zyra",
 	danger = 4,
 	name = "ZyraR",
+	speed = math.huge,
 	radius = 525,
 	range = 700,
 	delay = 500,
 	Slot = 3,
 	spellName = "ZyraBrambleZone",
 	spellType = "Circular",
+	killName = "ZyraBrambleZone",
+	killTime = 1.2,
 	},
 },
 --end Zyra
@@ -2755,17 +2786,36 @@ local d = {
 	--evadeType = EvadeType.Dash,
 	--castType = CastType.Position,
 	},
+["Vayne"]  = {
+	dl = 2,
+	range = 300,
+	spellDelay = 50,
+	speed = 1350,
+	slot = 0,
+	--evadeType = EvadeType.Dash,
+	--castType = CastType.Position,
+	},
+["Caitlyn"]  = {
+	dl = 3,
+	range = 750,
+	spellDelay = 0.2,
+	speed = 1350,
+	slot = 2,
+	--evadeType = EvadeType.Dash,
+	--castType = CastType.Position,
+	},
 }
-
 
 local obj = {}
 local str = {[0]="Q",[1]="W",[2]="E",[3]="R"}
 local EMenu = Menu("Evade","Evade")
+local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash") and SUMMONER_1 or (GetCastName(GetMyHero(),SUMMONER_2):lower():find("summonerflash") and SUMMONER_2 or nil))
 EMenu:Slider("d","Danger",2,1,5,1)
+EMenu:Slider("ew", "extra width", 20, 1, 100, 5)
 DelayAction( function()
 	for _,i in pairs(GetEnemyHeroes()) do
 		if not s[GetObjectName(i)] then return end
-		EMenu:SubMenu(GetObjectName(i))
+		EMenu:SubMenu(GetObjectName(i),GetObjectName(i))
 		for _,l in ipairs(s[GetObjectName(i)]) do
 			EMenu[GetObjectName(i)]:Boolean(l.name,"|"..(str[l.Slot] or "?").."| - "..(l.name or "."), true)
 			EMenu[GetObjectName(i)]:Slider("d"..l.name,str[l.Slot].."- Danger",(l.danger or 1), 1, 5, 1)
@@ -2784,7 +2834,9 @@ OnCreateObj(function (Object)
 					if (l.missileName == GetObjectSpellName(Object) or GetObjectSpellName(Object):lower():find(l.name:lower()) or GetObjectSpellName(Object):lower():find(l.spellName:lower()) or (tostring(l.extraMissileNames) and l.extraMissileNames == GetObjectSpellName(Object))) and l.spellType == "Line" and EMenu[GetObjectName(GetObjectSpellOwner(Object))][l.name]:Value() and EMenu.d:Value() <= EMenu[GetObjectName(GetObjectSpellOwner(Object))]["d"..l.name]:Value() then
 						start = GetObjectSpellStartPos(Object)
 						start.y = GetOrigin(Object).y
-						obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, spell = l, sType = l.spellType}
+						endpos = GetObjectSpellEndPos(Object) 
+						endpos.y = GetOrigin(Object).y
+						obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType}
 					end
 				end
 			end
@@ -2812,21 +2864,22 @@ OnDraw(function ()
 			if _ ~= GetObjectSpellName(i.Obj) then obj[_] = nil end
 			local Screen = WorldToScreen(0,GetOrigin(i.Obj))
 			local Screen2 = WorldToScreen(0,i.sPos)
-			DrawCircle(GetOrigin(i.Obj),i.spell.radius*.5,3,3,GoS.White)
+			DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,3,3,GoS.White)
 			offy = offy + 30
-			i.ePos = Vector(i.sPos)+(Vector(i.sPos)-GetOrigin(i.Obj)):normalized()*i.spell.range*(-1)
+			local sPos = Vector(i.sPos)
+ 			local ePos = Vector(i.ePos)
+ 			local dVec = Vector(ePos - sPos)
+ 			DrawCircle(dVec,50,0,3,GoS.White)
+ 			sVec = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5)
+ 		
+ 			local TopD1 = WorldToScreen(0,sPos+sVec)
+ 			local TopD2 = WorldToScreen(0,sPos-sVec)
+ 			local BotD1 = WorldToScreen(0,ePos+sVec)
+ 			local BotD2 = WorldToScreen(0,ePos-sVec)
+ 			DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,3,GoS.White)
+ 			DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,GoS.White)
+ 			DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,GoS.White)
 			
-			--HitBox
-			DrawCircle(i.ePos,i.spell.radius*.5,0,3,GoS.White)
-			LVector = (Vector(GetOrigin(myHero)) - i.ePos):normalized():perpendicular()*i.spell.radius*.5
-			local TopD1 = WorldToScreen(0,i.sPos+LVector)
-			local TopD2 = WorldToScreen(0,i.sPos-LVector)
-			local BotD1 = WorldToScreen(0,i.ePos+LVector)
-			local BotD2 = WorldToScreen(0,i.ePos-LVector)
-			DrawLine(Screen2.x,Screen2.y,Screen.x,Screen.y,5,GoS.Pink)
-			DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1,GoS.White)
-			DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1,GoS.White)
-			DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1,GoS.White)
 		elseif i.sType == "Circular" then
 			DrawCircle(i.ePos,i.spell.radius,3,0,GoS.White)
 		end
@@ -2865,11 +2918,11 @@ OnTick(function()
 			jp = Vector(VectorIntersection(i.sPos,i.ePos,S1,S2).x,i.ePos.y,VectorIntersection(i.sPos,i.ePos,S1,S2).y)
 			i.jp = jp
 			-- and not i.safe then
-			if GetDistance(myHero,i.jp) < i.spell.radius+GetHitBox(myHero) and not i.safe then
+			if GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 				if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
-					i.safe = jp + Vector(i.sPos-i.ePos):perpendicular():normalized()*(i.spell.radius*1.1+GetHitBox(myHero))
+					i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius+20)*1.1)
 				else 
-					i.safe = jp + Vector(i.sPos-i.ePos):perpendicular2():normalized()*(i.spell.radius*1.1+GetHitBox(myHero))
+					i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius+20)*1.1)
 				end
 				--print("register")
 				i.isEvading = true
@@ -2879,8 +2932,8 @@ OnTick(function()
 				i.isEvading = false
 			end
 		elseif i.sType == "Circular" then
-			if GetDistance(myHero,i.ePos) < i.radius + GetHitBox(myHero) and not i.safe then
-				i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized()*(i.radius*1.1+GetHitBox(myHero))
+			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
+				i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius+20)*1.1)
 				i.isEvading = true
 				Stop(true)
 			else
@@ -2891,6 +2944,15 @@ OnTick(function()
 		if i.safe then
 			Stop(false)
 			MoveToXYZ(i.safe)
+			if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
+				if d[GetObjectName(myHero)].slot and CanUseSpell(myHero, d[GetObjectName(myHero)].slot) == 0 then
+					CastSkillShot(d[GetObjectName(myHero)].slot, i.safe)
+				end
+			elseif GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
+				if Flash and Ready(Flash) then
+					CastSkillShot(Flash, i.safe)
+				end
+			end
 		end
 	end
 end)
