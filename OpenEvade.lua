@@ -87,12 +87,15 @@ local s = {
 	charName = "Amumu",
 	danger = 4,
 	name = "CurseoftheSadMummy",
+	speed = math.huge,
 	radius = 560,
 	range = 560,
 	delay = 250,
 	Slot = 3,
 	spellName = "CurseoftheSadMummy",
 	spellType = "Circular",
+	killName = "CurseoftheSadMummy",
+	killTime = 1.25,
 	},
 	{
 	charName = "Amumu",
@@ -269,12 +272,15 @@ local s = {
 	charName = "Brand",
 	danger = 2,
 	name = "Pillar of Flame",
+	speed = math.huge,
 	radius = 250,
 	range = 1100,
 	delay = 850,
 	Slot = 1,
 	spellName = "BrandFissure",
 	spellType = "Circular",
+	killName = "BrandFissure",
+	killTime = 0.3,
 	},
 },
 --end Brand
@@ -2777,33 +2783,364 @@ local s = {
 }
 
 local d = {
-["Lucian"]	= {
-	dl = 2,
-	range = 425,
-	spellDelay = 50,
-	speed = 1350,
-	slot = 2,
-	--evadeType = EvadeType.Dash,
-	--castType = CastType.Position,
+["Ahri"] = {
+		dl = 4,
+		name = "AhriTumble",
+		range = 500,
+		spellDelay = 50,
+		speed = 1575,
+		spellKey = 3,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Caitlyn"] = {
+		dl = 3,
+		name = "CaitlynEntrapment",
+		range = 490,
+		spellDelay = 50,
+		speed = 1000,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Corki"] = {
+		dl = 3,
+		name = "CarpetBomb",
+		range = 790,
+		spellDelay = 50,
+		speed = 975,
+		spellKey = 1,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Ekko"] = {
+	["EkkoE"] = {
+		dl = 3,
+		name = "PhaseDive",
+		range = 350,
+		spellDelay = 50,
+		speed = 1150,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
 	},
-["Vayne"]  = {
-	dl = 2,
-	range = 300,
-	spellDelay = 50,
-	speed = 1350,
-	slot = 0,
-	--evadeType = EvadeType.Dash,
-	--castType = CastType.Position,
+	["EkkoR"] = {
+		charName = "Ekko",
+		dangerlevel = 4,
+		name = "Chronobreak",
+		range = 20000,
+		spellDelay = 50,
+		spellKey = 3,
+		evadeType = "Blink",
+		castType = "Self",
+     },
+},
+["Ezreal"] = {
+		dl = 2,
+		name = "ArcaneShift",
+		speed = math.huge,
+		range = 450,
+		spellDelay = 250,
+		spellKey = 2,
+		evadeType = "Blink",
+		castType = "Position",
+},
+["Gragas"] = {
+		dl = 2,
+		name = "BodySlam",
+		range = 600,
+		spellDelay = 50,
+		speed = 900,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Gnar"] = {
+	["GnarE"] = {
+		dl = 3,
+		name = "GnarE",
+		range = 475,
+		spellDelay = 50,
+		speed = 900,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+    },
+	["GnarBigE"] = {
+		dl = 4,
+		name = "GnarBigE",
+		range = 475,
+		spellDelay = 50,
+		speed = 800,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+    },
+},
+["Graves"] = {
+		dl = 2,
+		name = "QuickDraw",
+		range = 425,
+		spellDelay = 50,
+		speed = 1250,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Kassadin"] = {
+		dl = 1,
+		name = "RiftWalk",
+		speed = math.huge,
+		range = 450,
+		spellDelay = 250,
+		spellKey = 3,
+		evadeType = "Blink",
+		castType = "Position",
+},
+["Kayle"] = {
+		dl = 4,
+		name = "Intervention",
+		speed = math.huge,
+		range = 0,
+		spellDelay = 250,
+		spellKey = 3,
+		evadeType = "SpellShield",
+		castType = "Target",
+},
+["LeBlanc"] = {
+		dl = 2,
+		name = "Distortion",
+		range = 600,
+		spellDelay = 50,
+		speed = 1600,
+		spellKey = 1,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["LeeSin"] = {	
+		dl = 3,
+		name = "Safeguard",
+		range = 700,
+		speed = 1400,
+		spellDelay = 50,
+		spellKey = 1,
+		evadeType = "Dash",
+		castType = "Target",
+},
+["Lucian"] = {			
+		dl = 1,
+		name = "RelentlessPursuit",
+		range = 425,
+		spellDelay = 50,
+		speed = 1350,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Morgana"] = {
+		dl = 3,
+		name = "BlackShield",
+		speed = math.huge,
+		range = 650,
+		spellDelay = 50,
+		spellKey = 2,
+		evadeType = "SpellShield",
+		castType = "Target",
+},
+["Nocturne"] = {
+		dl = 3,
+		name = "ShroudofDarkness",
+		speed = math.huge,
+		range = 0,
+		spellDelay = 50,
+		spellKey = 1,
+		evadeType = "SpellShield",
+		castType = "Self",
+},
+["Nidalee"] = {
+		dl = 3,
+		name = "Pounce",
+		range = 375,
+		spellDelay = 150,
+		speed = 1750,
+		spellKey = 1,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Fiora"] = {
+	["FioraQ"] = {
+		dl = 3,
+		name = "FioraQ",
+		range = 340,
+		speed = 1100,
+		spellDelay = 50,
+		spellKey = 0,
+		evadeType = "Dash",
+		castType = "Position",
+    },
+	["FioraW"] = {
+		dl = 3,
+		name = "FioraW",
+		range = 750,
+		spellDelay = 100,
+		spellKey = 1,
+		evadeType = "WindWall",
+		castType = "Position",
+    },
+},
+["Fizz"] = {
+		dl = 3,
+		name = "FizzJump",
+		range = 400,
+		speed = 1400,
+		spellDelay = 50,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Riven"] = {
+	["BrokenWings"] = {
+		dl = 1,
+		name = "BrokenWings",
+		range = 260,
+		spellDelay = 50,
+		speed = 560,
+		spellKey = 0,
+		evadeType = "Dash",
+		castType = "Position",
+    },
+	["Valor"] = {
+		dl = 1,
+		name = "Valor",
+		range = 325,
+		spellDelay = 50,
+		speed = 1200,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+    },
+},
+["Sivir"] = {
+		dl = 2,
+		name = "SivirE",
+		spellDelay = 50,
+		spellKey = 2,
+		evadeType = "SpellShield",
+		castType = "Self",
+},
+["Shaco"] = {
+    ["Deceive"] = {
+		dl = 3,
+		name = "Deceive",
+		range = 400,
+		spellDelay = 250,
+		spellKey = 0,
+		evadeType = "Blink",
+		castType = "Position",
+    },
+	["JackInTheBox"] = {
+		dl = 3,
+		name = "JackInTheBox",
+		range = 425,
+		spellDelay = 250,
+		spellKey = 1,
+		evadeType = "WindWall",
+		castType = "Position",
 	},
-["Caitlyn"]  = {
-	dl = 3,
-	range = 750,
-	spellDelay = 0.2,
-	speed = 1350,
-	slot = 2,
-	--evadeType = EvadeType.Dash,
-	--castType = CastType.Position,
+},
+["Tristana"] = {
+		dl = 3,
+		name = "RocketJump",
+		range = 900,
+		spellDelay = 500,
+		speed = 1100,
+		spellKey = 1,
+		evadeType = "Dash",
+		castType = "Position",
+},       
+["Tryndamere"] = {
+		dl = 3,
+		name = "SpinningSlash",
+		range = 660,
+		spellDelay = 50,
+		speed = 900,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Position",
+},   
+["Vayne"] = {
+		dl = 1,
+		name = "Tumble",
+		range = 300,
+		speed = 900,
+		spellDelay = 50,
+		spellKey = 0,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Yasuo"] = {
+	["SweepingBlade"] = {
+		dl = 2,
+		name = "SweepingBlade",
+		range = 475,
+		speed = 1000,
+		spellDelay = 50,
+		spellKey = 2,
+		evadeType = "Dash",
+		castType = "Target",
 	},
+	["WindWall"] = {
+		dl = 3,
+		name = "WindWall",
+		range = 400,
+		spellDelay = 250,
+		spellKey = 1,
+		evadeType = "WindWall",
+		castType = "Position",
+	},
+},
+["MasterYi"] = {
+		dl = 3,
+		name = "AlphaStrike",
+		range = 600,
+		speed = math.huge,
+		spellDelay = 100,
+		spellKey = 0,
+		evadeType = "Blink",
+		castType = "Target",
+},
+["Katarina"] = {
+		dl = 3,
+		name = "KatarinaE",
+		range = 700,
+		speed = math.huge,
+		spellDelay = 50,
+		spellKey = 2,
+		evadeType = "Blink",
+		castType = "Target",
+},
+["Kindred"] = {
+		dl = 1,
+		name = "KindredQ",
+		range = 300,
+		speed = 733,
+		spellDelay = 50,
+		spellKey = 0,
+		evadeType = "Dash",
+		castType = "Position",
+},
+["Talon"] = {
+		dl = 3,
+		name = "Cutthroat",
+		range = 700,
+		speed = math.huge,
+		spellDelay = 50,
+		spellKey = 2,
+		evadeType = "Blink",
+		castType = "Target",
+   
+},
+
 }
 
 local obj = {}
@@ -2821,6 +3158,10 @@ DelayAction( function()
 			EMenu[GetObjectName(i)]:Slider("d"..l.name,str[l.Slot].."- Danger",(l.danger or 1), 1, 5, 1)
 		end
 	end
+	if not d[GetObjectName(myHero)] then return end
+	EMenu:SubMenu("Dashes", "Dashes")		
+	EMenu.Dashes:Boolean(d[GetObjectName(myHero)].name,"|"..(str[d[GetObjectName(myHero)].spellKey] or "?").."| - "..(d[GetObjectName(myHero)].name or "."), true)
+	EMenu.Dashes:Slider("d"..d[GetObjectName(myHero)].name,(str[d[GetObjectName(myHero)].spellKey] or "?").."- Danger",(d[GetObjectName(myHero)].dl or 2), 1, 5, 1)
 end,.001)
 
 OnCreateObj(function (Object)
@@ -2876,6 +3217,7 @@ OnDraw(function ()
  			local TopD2 = WorldToScreen(0,sPos-sVec)
  			local BotD1 = WorldToScreen(0,ePos+sVec)
  			local BotD2 = WorldToScreen(0,ePos-sVec)
+			DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,3,GoS.White)
  			DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,3,GoS.White)
  			DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,GoS.White)
  			DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,GoS.White)
@@ -2893,6 +3235,7 @@ end)
 
 OnProcessSpell( function(unit,spellProc)
 	--if unit == myHero then print(spellProc.name) end
+	if unit.team == MINION_ENEMY then
 	if s[GetObjectName(unit)] then
 		for _,i in pairs(s[GetObjectName(unit)]) do
 			if i.spellType == "Circular" and spellProc.name == i.spellName then
@@ -2904,6 +3247,7 @@ OnProcessSpell( function(unit,spellProc)
 				obj[i.spellName] = nil
 			end
 		end
+	end
 	end
 end)
 
@@ -2944,11 +3288,27 @@ OnTick(function()
 		if i.safe then
 			Stop(false)
 			MoveToXYZ(i.safe)
-			if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
-				if d[GetObjectName(myHero)].slot and CanUseSpell(myHero, d[GetObjectName(myHero)].slot) == 0 then
-					CastSkillShot(d[GetObjectName(myHero)].slot, i.safe)
+			if d[GetObjectName(myHero)] then 
+				if EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() >= EMenu.d:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
+					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Position" then
+							CastSkillShot(d[GetObjectName(myHero)].spellKey, i.safe)
+					end
+				
+					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" and d[GetObjectName(myHero)].castType == "Target" then
+					-- in progress
+					end
+					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Target" then
+					-- in progress
+					end
+					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "WindWall" and d[GetObjectName(myHero)].castType == "Position" then
+						CastSkillShot(d[GetObjectName(myHero)].spellKey, i.ePos)
+					end		
+					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "SpellShield" and d[GetObjectName(myHero)].castType == "Self" then
+						CastSpell(d[GetObjectName(myHero)].spellKey)
+					end
 				end
-			elseif GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
+			end
+			if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
 				if Flash and Ready(Flash) then
 					CastSkillShot(Flash, i.safe)
 				end
