@@ -3304,17 +3304,29 @@ OnTick(function()
 		if i.safe then
 			Stop(false)
 			MoveToXYZ(i.safe)
+			Stop(true)
 			if d[GetObjectName(myHero)] then 
 				if EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() >= EMenu.d:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
 					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Position" then
 							CastSkillShot(d[GetObjectName(myHero)].spellKey, i.safe)
 					end
 				
-					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" and d[GetObjectName(myHero)].castType == "Target" then
-					-- in progress
-					end
-					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Target" then
-					-- in progress
+					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Target" then
+						for _,ally in pairs(GetAllyHeroes()) do
+							if GetDistance(myHero,ally) < d[GetObjectName(myHero)].range and not ally.dead then
+								CastTargetSpell(ally, d[GetObjectName(myHero)],spellKey)
+							end
+						end
+						for _,minion in pairs(minionManager.objects) do
+							if GetTeam(minion) == MINION_ALLY then 
+								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead then
+									CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
+							elseif GetTeam(minion) == MINION_JUNGLE then 
+								elseif GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead then
+									CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
+								end
+							end
+						end
 					end
 					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "WindWall" and d[GetObjectName(myHero)].castType == "Position" then
 						CastSkillShot(d[GetObjectName(myHero)].spellKey, i.ePos)
@@ -3327,6 +3339,8 @@ OnTick(function()
 			if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius and EMenu.Dashes.UseFlash:Value() and EMenu.Dashes.UseFlashdanger:Value() >= EMenu.d:Value() and Flash and Ready(Flash) then
 				CastSkillShot(Flash, i.safe)
 			end
+		else
+			Stop(false)
 		end
 	end
 end)
