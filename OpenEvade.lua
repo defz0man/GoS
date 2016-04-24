@@ -1,3 +1,17 @@
+local ver = "0.01"
+
+function AutoUpdate(data)
+    if tonumber(data) > tonumber(ver) then
+        PrintChat("New version found! " .. data)
+        PrintChat("Downloading update, please wait...")
+        DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/OpenEvade.lua", SCRIPT_PATH .. "OpenEvade.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
+    else
+        PrintChat("No updates found!")
+    end
+end
+
+GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/OpenEvade.version", AutoUpdate)
+
 local s = {
 ["Aatrox"] = {
 	{
@@ -3162,6 +3176,8 @@ DelayAction( function()
 	EMenu:SubMenu("Dashes", "Dashes")		
 	EMenu.Dashes:Boolean(d[GetObjectName(myHero)].name,"|"..(str[d[GetObjectName(myHero)].spellKey] or "?").."| - "..(d[GetObjectName(myHero)].name or "."), true)
 	EMenu.Dashes:Slider("d"..d[GetObjectName(myHero)].name,(str[d[GetObjectName(myHero)].spellKey] or "?").."- Danger",(d[GetObjectName(myHero)].dl or 2), 1, 5, 1)
+	EMenu.Dashes:Boolean("UseFlash", "Use Flash", true)
+	EMenu.Dashes:Slider("UseFlashdanger", "Flash - Danger", 5, 1, 5, 1)
 end,.001)
 
 OnCreateObj(function (Object)
@@ -3308,10 +3324,8 @@ OnTick(function()
 					end
 				end
 			end
-			if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
-				if Flash and Ready(Flash) then
-					CastSkillShot(Flash, i.safe)
-				end
+			if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius and EMenu.Dashes.UseFlash:Value() and EMenu.Dashes.UseFlashdanger:Value() >= EMenu.d:Value() and Flash and Ready(Flash) then
+				CastSkillShot(Flash, i.safe)
 			end
 		end
 	end
