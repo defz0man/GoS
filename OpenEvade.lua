@@ -2,11 +2,11 @@ local ver = "0.01"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
-        PrintChat("New version found! " .. data)
-        PrintChat("Downloading update, please wait...")
+        PrintChat("[SL Evade] - New version found! " .. data)
+        PrintChat("[SL Evade] - Downloading update, please wait...")
         DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/OpenEvade.lua", SCRIPT_PATH .. "OpenEvade.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
     else
-        PrintChat("No updates found!")
+        PrintChat("[SL Evade] - No updates found!")
     end
 end
 
@@ -3176,8 +3176,6 @@ DelayAction( function()
 	EMenu:SubMenu("Dashes", "Dashes")		
 	EMenu.Dashes:Boolean(d[GetObjectName(myHero)].name,"|"..(str[d[GetObjectName(myHero)].spellKey] or "?").."| - "..(d[GetObjectName(myHero)].name or "."), true)
 	EMenu.Dashes:Slider("d"..d[GetObjectName(myHero)].name,(str[d[GetObjectName(myHero)].spellKey] or "?").."- Danger",(d[GetObjectName(myHero)].dl or 2), 1, 5, 1)
-	EMenu.Dashes:Boolean("UseFlash", "Use Flash", true)
-	EMenu.Dashes:Slider("UseFlashdanger", "Flash - Danger", 5, 1, 5, 1)
 end,.001)
 
 OnCreateObj(function (Object)
@@ -3193,7 +3191,7 @@ OnCreateObj(function (Object)
 						start.y = GetOrigin(Object).y
 						endpos = GetObjectSpellEndPos(Object) 
 						endpos.y = GetOrigin(Object).y
-						obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType}
+						obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType, sSpeed = l.speed or math.huge, sDelay = l.delay or 250}
 					end
 				end
 			end
@@ -3255,7 +3253,7 @@ OnProcessSpell( function(unit,spellProc)
 	if s[GetObjectName(unit)] then
 		for _,i in pairs(s[GetObjectName(unit)]) do
 			if i.spellType == "Circular" and spellProc.name == i.spellName then
-				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius}
+				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250}
 				if i.killTime then
 					DelayAction(function() obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
 				end
@@ -3270,6 +3268,8 @@ end)
 OnTick(function()
 	Stop(false)
 	for _,i in pairs(obj) do
+	local oT = i.sDelay + GetDistance(myHero,i.sPos) / i.sSpeed
+	local fT = .75
 		if i.sType == "Line" then
 			i.sPos = Vector(i.sPos)
 			i.ePos = Vector(i.ePos)
@@ -3308,37 +3308,50 @@ OnTick(function()
 			if d[GetObjectName(myHero)] then 
 				if EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() >= EMenu.d:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
 					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Position" then
-							CastSkillShot(d[GetObjectName(myHero)].spellKey, i.safe)
-					end
-				
+						CastSkillShot(d[GetObjectName(myHero)].spellKey, i.safe)
+					end	
 					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Target" then
 						for _,ally in pairs(GetAllyHeroes()) do
 							if GetDistance(myHero,ally) < d[GetObjectName(myHero)].range and not ally.dead then
-								CastTargetSpell(ally, d[GetObjectName(myHero)],spellKey)
+								DelayAction(function()
+									CastTargetSpell(ally, d[GetObjectName(myHero)],spellKey)
+								end,oT*fT*.001)
 							end
 						end
 						for _,minion in pairs(minionManager.objects) do
 							if GetTeam(minion) == MINION_ALLY then 
 								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead then
-									CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
-							elseif GetTeam(minion) == MINION_JUNGLE then 
-								elseif GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead then
-									CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
+									DelayAction(function()
+										CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
+									end,oT*fT*.001)
+								end
+							end
+							if GetTeam(minion) == MINION_JUNGLE then 
+								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead then
+									DelayAction(function()
+										CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
+									end,oT*fT*.001)
 								end
 							end
 						end
 					end
 					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "WindWall" and d[GetObjectName(myHero)].castType == "Position" then
-						CastSkillShot(d[GetObjectName(myHero)].spellKey, i.ePos)
+						DelayAction(function()
+							CastSkillShot(d[GetObjectName(myHero)].spellKey, i.ePos)
+						end,oT*fT*.001)
 					end		
 					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "SpellShield" and d[GetObjectName(myHero)].castType == "Self" then
-						CastSpell(d[GetObjectName(myHero)].spellKey)
+						DelayAction(function()
+							CastSpell(d[GetObjectName(myHero)].spellKey)
+						end,oT*fT*.001)
 					end
 				end
 			end
-			if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius and EMenu.Dashes.UseFlash:Value() and EMenu.Dashes.UseFlashdanger:Value() >= EMenu.d:Value() and Flash and Ready(Flash) then
-				CastSkillShot(Flash, i.safe)
-			end
+			-- if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
+				-- if Flash and Ready(Flash) then
+					-- CastSkillShot(Flash, i.safe)
+				-- end
+			-- end
 		else
 			Stop(false)
 		end
