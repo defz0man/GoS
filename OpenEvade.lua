@@ -3302,15 +3302,12 @@ OnTick(function()
 			end
 		end
 		if i.safe then
-			Stop(false)
-			MoveToXYZ(i.safe)
-			Stop(true)
 			if d[GetObjectName(myHero)] then 
-				if EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() >= EMenu.d:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
-					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Position" then
+				if EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() >= EMenu.d:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 and d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 then
+					if d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Position" then
 						CastSkillShot(d[GetObjectName(myHero)].spellKey, i.safe)
 					end	
-					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Target" then
+					if d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Target" then
 						for _,ally in pairs(GetAllyHeroes()) do
 							if GetDistance(myHero,ally) < d[GetObjectName(myHero)].range and not ally.dead then
 								DelayAction(function()
@@ -3335,16 +3332,20 @@ OnTick(function()
 							end
 						end
 					end
-					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "WindWall" and d[GetObjectName(myHero)].castType == "Position" then
+					if d[GetObjectName(myHero)].evadeType == "WindWall" and d[GetObjectName(myHero)].castType == "Position" then
 						DelayAction(function()
 							CastSkillShot(d[GetObjectName(myHero)].spellKey, i.ePos)
 						end,oT*fT*.001)
 					end		
-					if d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and d[GetObjectName(myHero)].evadeType == "SpellShield" and d[GetObjectName(myHero)].castType == "Self" then
+					if d[GetObjectName(myHero)].evadeType == "SpellShield" and d[GetObjectName(myHero)].castType == "Self" then
 						DelayAction(function()
 							CastSpell(d[GetObjectName(myHero)].spellKey)
 						end,oT*fT*.001)
 					end
+				else
+					Stop(false)
+					MoveToXYZ(i.safe)
+					Stop(true)
 				end
 			end
 			-- if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
