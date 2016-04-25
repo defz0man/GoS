@@ -3347,6 +3347,10 @@ OnTick(function()
 					MoveToXYZ(i.safe)
 					Stop(true)
 				end
+			else
+				Stop(false)
+				MoveToXYZ(i.safe)
+				Stop(true)
 			end
 			-- if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
 				-- if Flash and Ready(Flash) then
