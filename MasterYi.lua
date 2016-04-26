@@ -132,7 +132,7 @@ local spell2=nil
 		end
 	end
 	end
-,50)
+,0)
 
 
 -- Start
