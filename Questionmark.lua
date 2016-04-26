@@ -9,8 +9,7 @@ if c[myHeroName] then
 	
 	require ('Inspired')
 	require ('OpenPredict')
-	if pcall( require, "Platywalk" ) then PrintChat("Please uninstall Platywalk or this script won't work!") return end
-	
+
 	Callback.Add("Load", 
 	function()	
 		Update()
