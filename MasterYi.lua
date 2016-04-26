@@ -156,7 +156,7 @@ OnProcessSpell(function(unit, spellProc)
 			elseif n%3==2 then
 				spelltype=slot
 			elseif n%3==0 then
-				if slot==_Q or slot==_W or slot==_E or slot==_R or slot==spellProc.name then									
+				if tonumber(slot) or slot==spellProc.name then									
 					if (spellProc.name==GetCastName(unit,slot) or spellProc.name==slot) then
 --						if GetObjectName(unit)=="Rengar" and not GotBuff("RengarR") then return end
 						if (spelltype==0 or spelltype==1 or spelltype==3) and CanUseSpell(myHero,_Q) == READY then
