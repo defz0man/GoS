@@ -3041,6 +3041,7 @@ local d = {
 		spellKey = 2,
 		evadeType = "SpellShield",
 		castType = "Self",
+		BuffName = "SivirE"
 },
 ["Shaco"] = {
     ["Deceive"] = {
@@ -3083,7 +3084,7 @@ local d = {
 		castType = "Position",
 },   
 ["Vayne"] = {
-		dl = 1,
+		dl = 2,
 		name = "Tumble",
 		range = 300,
 		speed = 900,
@@ -3159,6 +3160,7 @@ local d = {
 
 local obj = {}
 local str = {[0]="Q",[1]="W",[2]="E",[3]="R"}
+local IsEvading2 = false
 local EMenu = Menu("Evade","Evade")
 local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash") and SUMMONER_1 or (GetCastName(GetMyHero(),SUMMONER_2):lower():find("summonerflash") and SUMMONER_2 or nil))
 EMenu:Slider("d","Danger",2,1,5,1)
@@ -3276,9 +3278,13 @@ OnTick(function()
 			S1 = GetOrigin(myHero)+(Vector(i.sPos)-Vector(i.ePos)):perpendicular()
 			S2 = GetOrigin(myHero)
 			jp = Vector(VectorIntersection(i.sPos,i.ePos,S1,S2).x,i.ePos.y,VectorIntersection(i.sPos,i.ePos,S1,S2).y)
-			i.jp = jp
+			if GetDistance(myHero,i.Obj) < 500 then 
+				i.jp = jp
+			else
+				i.jp = nil
+			end
 			-- and not i.safe then
-			if GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
+			if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 				if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 					i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius+20)*1.1)
 				else 
@@ -3303,54 +3309,66 @@ OnTick(function()
 		end
 		if i.safe then
 			if d[GetObjectName(myHero)] then 
-				if EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() >= EMenu.d:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 and d[GetObjectName(myHero)].spellKey and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 then
-					if d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Position" then
+				if EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() >= EMenu.d:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() and GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 and d[GetObjectName(myHero)].spellKey then
+					if d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Position" and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+						IsEvading2 = true
 						CastSkillShot(d[GetObjectName(myHero)].spellKey, i.safe)
+					else
+						IsEvading2 = false
 					end	
 					if d[GetObjectName(myHero)].evadeType == "Dash" or d[GetObjectName(myHero)].evadeType == "Blink" and d[GetObjectName(myHero)].castType == "Target" then
 						for _,ally in pairs(GetAllyHeroes()) do
-							if GetDistance(myHero,ally) < d[GetObjectName(myHero)].range and not ally.dead then
-								DelayAction(function()
-									CastTargetSpell(ally, d[GetObjectName(myHero)],spellKey)
+							if GetDistance(myHero,ally) < d[GetObjectName(myHero)].range and not ally.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+								IsEvading2 = true	
+								DelayAction(function()								
+									CastTargetSpell(ally, d[GetObjectName(myHero)].spellKey)
 								end,oT*fT*.001)
+							else
+								IsEvading2 = false
 							end
 						end
 						for _,minion in pairs(minionManager.objects) do
 							if GetTeam(minion) == MINION_ALLY then 
-								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead then
-									DelayAction(function()
+								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+									IsEvading2 = true
+									DelayAction(function()										
 										CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
 									end,oT*fT*.001)
+								else
+									IsEvading2 = false
 								end
 							end
 							if GetTeam(minion) == MINION_JUNGLE then 
-								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead then
+								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+									IsEvading2 = true
 									DelayAction(function()
 										CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
 									end,oT*fT*.001)
+								else
+									IsEvading2 = false
 								end
 							end
 						end
 					end
-					if d[GetObjectName(myHero)].evadeType == "WindWall" and d[GetObjectName(myHero)].castType == "Position" then
+					if d[GetObjectName(myHero)].evadeType == "WindWall" and d[GetObjectName(myHero)].castType == "Position" and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+						IsEvading2 = true
 						DelayAction(function()
-							CastSkillShot(d[GetObjectName(myHero)].spellKey, i.ePos)
+						CastSkillShot(d[GetObjectName(myHero)].spellKey, i.ePos)
 						end,oT*fT*.001)
+					else
+						IsEvading2 = false
 					end		
-					if d[GetObjectName(myHero)].evadeType == "SpellShield" and d[GetObjectName(myHero)].castType == "Self" then
-						DelayAction(function()
-							CastSpell(d[GetObjectName(myHero)].spellKey)
-						end,oT*fT*.001)
+					if d[GetObjectName(myHero)].BuffName then
+						if d[GetObjectName(myHero)].evadeType == "SpellShield" and d[GetObjectName(myHero)].castType == "Self" and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == 0 and GotBuff(myHero,d[GetObjectName(myHero)].BuffName) ~= 1 then
+							IsEvading2 = true
+							DelayAction(function()
+								CastSpell(d[GetObjectName(myHero)].spellKey)
+							end,oT*fT*.001)
+						else
+							IsEvading2 = false
+						end
 					end
-				else
-					Stop(false)
-					MoveToXYZ(i.safe)
-					Stop(true)
 				end
-			else
-				Stop(false)
-				MoveToXYZ(i.safe)
-				Stop(true)
 			end
 			-- if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius then
 				-- if Flash and Ready(Flash) then
@@ -3359,6 +3377,14 @@ OnTick(function()
 			-- end
 		else
 			Stop(false)
+		end
+		if i.safe then
+			if IsEvading2 ~= true then
+				Stop(false)
+				MoveToXYZ(i.safe)
+				Stop(true)
+			end
+		print(IsEvading2)
 		end
 	end
 end)
