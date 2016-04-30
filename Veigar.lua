@@ -1,6 +1,5 @@
 if GetObjectName(GetMyHero()) ~= "Veigar" then return end
 
-require("Inspired")
 require("OpenPredict")
 
 local VMenu = Menu("Veigar", "Veigar")
