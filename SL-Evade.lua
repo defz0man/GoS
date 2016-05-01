@@ -3390,7 +3390,9 @@ OnDraw(function ()
 		end
 		-- if i.jp then DrawCircle(i.jp,i.spell.radius*.5,0,3,GoS.Red) end			
 		if i.safe and EMenu.Draws.DEPos:Value() then 
-			DrawCircle(i.safe,50,0,3,GoS.Green)
+			local tp232 = WorldToScreen(0,GetOrigin(myHero))
+			local tp233 = WorldToScreen(0,i.safe)
+			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Blue)
 			-- DrawText("Evading",30,40,0,GoS.Red) 
 		end
 	end
