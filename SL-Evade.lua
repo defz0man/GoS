@@ -1,15 +1,17 @@
-local ver = "0.01"
+local AutoUpdate = true
+local SLEvade = "0.01"
+local SLEPatchnew, SLEPatchold = 6.8, 6.7
 
 function AutoUpdate(data)
-    if tonumber(data) > tonumber(ver) then
-        PrintChat("[SL-Evade] - New version found! " .. data)
-        PrintChat("[SL-Evade] - Downloading update, please wait...")
-        DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/SL-Evade.lua", SCRIPT_PATH .. "SL-Evade.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
-    else
-        PrintChat("[SL-Evade] - No updates found!")
-    end
+  if not AutoUpdate then return end
+    if tonumber(data) > tonumber(SLEvade) then
+		PrintChat("<font color=\"#fd8b12\"><b>[SL-Evade] - <font color=\"#F2EE00\">New Version found ! "..data.."</b></font>")
+		PrintChat("<font color=\"#fd8b12\"><b>[SL-Evade] - <font color=\"#F2EE00\">Downloading Update... Please wait</b></font>")
+		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/SL-Evade.lua", SCRIPT_PATH .. "SL-Evade.lua", function() PrintChat("<font color=\"#fd8b12\"><b>[SL-Evade] - <font color=\"#F2EE00\">Reload the Script with 2x F6</b></font>") return	end)
+	else
+		PrintChat("<font color=\"#fd8b12\"><b>[SL-Evade] - <font color=\"#F2EE00\">No Updates Found.</b></font>")
+	end
 end
-
 GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/SL-Evade.version", AutoUpdate)
 
 local s = {
@@ -277,6 +279,20 @@ local s = {
 	spellName = "RocketGrab",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
+	},
+	{
+	charName = "Blitzcrank",
+	danger = 3,
+	name = "Static Field",
+	speed = math.huge,
+	radius = 500,
+	range = 0,
+	delay = 100,
+	Slot = 3,
+	spellName = "StaticField",
+	spellType = "Circular",
+	killTime = 0.3,
 	Dangerous = true,
 	},
 },
@@ -2175,17 +2191,20 @@ local s = {
 	Slot = 0,
 	spellName = "SorakaQ",
 	spellType = "Circular",
+	killTime = 0.275,
 	},
 	{
 	charName = "Soraka",
 	danger = 3,
 	name = "SorakaE",
+	speed = math.huge,
 	radius = 275,
 	range = 925,
 	delay = 1750,
 	Slot = 2,
 	spellName = "SorakaE",
 	spellType = "Circular",
+	killTime = 0.8,
 	},
 },
 --end Soraka
@@ -3257,7 +3276,7 @@ local d = {
 local obj = {}
 local str = {[-1]="P",[0]="Q",[1]="W",[2]="E",[3]="R"}
 local IsEvading2 = false
-local EMenu = Menu("Evade","Evade")
+local EMenu = Menu("SL-Evade", "["..SLEPatchnew.."-"..SLEPatchold.."][v.:"..SLEvade.."] SL-Evade")
 local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash") and SUMMONER_1 or (GetCastName(GetMyHero(),SUMMONER_2):lower():find("summonerflash") and SUMMONER_2 or nil))
 local DodgeOnlyDangerous = false
 EMenu:Slider("d","Danger",2,1,5,1)
