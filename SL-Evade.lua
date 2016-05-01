@@ -917,12 +917,13 @@ local s = {
 	extraMissileNames = "GravesQReturn",
 	name = "Buckshot",
 	speed = 3000,
-	radius = 60,
+	radius = 100,
 	range = 825,
 	delay = 250,
 	Slot = 0,
 	spellName = "GravesQLineSpell",
 	spellType = "Line",
+	EndExplosion = true,
 	},
 	{
 	charName = "Graves",
@@ -930,7 +931,7 @@ local s = {
 	missileName = "GravesChargeShotShot",
 	name = "Collateral Damage",
 	speed = 2100,
-	radius = 100,
+	radius = 125,
 	range = 1000,
 	delay = 250,
 	Slot = 3,
@@ -3252,6 +3253,7 @@ local d = {
 
 }
 
+
 local obj = {}
 local str = {[-1]="P",[0]="Q",[1]="W",[2]="E",[3]="R"}
 local IsEvading2 = false
@@ -3268,7 +3270,6 @@ EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Width", true)
 EMenu.Draws:Boolean("DSPos", "Draw SkillShot Position", true)
 EMenu.Draws:Boolean("DEPos", "Draw Evade Position", true)
 EMenu.Draws:Boolean("DevOpt", "Draw for Devs", false)
-EMenu.Draws:Slider("SW", "SkillShot Width", 1, 1, 5, 1)
 EMenu.Draws:Slider("SQ", "SkillShot Quality", 5, 1, 35, 5)
 EMenu.Draws:Info("asd", "lower = higher Quality")
 EMenu:SubMenu("Keys", "Key Bindings")
@@ -3328,8 +3329,10 @@ end)
 
 
 OnDraw(function ()
-	DrawText("DoD:", 20, 460, 20, GoS.White)
-	DrawText(DodgeOnlyDangerous, 20, 500, 20, GoS.Red)
+	if EMenu.Draws.DevOpt:Value() then
+		DrawText("DoD:", 20, 460, 20, GoS.White)
+		DrawText(DodgeOnlyDangerous, 20, 500, 20, GoS.Red)
+	end
 	local offy = 60
 	local angle = 0
 	if EMenu.Draws.DevOpt:Value() then 
@@ -3365,22 +3368,22 @@ OnDraw(function ()
  			local BotD3 = WorldToScreen(0,ePos+sVec2)
  			local BotD4 = WorldToScreen(0,ePos-sVec2)
 			if EMenu.Draws.DSPath:Value() then
-				DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,EMenu.Draws.SW:Value(),GoS.White)
-				DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,EMenu.Draws.SW:Value(),GoS.White)
-				DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,EMenu.Draws.SW:Value(),GoS.White)
-				DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,EMenu.Draws.SW:Value(),GoS.White)
+				DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,3,ARGB(255,255,255,255))
+				DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,3,ARGB(255,255,255,255))
+				DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
+				DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
 				if EMenu.Draws.DSEW:Value() then
-					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,EMenu.Draws.SW:Value(),GoS.White)
-					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,EMenu.Draws.SW:Value(),GoS.White)
-					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,EMenu.Draws.SW:Value(),GoS.White)
-					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,EMenu.Draws.SW:Value(),GoS.White)
+					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(255,102,102,102))
+					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(255,102,102,102))
+					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(255,102,102,102))
+					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(255,102,102,102))
 				end
 			end
 		elseif i.sType == "Circular" then
 			if EMenu.Draws.DSPath:Value() then
-				DrawCircle(i.ePos,i.spell.radius,EMenu.Draws.SW:Value(),EMenu.Draws.SQ:Value(),GoS.White)
+				DrawCircle(i.ePos,i.spell.radius,3,EMenu.Draws.SQ:Value(),ARGB(255,255,255,255))
 				if EMenu.Draws.DSEW:Value() then
-					DrawCircle(i.ePos,i.spell.radius+EMenu.ew:Value(),EMenu.Draws.SW:Value(),EMenu.Draws.SQ:Value(),GoS.White)
+					DrawCircle(i.ePos,i.spell.radius+EMenu.ew:Value(),1.5,EMenu.Draws.SQ:Value(),ARGB(255,102,102,102))
 				end
 			end
 		end
