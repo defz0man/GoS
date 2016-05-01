@@ -3106,6 +3106,7 @@ local d = {
 		castType = "Position",
 },
 ["Riven"] = {
+	--[[
 	{
 		dl = 1,
 		name = "BrokenWings",
@@ -3116,8 +3117,8 @@ local d = {
 		evadeType = "DashP",
 		castType = "Position",
     },
-	{
-		dl = 1,
+	{--]]
+		dl = 2,
 		name = "Valor",
 		range = 325,
 		spellDelay = 50,
@@ -3125,7 +3126,7 @@ local d = {
 		spellKey = 2,
 		evadeType = "DashP",
 		castType = "Position",
-	},
+	--},
 },
 ["Sivir"] = {
 		dl = 2,
@@ -3279,11 +3280,7 @@ DelayAction( function()
 		EMenu.Spells:SubMenu(GetObjectName(i),GetObjectName(i))
 		for _,l in ipairs(s[GetObjectName(i)]) do
 			EMenu.Spells[GetObjectName(i)]:Boolean(l.name,"|"..(str[l.Slot] or "?").."| - "..(l.name or "."), true)
-			if l.Dangerous == true then
-				EMenu.Spells[GetObjectName(i)]:Boolean("IsD"..l.name,"IsDangerous", true)	
-			else
-				EMenu.Spells[GetObjectName(i)]:Boolean("IsD"..l.name,"IsDangerous", false)
-			end
+			EMenu.Spells[GetObjectName(i)]:Boolean("IsD"..l.name,"IsDangerous", l.Dangerous or false)	
 			EMenu.Spells[GetObjectName(i)]:Slider("d"..l.name,str[l.Slot].."- Danger",(l.danger or 1), 1, 5, 1)
 			EMenu.Spells[GetObjectName(i)]:Info("Info"..l.name, "")			
 		end
@@ -3306,7 +3303,7 @@ OnCreateObj(function (Object)
 					print(GetObjectSpellName(Object)) 
 				end
 				for m,l in pairs(s[GetObjectName(GetObjectSpellOwner(Object))]) do
-					if (l.missileName == GetObjectSpellName(Object) or GetObjectSpellName(Object):lower():find(l.name:lower()) or GetObjectSpellName(Object):lower():find(l.spellName:lower()) or (tostring(l.extraMissileNames) and l.extraMissileNames == GetObjectSpellName(Object))) and l.spellType == "Line" and EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))][l.name]:Value() and EMenu.d:Value() <= EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))]["d"..l.name]:Value() then
+					if (l.missileName == GetObjectSpellName(Object) or GetObjectSpellName(Object):lower():find(l.name:lower()) or GetObjectSpellName(Object):lower():find(l.spellName:lower()) or (tostring(l.extraMissileNames) and l.extraMissileNames == GetObjectSpellName(Object))) and l.spellType == "Line" and EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))][l.name]:Value() and ((not DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))]["d"..l.name]:Value()) or (DodgeOnlyDangerous and EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))]["IsD"..l.name]:Value())) then
 						start = GetObjectSpellStartPos(Object)
 						start.y = GetOrigin(Object).y
 						endpos = GetObjectSpellEndPos(Object) 
@@ -3331,6 +3328,8 @@ end)
 
 
 OnDraw(function ()
+	DrawText("DoD:", 20, 460, 20, GoS.White)
+	DrawText(DodgeOnlyDangerous, 20, 500, 20, GoS.Red)
 	local offy = 60
 	local angle = 0
 	if EMenu.Draws.DevOpt:Value() then 
@@ -3398,7 +3397,7 @@ OnProcessSpell( function(unit,spellProc)
 	if unit.team == MINION_ENEMY then
 	if s[GetObjectName(unit)] then
 		for _,i in pairs(s[GetObjectName(unit)]) do
-			if i.spellType == "Circular" and spellProc.name == i.spellName then
+			if i.spellType == "Circular" and spellProc.name == i.spellName and ((not DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.charName]["d"..i.name]:Value()) or (DodgeOnlyDangerous and EMenu.Spells[i.charName]["IsD"..i.name]:Value())) then
 				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range}
 				if i.killTime then
 					DelayAction(function() obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
@@ -3413,15 +3412,15 @@ end)
 
 OnTick(function()
 	Stopp(false)
+	if EMenu.Keys.DoD:Value() then
+			DodgeOnlyDangerous = true
+		else
+			DodgeOnlyDangerous = false
+	end
 	for _,i in pairs(obj) do
 	local oT = i.sDelay + GetDistance(myHero,i.sPos) / i.sSpeed
 	local fT = .75
 	for k,p in pairs(GetEnemyHeroes()) do
-		if EMenu.Keys.DoD:Value() then
-			DodgeOnlyDangerous = true
-		else
-			DodgeOnlyDangerous = false
-		end
 	end
 		if i.sType == "Line" then
 			i.sPos = Vector(i.sPos)
