@@ -12,7 +12,7 @@ AnnieMenu.Combo:Boolean("UOP", "Use OpenPredict for R", true)	--Adds a button so
 
 local AnnieR = {delay = 0.075, range = 600, radius = 150, speed = math.huge}		--TABLE for Annie R ONLY if you are using OpenPredict
 
-OnTick(function (myHero)									--The code inside the Function runs every tick
+OnTick(function ()									--The code inside the Function runs every tick
 	
 	local target = GetCurrentTarget()					--Saves the "best" enemy champ to the target variable
 		
