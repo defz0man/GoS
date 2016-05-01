@@ -3275,6 +3275,7 @@ EMenu.Draws:Info("asd", "lower = higher Quality")
 EMenu:SubMenu("Keys", "Key Bindings")
 EMenu.Keys:KeyBinding("DD", "Disable Dodging", string.byte("K"), true)
 EMenu.Keys:KeyBinding("DoD", "Dodge only Dangerous", string.byte(" "))
+EMenu.Keys:KeyBinding("DoD2", "Dodge only Dangerous 2", string.byte("V"))
 DelayAction( function()
 	for _,i in pairs(GetEnemyHeroes()) do
 		if not s[GetObjectName(i)] then return end
@@ -3347,7 +3348,7 @@ OnDraw(function ()
 			local Screen = WorldToScreen(0,GetOrigin(i.Obj))
 			local Screen2 = WorldToScreen(0,i.sPos)
 			if EMenu.Draws.DSPos:Value() then
-				DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,EMenu.Draws.SW:Value()+1,EMenu.Draws.SQ:Value(),GoS.White)
+				DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,3,EMenu.Draws.SQ:Value(),GoS.White)
 			end
 			endPos = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius)
 			endPos2 = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius+EMenu.ew:Value())
@@ -3415,7 +3416,7 @@ end)
 
 OnTick(function()
 	Stopp(false)
-	if EMenu.Keys.DoD:Value() then
+	if EMenu.Keys.DoD:Value() or EMenu.Keys.DoD2:Value() then
 			DodgeOnlyDangerous = true
 		else
 			DodgeOnlyDangerous = false
