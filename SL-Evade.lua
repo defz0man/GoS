@@ -2,15 +2,15 @@ local ver = "0.01"
 
 function AutoUpdate(data)
     if tonumber(data) > tonumber(ver) then
-        PrintChat("[SL Evade] - New version found! " .. data)
-        PrintChat("[SL Evade] - Downloading update, please wait...")
-        DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/OpenEvade.lua", SCRIPT_PATH .. "OpenEvade.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
+        PrintChat("[SL-Evade] - New version found! " .. data)
+        PrintChat("[SL-Evade] - Downloading update, please wait...")
+        DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/SL-Evade.lua", SCRIPT_PATH .. "SL-Evade.lua", function() PrintChat("Update Complete, please 2x F6!") return end)
     else
-        PrintChat("[SL Evade] - No updates found!")
+        PrintChat("[SL-Evade] - No updates found!")
     end
 end
 
-GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/OpenEvade.version", AutoUpdate)
+GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/SL-Evade.version", AutoUpdate)
 
 local s = {
 ["Aatrox"] = {
@@ -67,6 +67,7 @@ local s = {
 	spellName = "AhriSeduce",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 	{
 	charName = "Ahri",
@@ -88,11 +89,16 @@ local s = {
 	defaultOff = true,
 	danger = 3,
 	name = "Pulverize",
+	speed = math.huge,
+	delay = 0,
 	radius = 365,
 	range = 365,
 	Slot = 0,
 	spellName = "Pulverize",
 	spellType = "Circular",
+	killName = "Pulverize",
+	killTime = 0.3,
+	Dangerous = true,
 	},
 },
 --end Alistar
@@ -110,6 +116,7 @@ local s = {
 	spellType = "Circular",
 	killName = "CurseoftheSadMummy",
 	killTime = 1.25,
+	Dangerous = true,
 	},
 	{
 	charName = "Amumu",
@@ -124,6 +131,7 @@ local s = {
 	spellName = "BandageToss",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Amumu
@@ -140,6 +148,7 @@ local s = {
 	Slot = 0,
 	spellName = "FlashFrostSpell",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Anivia
@@ -166,6 +175,7 @@ local s = {
 	Slot = 3,
 	spellName = "InfernalGuardian",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Annie
@@ -181,6 +191,7 @@ local s = {
 	Slot = 3,
 	spellName = "EnchantedCrystalArrow",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	angle = 5,
@@ -231,6 +242,7 @@ local s = {
 	spellName = "BardQ",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 	{
 	charName = "Bard",
@@ -246,6 +258,7 @@ local s = {
 	spellType = "Circular",
 	killName = "BardR",
 	killTime = 1,
+	Dangerous = true,
 	},
 },
 --end Bard
@@ -264,6 +277,7 @@ local s = {
 	spellName = "RocketGrab",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Blitzcrank
@@ -280,7 +294,8 @@ local s = {
 	Slot = 0,
 	spellName = "BrandBlaze",
 	spellType = "Line",
-	collision = true,              
+	collision = true,
+	Dangerous = true,	
 	},
 	{
 	charName = "Brand",
@@ -310,6 +325,7 @@ local s = {
 	Slot = 3,
 	spellName = "BraumRWrapper",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Braum",
@@ -324,6 +340,7 @@ local s = {
 	spellName = "BraumQ",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Braum
@@ -369,6 +386,7 @@ local s = {
 	Slot = 3,
 	spellName = "CassiopeiaPetrifyingGaze",
 	spellType = "Cone",
+	Dangerous = true,
 	},
 	{
 	charName = "Cassiopeia",
@@ -428,6 +446,7 @@ local s = {
 	extraDrawHeight = 45,
 	killName = "Rupture",
 	killTime = 0.5,
+	Dangerous = true,
 	},
 },
 --end Chogath
@@ -488,6 +507,7 @@ local s = {
 	Slot = 2,
 	spellName = "DariusAxeGrabCone",
 	spellType = "Cone",
+	Dangerous = true,
 	},
 },
 --end Darius
@@ -540,6 +560,7 @@ local s = {
 	Slot = 3,
 	spellName = "DravenRCast",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Draven",
@@ -553,6 +574,7 @@ local s = {
 	Slot = 2,
 	spellName = "DravenDoubleShot",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Draven
@@ -583,6 +605,7 @@ local s = {
 	spellType = "Circular",
 	killName = "EkkoW",
 	killTime = 1.2,
+	Dangerous = true,
 	},
 	{
 	charName = "Ekko",
@@ -611,6 +634,7 @@ local s = {
 	spellName = "EliseHumanE",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Elise
@@ -625,6 +649,7 @@ local s = {
 	Slot = 3,
 	spellName = "EvelynnR",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Evelynn
@@ -655,6 +680,7 @@ local s = {
 	Slot = 3,
 	spellName = "EzrealTrueshotBarrage",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Ezreal",
@@ -717,6 +743,7 @@ local s = {
 	secondaryRadius = 250,
 	useEndPosition = true,
 	extraEndTime = 1000,
+	Dangerous = true,
 	},
 },
 --end Fizz
@@ -755,6 +782,7 @@ local s = {
 	Slot = 3,
 	spellName = "GalioIdolOfDurand",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Galio
@@ -783,6 +811,7 @@ local s = {
 	Slot = 3,
 	spellName = "GnarR",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 	{
 	charName = "Gnar",
@@ -863,6 +892,7 @@ local s = {
 	Slot = 2,
 	spellName = "GragasE",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Gragas",
@@ -875,6 +905,7 @@ local s = {
 	Slot = 3,
 	spellName = "GragasR",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Gragas
@@ -905,6 +936,7 @@ local s = {
 	Slot = 3,
 	spellName = "GravesChargeShot",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Graves
@@ -921,6 +953,7 @@ local s = {
 	Slot = 3,
 	spellName = "HecarimUlt",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Hecarim
@@ -937,6 +970,7 @@ local s = {
 	Slot = 2,
 	spellName = "HeimerdingerE",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 	{
 	charName = "Heimerdinger",
@@ -1004,6 +1038,7 @@ local s = {
 	Slot = 2,
 	spellName = "IllaoiE",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Illaoi",
@@ -1015,6 +1050,7 @@ local s = {
 	Slot = 3,
 	spellName = "IllaoiR",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Illaoi
@@ -1046,7 +1082,7 @@ local s = {
 	Slot = 0,
 	spellName = "HowlingGale",
 	spellType = "Line",
-
+	Dangerous = true,
 	},
 },
 --end Janna
@@ -1087,6 +1123,7 @@ local s = {
 	Slot = 3,
 	spellName = "JarvanIVCataclysm",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end JarvanIV
@@ -1137,6 +1174,7 @@ local s = {
 	Slot = 3,
 	spellName = "JinxR",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Jinx",
@@ -1151,6 +1189,7 @@ local s = {
 	spellName = "JinxWMissile",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Jinx
@@ -1168,6 +1207,7 @@ local s = {
 	spellName = "JhinW",
 	spellType = "Line",
 	fixedRange = true,
+	Dangerous = true,
 	},
 	{
 	charName = "Jhin",
@@ -1184,6 +1224,7 @@ local s = {
 	spellType = "Line",
 	fixedRange = true,
 	extraMissileNames = "JhinRShotMis4",
+	Dangerous = true,
 	},
 },
 --end
@@ -1382,6 +1423,7 @@ local s = {
 	spellName = "LeblancSoulShackleM",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 	{
 	charName = "Leblanc",
@@ -1396,6 +1438,7 @@ local s = {
 	spellName = "LeblancSoulShackle",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 	{
 	charName = "Leblanc",
@@ -1436,6 +1479,7 @@ local s = {
 	spellName = "BlindMonkQOne",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 	--end LeeSin
 },
@@ -1450,6 +1494,9 @@ local s = {
 	Slot = 3,
 	spellName = "LeonaSolarFlare",
 	spellType = "Circular",
+	killName = "LeonaSolarFlare",
+	killTime = 1,
+	Dangerous = true,
 	},
 	{
 	charName = "Leona",
@@ -1464,6 +1511,7 @@ local s = {
 	Slot = 2,
 	spellName = "LeonaZenithBlade",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Leona
@@ -1479,6 +1527,7 @@ local s = {
 	Slot = 1,
 	spellName = "LissandraW",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 	{
 	charName = "Lissandra",
@@ -1572,6 +1621,7 @@ local s = {
 	Slot = 3,
 	spellName = "LuxMaliceCannon",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Lux",
@@ -1586,6 +1636,7 @@ local s = {
 	spellName = "LuxLightBinding",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Lux
@@ -1601,6 +1652,7 @@ local s = {
 	Slot = 3,
 	spellName = "UFSlash",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Malphite
@@ -1653,6 +1705,7 @@ local s = {
 	spellName = "DarkBindingMissile",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Morgana
@@ -1667,6 +1720,7 @@ local s = {
 	Slot = 0,
 	spellName = "NamiQ",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 	{
 	charName = "Nami",
@@ -1680,6 +1734,7 @@ local s = {
 	Slot = 3,
 	spellName = "NamiR",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Nami
@@ -1697,6 +1752,7 @@ local s = {
 	spellName = "NautilusAnchorDrag",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Nautilus
@@ -1714,6 +1770,7 @@ local s = {
 	spellName = "JavelinToss",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Nidalee
@@ -1774,6 +1831,7 @@ local s = {
 	Slot = 3,
 	spellName = "OrianaDetonateCommand",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 	{
 	charName = "Orianna",
@@ -1819,11 +1877,13 @@ local s = {
 	danger = 3,
 	name = "Keeper's Verdict",
 	radius = 110,
+	speed = math.huge,
 	range = 450,
 	delay = 300,
 	Slot = 3,
 	spellName = "PoppyRSpellInstant",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Poppy",
@@ -1837,6 +1897,7 @@ local s = {
 	spellName = "PoppyRSpell",
 	missileName = "PoppyRMissile",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end
@@ -1854,6 +1915,7 @@ local s = {
 	spellName = "QuinnQ",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Quinn
@@ -1889,6 +1951,7 @@ local s = {
 	spellType = "Line",
 	extraMissileNames = "RengarEFinalMAX",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Rengar
@@ -1907,6 +1970,7 @@ local s = {
 	spellName = "RivenIzunaBlade",
 	spellType = "Line",
 	isSpecial = true,
+	Dangerous = true,
 	},
 	{
 	charName = "Riven",
@@ -1969,6 +2033,7 @@ local s = {
 	Slot = 0,
 	spellName = "SejuaniArcticAssault",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Sejuani",
@@ -1982,6 +2047,7 @@ local s = {
 	Slot = 3,
 	spellName = "SejuaniGlacialPrisonCast",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Sejuani
@@ -1998,6 +2064,7 @@ local s = {
 	Slot = 2,
 	spellName = "ShenE",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Shen
@@ -2024,6 +2091,7 @@ local s = {
 	Slot = 3,
 	spellName = "ShyvanaTransformCast",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Shyvana
@@ -2041,6 +2109,7 @@ local s = {
 	spellName = "SionE",
 	spellType = "Line",
 	isSpecial = true,
+	Dangerous = true,
 	},
 },
 --end Sion
@@ -2089,6 +2158,7 @@ local s = {
 	Slot = 3,
 	spellName = "SonaR",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Sona
@@ -2129,6 +2199,7 @@ local s = {
 	Slot = 1,
 	spellName = "SwainShadowGrasp",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Swain
@@ -2146,6 +2217,7 @@ local s = {
 	Slot = 2,
 	spellName = "SyndraE",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Syndra",
@@ -2187,6 +2259,7 @@ local s = {
 	spellName = "TahmKenchQ",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end TahmKench
@@ -2222,6 +2295,7 @@ local s = {
 	spellName = "ThreshQ",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 	{
 	charName = "Thresh",
@@ -2236,7 +2310,7 @@ local s = {
 	Slot = 2,
 	spellName = "ThreshE",
 	spellType = "Line",
-
+	Dangerous = true,
 	},
 },
 --end Thresh
@@ -2343,6 +2417,7 @@ local s = {
 	Slot = 3,
 	spellName = "VarusR",
 	spellType = "Line",
+	Dangerous = true,
 	},
 },
 --end Varus
@@ -2364,17 +2439,21 @@ local s = {
 	charName = "Veigar",
 	danger = 2,
 	name = "VeigarDarkMatter",
+	speed = math.huge,
 	radius = 225,
 	range = 900,
 	delay = 1350,
 	Slot = 1,
 	spellName = "VeigarDarkMatter",
 	spellType = "Circular",
+	killName = "VeigarDarkMatter",
+	killTime = 1.2,
 	},
 	{
 	charName = "Veigar",
 	danger = 3,
 	name = "VeigarEventHorizon",
+	speed = math.huge,
 	radius = 425,
 	range = 700,
 	delay = 500,
@@ -2383,6 +2462,9 @@ local s = {
 	spellName = "VeigarEventHorizon",
 	spellType = "Circular",
 	defaultOff = true,
+	Dangerous = true,
+	killName = "VeigarEventHorizon",
+	killTime = 3.5,
 	},
 },
 --end Veigar
@@ -2397,6 +2479,7 @@ local s = {
 	Slot = 2,
 	spellName = "VelkozE",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 	{
 	charName = "Velkoz",
@@ -2448,7 +2531,7 @@ local s = {
 	Slot = 0,
 	spellName = "ViQMissile",
 	spellType = "Line",
-
+	Dangerous = true,
 	defaultOff = true,
 	},
 },
@@ -2502,6 +2585,7 @@ local s = {
 	spellName = "ViktorGravitonField",
 	spellType = "Circular",
 	defaultOff = true,
+	Dangerous = true,
 	},
 },
 --end Viktor
@@ -2516,6 +2600,7 @@ local s = {
 	Slot = 3,
 	spellName = "VladimirHemoplague",
 	spellType = "Circular",
+	Dangerous = true,
 	},
 },
 --end Vladimir
@@ -2556,7 +2641,8 @@ local s = {
 	Slot = 3,
 	spellName = "XerathRMissileWrapper",
 	extraSpellNames = "XerathLocusPulse",
-	spellType = "Circular"
+	spellType = "Circular",
+	Dangerous = true,
 	},
 	{
 	charName = "Xerath",
@@ -2571,6 +2657,7 @@ local s = {
 	spellName = "XerathMageSpear",
 	spellType = "Line",
 	collision = true,
+	Dangerous = true,
 	},
 },
 --end Xerath
@@ -2588,6 +2675,7 @@ local s = {
 	spellName = "YasuoQ3W",
 	extraMissileNames = "YasuoQ3Mis",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Yasuo",
@@ -2720,6 +2808,7 @@ local s = {
 	spellType = "Circular",
 	killName = "ZiggsR",
 	killTime = 1.75,
+	Dangerous = true,
 	},
 },
 --end Ziggs
@@ -2750,6 +2839,7 @@ local s = {
 	Slot = 2,
 	spellName = "ZyraGraspingRoots",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Zyra",
@@ -2760,9 +2850,10 @@ local s = {
 	radius = 70,
 	range = 1474,
 	delay = 500,
-	Slot = 0,
+	Slot = -1,
 	spellName = "ZyraPassiveDeathManager",
 	spellType = "Line",
+	Dangerous = true,
 	},
 	{
 	charName = "Zyra",
@@ -2776,14 +2867,14 @@ local s = {
 	spellName = "ZyraQFissure",
 	spellType = "Circular",
 	killName = "ZyraQFissure",
-	killTime = 0.3,
+	killTime = 0.275,
 	},
 	{
 	charName = "Zyra",
 	danger = 4,
 	name = "ZyraR",
 	speed = math.huge,
-	radius = 525,
+	radius = 550,
 	range = 700,
 	delay = 500,
 	Slot = 3,
@@ -2791,6 +2882,7 @@ local s = {
 	spellType = "Circular",
 	killName = "ZyraBrambleZone",
 	killTime = 1.2,
+	Dangerous = true,
 	},
 },
 --end Zyra
@@ -3160,27 +3252,48 @@ local d = {
 }
 
 local obj = {}
-local str = {[0]="Q",[1]="W",[2]="E",[3]="R"}
+local str = {[-1]="P",[0]="Q",[1]="W",[2]="E",[3]="R"}
 local IsEvading2 = false
 local EMenu = Menu("Evade","Evade")
 local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash") and SUMMONER_1 or (GetCastName(GetMyHero(),SUMMONER_2):lower():find("summonerflash") and SUMMONER_2 or nil))
+local DodgeOnlyDangerous = false
 EMenu:Slider("d","Danger",2,1,5,1)
-EMenu:Slider("ew", "extra width", 20, 1, 100, 5)
+EMenu:Slider("ew", "Extra Width", 20, 1, 100, 5)
 EMenu:SubMenu("Spells", "Spells")
 EMenu:SubMenu("Dashes", "EvadeSpells")	
+EMenu:SubMenu("Draws", "Draws")
+EMenu.Draws:Boolean("DSPath", "Draw SkillShot Path", true)
+EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Width", true)
+EMenu.Draws:Boolean("DSPos", "Draw SkillShot Position", true)
+EMenu.Draws:Boolean("DEPos", "Draw Evade Position", true)
+EMenu.Draws:Boolean("DevOpt", "Draw for Devs", false)
+EMenu.Draws:Slider("SW", "SkillShot Width", 1, 1, 5, 1)
+EMenu.Draws:Slider("SQ", "SkillShot Quality", 5, 1, 35, 5)
+EMenu.Draws:Info("asd", "lower = higher Quality")
+EMenu:SubMenu("Keys", "Key Bindings")
+EMenu.Keys:KeyBinding("DD", "Disable Dodging", string.byte("K"), true)
+EMenu.Keys:KeyBinding("DoD", "Dodge only Dangerous", string.byte(" "))
 DelayAction( function()
 	for _,i in pairs(GetEnemyHeroes()) do
 		if not s[GetObjectName(i)] then return end
 		EMenu.Spells:SubMenu(GetObjectName(i),GetObjectName(i))
 		for _,l in ipairs(s[GetObjectName(i)]) do
 			EMenu.Spells[GetObjectName(i)]:Boolean(l.name,"|"..(str[l.Slot] or "?").."| - "..(l.name or "."), true)
+			if l.Dangerous == true then
+				EMenu.Spells[GetObjectName(i)]:Boolean("IsD"..l.name,"IsDangerous", true)	
+			else
+				EMenu.Spells[GetObjectName(i)]:Boolean("IsD"..l.name,"IsDangerous", false)
+			end
 			EMenu.Spells[GetObjectName(i)]:Slider("d"..l.name,str[l.Slot].."- Danger",(l.danger or 1), 1, 5, 1)
+			EMenu.Spells[GetObjectName(i)]:Info("Info"..l.name, "")			
 		end
 	end
 	if not d[GetObjectName(myHero)] then return end	
 	EMenu.Dashes:Boolean(d[GetObjectName(myHero)].name,"|"..(str[d[GetObjectName(myHero)].spellKey] or "?").."| - "..(d[GetObjectName(myHero)].name or "."), true)
 	EMenu.Dashes:Slider("d"..d[GetObjectName(myHero)].name,(str[d[GetObjectName(myHero)].spellKey] or "?").."- Danger",(d[GetObjectName(myHero)].dl or 2), 1, 5, 1)
-	EMenu.Dashes:Boolean("EnableFlash", "Flash")
+	EMenu.Dashes:Info("Info"..d[GetObjectName(myHero)].name,"")
+	EMenu.Dashes:Boolean("EnableFlash", "Flash", true)
+	EMenu.Dashes:Slider("FlashDanger", "Flash - Danger", 5, 1, 5, 1)
 end,.001)
 
 OnCreateObj(function (Object)
@@ -3189,7 +3302,9 @@ OnCreateObj(function (Object)
 			--hero = myHero
 			for _,hero in pairs(GetEnemyHeroes()) do
 				if not s[GetObjectName(GetObjectSpellOwner(Object))] or GetObjectType(GetObjectSpellOwner(Object)) ~= Obj_AI_Hero or GetTeam(GetObjectSpellOwner(Object)) ~= MINION_ENEMY then return end
-				print(GetObjectSpellName(Object))
+				if EMenu.Draws.DevOpt:Value() then 
+					print(GetObjectSpellName(Object)) 
+				end
 				for m,l in pairs(s[GetObjectName(GetObjectSpellOwner(Object))]) do
 					if (l.missileName == GetObjectSpellName(Object) or GetObjectSpellName(Object):lower():find(l.name:lower()) or GetObjectSpellName(Object):lower():find(l.spellName:lower()) or (tostring(l.extraMissileNames) and l.extraMissileNames == GetObjectSpellName(Object))) and l.spellType == "Line" and EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))][l.name]:Value() and EMenu.d:Value() <= EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))]["d"..l.name]:Value() then
 						start = GetObjectSpellStartPos(Object)
@@ -3217,38 +3332,63 @@ end)
 
 OnDraw(function ()
 	local offy = 60
-	DrawText("Active Spells:",30,40,offy-30,GoS.White)
+	local angle = 0
+	if EMenu.Draws.DevOpt:Value() then 
+		DrawText("Active Spells:",30,40,offy-30,GoS.White)
+	end
 	for _,i in pairs(obj) do
+	  if EMenu.Draws.DevOpt:Value() then
 		DrawText(_,30,40,offy,GoS.White)
+	  end
 		if i.sType == "Line" then
 			if _ ~= GetObjectSpellName(i.Obj) then obj[_] = nil end
 			local Screen = WorldToScreen(0,GetOrigin(i.Obj))
 			local Screen2 = WorldToScreen(0,i.sPos)
-			DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,3,3,GoS.White)
+			if EMenu.Draws.DSPos:Value() then
+				DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,EMenu.Draws.SW:Value()+1,EMenu.Draws.SQ:Value(),GoS.White)
+			end
 			endPos = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius)
+			endPos2 = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius+EMenu.ew:Value())
 			offy = offy + 30
 			local sPos = Vector(i.sPos)
  			local ePos = Vector(endPos)
  			local dVec = Vector(ePos - sPos)
- 			DrawCircle(dVec,50,0,3,GoS.White)
+ 			-- DrawCircle(dVec,50,0,3,GoS.White)
  			sVec = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5)
+			sVec2 = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5+EMenu.ew:Value())
  		
  			local TopD1 = WorldToScreen(0,sPos+sVec)
  			local TopD2 = WorldToScreen(0,sPos-sVec)
  			local BotD1 = WorldToScreen(0,ePos+sVec)
  			local BotD2 = WorldToScreen(0,ePos-sVec)
-			DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,3,GoS.White)
- 			DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,3,GoS.White)
- 			DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,GoS.White)
- 			DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,GoS.White)
-			
+ 			local TopD3 = WorldToScreen(0,sPos+sVec2)
+ 			local TopD4 = WorldToScreen(0,sPos-sVec2)
+ 			local BotD3 = WorldToScreen(0,ePos+sVec2)
+ 			local BotD4 = WorldToScreen(0,ePos-sVec2)
+			if EMenu.Draws.DSPath:Value() then
+				DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,EMenu.Draws.SW:Value(),GoS.White)
+				DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,EMenu.Draws.SW:Value(),GoS.White)
+				DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,EMenu.Draws.SW:Value(),GoS.White)
+				DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,EMenu.Draws.SW:Value(),GoS.White)
+				if EMenu.Draws.DSEW:Value() then
+					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,EMenu.Draws.SW:Value(),GoS.White)
+					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,EMenu.Draws.SW:Value(),GoS.White)
+					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,EMenu.Draws.SW:Value(),GoS.White)
+					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,EMenu.Draws.SW:Value(),GoS.White)
+				end
+			end
 		elseif i.sType == "Circular" then
-			DrawCircle(i.ePos,i.spell.radius,3,0,GoS.White)
+			if EMenu.Draws.DSPath:Value() then
+				DrawCircle(i.ePos,i.spell.radius,EMenu.Draws.SW:Value(),EMenu.Draws.SQ:Value(),GoS.White)
+				if EMenu.Draws.DSEW:Value() then
+					DrawCircle(i.ePos,i.spell.radius+EMenu.ew:Value(),EMenu.Draws.SW:Value(),EMenu.Draws.SQ:Value(),GoS.White)
+				end
+			end
 		end
-		if i.jp then DrawCircle(i.jp,i.spell.radius*.5,0,3,GoS.Red) end
-		if i.safe then 
+		-- if i.jp then DrawCircle(i.jp,i.spell.radius*.5,0,3,GoS.Red) end			
+		if i.safe and EMenu.Draws.DEPos:Value() then 
 			DrawCircle(i.safe,50,0,3,GoS.Green)
-			DrawText("Evading",30,40,0,GoS.Red) 
+			-- DrawText("Evading",30,40,0,GoS.Red) 
 		end
 	end
 end)
@@ -3276,13 +3416,20 @@ OnTick(function()
 	for _,i in pairs(obj) do
 	local oT = i.sDelay + GetDistance(myHero,i.sPos) / i.sSpeed
 	local fT = .75
+	for k,p in pairs(GetEnemyHeroes()) do
+		if EMenu.Keys.DoD:Value() then
+			DodgeOnlyDangerous = true
+		else
+			DodgeOnlyDangerous = false
+		end
+	end
 		if i.sType == "Line" then
 			i.sPos = Vector(i.sPos)
 			i.ePos = Vector(i.ePos)
 			S1 = GetOrigin(myHero)+(Vector(i.sPos)-Vector(i.ePos)):perpendicular()
 			S2 = GetOrigin(myHero)
 			jp = Vector(VectorIntersection(i.sPos,i.ePos,S1,S2).x,i.ePos.y,VectorIntersection(i.sPos,i.ePos,S1,S2).y)
-			if GetDistance(myHero,GetOrigin(i.Obj)) < i.sRange + i.sSpeed then 
+			if GetDistance(myHero,GetOrigin(i.Obj)) < i.spell.radius + i.sSpeed + i.sDelay + myHero.boundingRadius then 
 				i.jp = jp
 			else
 				i.jp = nil
@@ -3290,9 +3437,9 @@ OnTick(function()
 			-- and not i.safe then
 			if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 				if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
-					i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius+20)*1.1)
+					i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.ew:Value())
 				else 
-					i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius+20)*1.1)
+					i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.ew:Value())
 				end
 				--print("register")
 				i.isEvading = true
@@ -3303,7 +3450,7 @@ OnTick(function()
 			end
 		elseif i.sType == "Circular" then
 			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
-				i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius+20)*1.1)
+				i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.ew:Value())
 				i.isEvading = true
 				Stopp(true)
 			else
@@ -3312,6 +3459,7 @@ OnTick(function()
 			end
 		end
 	--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
+	   if EMenu.Keys.DD:Value() then return end
 		if i.safe then
 			if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey then 
 				if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2.5 then
@@ -3321,35 +3469,39 @@ OnTick(function()
 					else
 						IsEvading2 = false
 					end	
-					for _,ally in pairs(GetAllyHeroes()) do
-						if GetDistance(myHero,ally) < d[GetObjectName(myHero)].range and not ally.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY and d[GetObjectName(myHero)].evadeType == "DashT" then
-							IsEvading2 = true	
-							DelayAction(function()								
-								CastTargetSpell(ally, d[GetObjectName(myHero)].spellKey)
-							end,oT*fT*.001)
-						else
-							IsEvading2 = false
-						end
-					end
-					for _,minion in pairs(minionManager.objects) do
-						if GetTeam(minion) == MINION_ALLY then 
-							if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY and d[GetObjectName(myHero)].evadeType == "DashT" then
-								IsEvading2 = true
-								DelayAction(function()										
-									CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
-								end,oT*fT*.001)
-							else
-								IsEvading2 = false
+					if d[GetObjectName(myHero)].evadeType == "DashT" then
+						for pp,ally in pairs(GetAllyHeroes()) do
+							if ally ~= nil then
+								if GetDistance(myHero,ally) < d[GetObjectName(myHero)].range and not ally.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+									IsEvading2 = true	
+									DelayAction(function()								
+										CastTargetSpell(ally, d[GetObjectName(myHero)].spellKey)
+									end,oT*fT*.001)
+								else
+									IsEvading2 = false
+								end
 							end
 						end
-						if GetTeam(minion) == MINION_JUNGLE then 
-							if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY and d[GetObjectName(myHero)].evadeType == "DashT" then
-								IsEvading2 = true
-								DelayAction(function()
-									CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
-								end,oT*fT*.001)
-							else
-								IsEvading2 = false
+						for _,minion in pairs(minionManager.objects) do
+							if GetTeam(minion) == MINION_ALLY then 
+								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+									IsEvading2 = true
+									DelayAction(function()										
+										CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
+									end,oT*fT*.001)
+								else
+									IsEvading2 = false
+								end
+							end
+							if GetTeam(minion) == MINION_JUNGLE then 
+								if GetDistance(myHero,minion) < d[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
+									IsEvading2 = true
+									DelayAction(function()
+										CastTargetSpell(minion, d[GetObjectName(myHero)].spellKey)
+									end,oT*fT*.001)
+								else
+									IsEvading2 = false
+								end
 							end
 						end
 					end
@@ -3389,16 +3541,16 @@ OnTick(function()
 					CastSkillShot(Flash, i.safe)
 				end
 			end
-		else
-			Stopp(false)
-		end
-		if i.safe then
 			if IsEvading2 ~= true then
 				Stopp(false)
 				MoveToXYZ(i.safe)
 				Stopp(true)
 			end
-		print(IsEvading2)
+			if EMenu.Draws.DevOpt:Value() then 
+				print(IsEvading2)
+			end
+		else
+			Stopp(false)
 		end
 	end
 end)
