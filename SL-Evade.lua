@@ -19,7 +19,7 @@ local s = {
 	{
 	charName = "Aatrox",
 	danger = 3,
-	name = "AatroxQ",
+	name = "Dark Flight",
 	speed = 450,
 	radius = 285,
 	range = 650,
@@ -27,6 +27,7 @@ local s = {
 	Slot = 0,
 	spellName = "AatroxQ",
 	spellType = "Circular",
+	killTime = 0.225,
 	},
 	{
 	charName = "Aatrox",
@@ -99,7 +100,7 @@ local s = {
 	spellName = "Pulverize",
 	spellType = "Circular",
 	killName = "Pulverize",
-	killTime = 0.3,
+	killTime = 0.2,
 	Dangerous = true,
 	},
 },
@@ -108,7 +109,7 @@ local s = {
 	{
 	charName = "Amumu",
 	danger = 4,
-	name = "CurseoftheSadMummy",
+	name = "Curse of the Sad Mummy",
 	speed = math.huge,
 	radius = 560,
 	range = 560,
@@ -194,6 +195,7 @@ local s = {
 	spellName = "EnchantedCrystalArrow",
 	spellType = "Line",
 	Dangerous = true,
+	collision = true,
 	},
 	{
 	angle = 5,
@@ -292,7 +294,7 @@ local s = {
 	Slot = 3,
 	spellName = "StaticField",
 	spellType = "Circular",
-	killTime = 0.3,
+	killTime = 0.2,
 	Dangerous = true,
 	},
 },
@@ -302,7 +304,7 @@ local s = {
 	charName = "Brand",
 	danger = 3,
 	missileName = "BrandBlazeMissile",
-	name = "BrandBlaze",
+	name = "Sear",
 	speed = 2000,
 	radius = 60,
 	range = 1100,
@@ -325,7 +327,7 @@ local s = {
 	spellName = "BrandFissure",
 	spellType = "Circular",
 	killName = "BrandFissure",
-	killTime = 0.3,
+	killTime = 0.275,
 	},
 },
 --end Brand
@@ -333,7 +335,7 @@ local s = {
 	{
 	charName = "Braum",
 	danger = 4,
-	name = "GlacialFissure",
+	name = "Glacial Fissure",
 	speed = 1125,
 	radius = 100,
 	range = 1250,
@@ -347,7 +349,7 @@ local s = {
 	charName = "Braum",
 	danger = 3,
 	missileName = "BraumQMissile",
-	name = "BraumQ",
+	name = "Winter's Bite",
 	speed = 1200,
 	delay = 250,   
 	radius = 100,
@@ -377,7 +379,7 @@ local s = {
 	charName = "Caitlyn",
 	danger = 2,
 	missileName = "CaitlynEntrapmentMissile",
-	name = "Caitlyn Entrapment",
+	name = "90 Caliber Net",
 	speed = 2000,
 	radius = 80,
 	range = 950,
@@ -394,7 +396,7 @@ local s = {
 	angle = 40,
 	charName = "Cassiopeia",
 	danger = 4,
-	name = "CassiopeiaPetrifyingGaze",
+	name = "Petrifying Gaze",
 	speed = math.huge,
 	radius = 20,
 	range = 825,
@@ -407,7 +409,7 @@ local s = {
 	{
 	charName = "Cassiopeia",
 	danger = 1,
-	name = "CassiopeiaNoxiousBlast",
+	name = "Noxious Blast",
 	speed = math.huge,
 	radius = 200,
 	range = 600,
@@ -421,7 +423,7 @@ local s = {
 	{
 	charName = "Cassiopeia",
 	danger = 1,
-	name = "CassiopeiaMiasma",
+	name = "Miasma",
 	radius = 220,
 	range = 850,
 	delay = 250,
@@ -430,7 +432,7 @@ local s = {
 	spellName = "CassiopeiaMiasma",
 	spellType = "Circular",
 	killName = "CassiopeiaMiasma",
-	killTime = 0.75,
+	killTime = 1.5,
 	},
 },
 --end Cassiopeia
@@ -461,7 +463,7 @@ local s = {
 	spellType = "Circular",
 	extraDrawHeight = 45,
 	killName = "Rupture",
-	killTime = 0.5,
+	killTime = 0.45,
 	Dangerous = true,
 	},
 },
@@ -494,6 +496,7 @@ local s = {
 	spellName = "PhosphorusBomb",
 	spellType = "Circular",
 	extraDrawHeight = 110,
+	killTime = 0.35,
 	},
 	{
 	charName = "Corki",
@@ -516,7 +519,7 @@ local s = {
 	angle = 25,
 	charName = "Darius",
 	danger = 3,
-	name = "DariusAxeGrabCone",
+	name = "Apprehend",
 	radius = 20,
 	range = 570,
 	delay = 320,
@@ -568,7 +571,7 @@ local s = {
 	charName = "Draven",
 	danger = 3,
 	missileName = "DravenR",
-	name = "DravenR",
+	name = "Whirling Death",
 	speed = 2000,
 	radius = 160,
 	range = 25000,
@@ -598,7 +601,7 @@ local s = {
 	{
 	charName = "Ekko",
 	danger = 3,
-	name = "EkkoQ",
+	name = "Timewinder",
 	missileName = "EkkoQMis",
 	speed = 1650,
 	radius = 60,
@@ -611,7 +614,7 @@ local s = {
 	{
 	charName = "Ekko",
 	danger = 3,
-	name = "EkkoW",
+	name = "Parallel Convergence",
 	speed = math.huge,
 	radius = 375,
 	range = 1600,
@@ -626,7 +629,8 @@ local s = {
 	{
 	charName = "Ekko",
 	danger = 3,
-	name = "EkkoR",
+	name = "Chronobreak",
+	speed = math.huge,
 	radius = 375,
 	range = 1600,
 	delay = 250,
@@ -634,6 +638,7 @@ local s = {
 	spellName = "EkkoR",
 	spellType = "Circular",
 	isSpecial = true,
+	killTime = 0.2,
 	},
 },
 --end Ekko
@@ -658,7 +663,7 @@ local s = {
 	{
 	charName = "Evelynn",
 	danger = 3,
-	name = "EvelynnR",
+	name = "Agony's Embrace",
 	radius = 350,
 	range = 650,
 	delay = 250,
@@ -666,6 +671,7 @@ local s = {
 	spellName = "EvelynnR",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.2,
 	},
 },
 --end Evelynn
@@ -718,7 +724,7 @@ local s = {
 	charName = "Fiora",
 	danger = 1,
 	missileName = "FioraWMissile",
-	name = "FioraW",
+	name = "Riposte",
 	speed = 3200,
 	radius = 70,
 	range = 750,
@@ -733,21 +739,22 @@ local s = {
 	{
 	charName = "Fizz",
 	danger = 2,
-	name = "FizzPiercingStrike",
+	name = "Playful / Trickster",
 	speed = 1400,
 	radius = 150,
 	range = 550,
 	delay = 0,
-	Slot = 0,
+	Slot = 2,
 	spellName = "FizzPiercingStrike",
-	spellType = "Line",
+	spellType = "Circular",
 	isSpecial = true,
+	killTime = 0.3,
 	},
 	{
 	charName = "Fizz",
 	danger = 3,
 	missileName = "FizzMarinerDoomMissile",
-	name = "Fizz ULT",
+	name = "Chum the Waters",
 	speed = 1350,
 	radius = 120,
 	range = 1275,
@@ -767,7 +774,7 @@ local s = {
 	{
 	charName = "Galio",
 	danger = 2,
-	name = "GalioRighteousGust",
+	name = "Righteous Gust",
 	missileName = "GalioRighteousGust",
 	speed = 1300,
 	radius = 160,
@@ -779,7 +786,7 @@ local s = {
 	{
 	charName = "Galio",
 	danger = 2,
-	name = "GalioResoluteSmite",
+	name = "ResoluteSmite",
 	missileName = "GalioResoluteSmite",
 	speed = 1200,
 	radius = 235,
@@ -788,11 +795,12 @@ local s = {
 	Slot = 0,
 	spellName = "GalioResoluteSmite",
 	spellType = "Circular",
+	killTime = 0.2,
 	},
 	{
 	charName = "Galio",
 	danger = 4,
-	name = "GalioIdolOfDurand",
+	name = "IdolOfDurand",
 	radius = 600,
 	range = 600,
 	Slot = 3,
@@ -828,6 +836,7 @@ local s = {
 	spellName = "GnarR",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.3,
 	},
 	{
 	charName = "Gnar",
@@ -868,6 +877,7 @@ local s = {
 	speed = 900,
 	Slot = 2,
 	spellType = "Circular",
+	killTime = 0.2,
 	},
 	{
 	charName = "Gnar",
@@ -881,6 +891,7 @@ local s = {
 	speed = 800,
 	Slot = 2,
 	spellType = "Circular",
+	killTime = 0.2,
 	},
 },
 --end Gnar
@@ -896,6 +907,8 @@ local s = {
 	Slot = 0,
 	spellName = "GragasQ",
 	spellType = "Circular",
+	killName = "GragasQToggle",
+	killTime = 1,
 	},
 	{
 	charName = "Gragas",
@@ -909,6 +922,7 @@ local s = {
 	spellName = "GragasE",
 	spellType = "Line",
 	Dangerous = true,
+	collision = true,
 	},
 	{
 	charName = "Gragas",
@@ -922,6 +936,7 @@ local s = {
 	spellName = "GragasR",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.3,
 	},
 },
 --end Gragas
@@ -939,7 +954,7 @@ local s = {
 	Slot = 0,
 	spellName = "GravesQLineSpell",
 	spellType = "Line",
-	EndExplosion = true,
+	HasEndExplosion = true,
 	},
 	{
 	charName = "Graves",
@@ -988,6 +1003,7 @@ local s = {
 	spellName = "HeimerdingerE",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.3,
 	},
 	{
 	charName = "Heimerdinger",
@@ -1036,6 +1052,7 @@ local s = {
 	charName = "Illaoi",
 	danger = 3,
 	name = "IllaoiQ",
+	speed = math.huge,
 	radius = 100,
 	range = 850,
 	delay = 750,
@@ -1056,11 +1073,13 @@ local s = {
 	spellName = "IllaoiE",
 	spellType = "Line",
 	Dangerous = true,
+	collision = true,
 	},
 	{
 	charName = "Illaoi",
 	danger = 3,
 	name = "IllaoiR",
+	speed = math.huge,
 	range = 0,
 	radius = 450,
 	delay = 500,
@@ -1068,6 +1087,7 @@ local s = {
 	spellName = "IllaoiR",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.2,
 	},
 },
 --end Illaoi
@@ -1095,6 +1115,7 @@ local s = {
 	name = "HowlingGaleSpell",
 	speed = 900,
 	radius = 120,
+	delay = 1000,
 	range = 1700,
 	Slot = 0,
 	spellName = "HowlingGale",
@@ -1107,7 +1128,7 @@ local s = {
 	{
 	charName = "JarvanIV",
 	danger = 2,
-	name = "JarvanIVDragonStrike",
+	name = "DragonStrike",
 	speed = 2000,
 	radius = 80,
 	range = 845,
@@ -1119,7 +1140,7 @@ local s = {
 	{
 	charName = "JarvanIV",
 	danger = 2,
-	name = "JarvanIVDragonStrike",
+	name = "DragonStrike",
 	speed = 1800,
 	radius = 120,
 	range = 845,
@@ -1132,7 +1153,7 @@ local s = {
 	{
 	charName = "JarvanIV",
 	danger = 3,
-	name = "JarvanIVCataclysm",
+	name = "Cataclysm",
 	speed = 1900,
 	radius = 350,
 	range = 825,
@@ -1141,6 +1162,8 @@ local s = {
 	spellName = "JarvanIVCataclysm",
 	spellType = "Circular",
 	Dangerous = true,
+	killName = "",
+	killTime = 1.5,
 	},
 },
 --end JarvanIV
@@ -1192,6 +1215,7 @@ local s = {
 	spellName = "JinxR",
 	spellType = "Line",
 	Dangerous = true,
+	collision = true,
 	},
 	{
 	charName = "Jinx",
@@ -1242,6 +1266,7 @@ local s = {
 	fixedRange = true,
 	extraMissileNames = "JhinRShotMis4",
 	Dangerous = true,
+	collision = true,
 	},
 },
 --end
@@ -1289,7 +1314,6 @@ local s = {
 	Slot = 0,
 	spellName = "KarmaQMissileMantra",
 	spellType = "Line",
-
 	collision = true,
 	},
 },
@@ -1299,6 +1323,7 @@ local s = {
 	charName = "Karthus",
 	danger = 1,
 	name = "Lay Waste",
+	speed = math.huge,
 	radius = 190,
 	range = 875,
 	delay = 900,
@@ -1306,6 +1331,7 @@ local s = {
 	spellName = "KarthusLayWaste",
 	spellType = "Circular",
 	extraSpellNames = {"karthuslaywastea2", "karthuslaywastea3", "karthuslaywastedeada1", "karthuslaywastedeada2", "karthuslaywastedeada3"},	--tostring
+	killTime = 0.2,
 	},
 },
 --end Karthus
@@ -1320,6 +1346,7 @@ local s = {
 	Slot = 3,
 	spellName = "RiftWalk",
 	spellType = "Circular",
+	killTime = 0.3,
 	},
 	{
 	angle = 40,
@@ -1423,6 +1450,7 @@ local s = {
 	Slot = 3,
 	spellName = "KogMawLivingArtillery",
 	spellType = "Circular",
+	killTime = 0.5,
 	},
 },
 --end KogMaw
@@ -1468,6 +1496,7 @@ local s = {
 	Slot = 3,
 	spellName = "LeblancSlideM",
 	spellType = "Circular",
+	killTime = 0.2,
 	},
 	{
 	charName = "Leblanc",
@@ -1480,6 +1509,7 @@ local s = {
 	Slot = 1,
 	spellName = "LeblancSlide",
 	spellType = "Circular",
+	killTime = 0.2,
 	},
 },
 --end Leblanc
@@ -1545,6 +1575,7 @@ local s = {
 	spellName = "LissandraW",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.2,
 	},
 	{
 	charName = "Lissandra",
@@ -1574,6 +1605,7 @@ local s = {
 	spellName = "LucianW",
 	spellType = "Line",
 	collision = true,
+	HasEndExplosion = true,
 	},
 	{
 	charName = "Lucian",
@@ -1670,6 +1702,7 @@ local s = {
 	spellName = "UFSlash",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.4,
 	},
 },
 --end Malphite
@@ -1706,6 +1739,8 @@ local s = {
 	spellName = "MonkeyKingSpinToWin",
 	spellType = "Circular",
 	defaultOff = true,
+	killName = "",
+	killTime = 1,
 	},
 },
 --end MonkeyKing
@@ -1731,6 +1766,7 @@ local s = {
 	charName = "Nami",
 	danger = 3,
 	name = "NamiQ",
+	speed = math.huge,
 	radius = 200,
 	range = 875,
 	delay = 1000,
@@ -1738,6 +1774,7 @@ local s = {
 	spellName = "NamiQ",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.35,
 	},
 	{
 	charName = "Nami",
@@ -1842,6 +1879,7 @@ local s = {
 	charName = "Orianna",
 	danger = 4,
 	name = "OrianaDetonateCommand",
+	speed = math.huge,
 	radius = 410,
 	range = 410,
 	delay = 500,
@@ -1849,16 +1887,19 @@ local s = {
 	spellName = "OrianaDetonateCommand",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.3,
 	},
 	{
 	charName = "Orianna",
 	danger = 2,
 	name = "OrianaDissonanceCommand",
+	speed = math.huge,
 	radius = 250,
 	range = 1825,
 	Slot = 1,
 	spellName = "OrianaDissonanceCommand",
 	spellType = "Circular",
+	killTime = 0.1,
 	},
 },
 --end Orianna
@@ -1868,6 +1909,7 @@ local s = {
 	charName = "Pantheon",
 	danger = 2,
 	name = "Heartseeker",
+	speed = math.huge,
 	radius = 100,
 	range = 650,
 	delay = 1000,
@@ -1882,6 +1924,7 @@ local s = {
 	charName = "Poppy",
 	danger = 2,
 	name = "Hammer Shock",
+	speed = math.huge,
 	radius = 100,
 	range = 450,
 	delay = 500,
@@ -2001,6 +2044,7 @@ local s = {
 	Slot = 1,
 	spellName = "RivenMartyr",
 	spellType = "Circular",
+	killTime = 0.3,
 	},
 },
 --end Riven
@@ -2051,6 +2095,7 @@ local s = {
 	spellName = "SejuaniArcticAssault",
 	spellType = "Line",
 	Dangerous = true,
+	collision = true,
 	},
 	{
 	charName = "Sejuani",
@@ -2220,6 +2265,7 @@ local s = {
 	spellName = "SwainShadowGrasp",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.3,
 	},
 },
 --end Swain
@@ -2250,6 +2296,7 @@ local s = {
 	Slot = 1,
 	spellName = "SyndraWCast",
 	spellType = "Circular",
+	killTime = 0.2,
 	},
 	{
 	charName = "Syndra",
@@ -2262,6 +2309,7 @@ local s = {
 	spellName = "SyndraQ",
 	missileName = "SyndraQSpell",
 	spellType = "Circular",
+	killTime = 0.2,
 	},
 },
 --end Syndra
@@ -2393,6 +2441,7 @@ local s = {
 	Slot = 2,
 	spellName = "UrgotPlasmaGrenade",
 	spellType = "Circular",
+	killTime = 0.3,
 	},
 },
 --end Urgot
@@ -2410,6 +2459,7 @@ local s = {
 	spellName = "VarusE",
 	extraSpellNames = "VarusEMissile",
 	spellType = "Circular",
+	killTime = 0.5,
 	},
 	{
 	charName = "Varus",
@@ -2423,7 +2473,6 @@ local s = {
 	Slot = 0,
 	spellName = "VarusQ",
 	spellType = "Line",
-
 	},
 	{
 	charName = "Varus",
@@ -2438,6 +2487,7 @@ local s = {
 	spellName = "VarusR",
 	spellType = "Line",
 	Dangerous = true,
+	collision = true,
 	},
 },
 --end Varus
@@ -2606,6 +2656,7 @@ local s = {
 	spellType = "Circular",
 	defaultOff = true,
 	Dangerous = true,
+	killTime = 0.8,
 	},
 },
 --end Viktor
@@ -2621,6 +2672,7 @@ local s = {
 	spellName = "VladimirHemoplague",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.3,
 	},
 },
 --end Vladimir
@@ -2636,6 +2688,7 @@ local s = {
 	spellName = "XerathArcaneBarrage2",
 	spellType = "Circular",
 	extraDrawHeight = 45,
+	killTime = 0.3,
 	},
 	{
 	charName = "Xerath",
@@ -2663,6 +2716,7 @@ local s = {
 	extraSpellNames = "XerathLocusPulse",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.4,
 	},
 	{
 	charName = "Xerath",
@@ -2767,6 +2821,7 @@ local s = {
 	spellType = "Circular",
 	isSpecial = true,
 	defaultOff = true,
+	killTime = 0.1,
 	},
 },
 --end Zed
@@ -2797,7 +2852,7 @@ local s = {
 	spellName = "ZiggsW",
 	spellType = "Circular",
 	killName = "ZiggsW",
-	killTime = 1,
+	killTime = 1.25,
 	},
 	{
 	charName = "Ziggs",
@@ -2844,6 +2899,7 @@ local s = {
 	Slot = 0,
 	spellName = "ZileanQ",
 	spellType = "Circular",
+	killTime = 1.5,
 	},
 },
 --end Zilean
@@ -2940,7 +2996,7 @@ local d = {
 		castType = "Position",
 },
 ["Ekko"] = {
-	{
+	-- {
 		dl = 3,
 		name = "PhaseDive",
 		range = 350,
@@ -2949,17 +3005,17 @@ local d = {
 		spellKey = 2,
 		evadeType = "DashP",
 		castType = "Position",
-	},
-	{
-		charName = "Ekko",
-		dangerlevel = 4,
-		name = "Chronobreak",
-		range = 20000,
-		spellDelay = 50,
-		spellKey = 3,
-		evadeType = "DashS",
-		castType = "Self",
-     },
+	-- },
+	-- {
+		-- charName = "Ekko",
+		-- dangerlevel = 4,
+		-- name = "Chronobreak",
+		-- range = 20000,
+		-- spellDelay = 50,
+		-- spellKey = 3,
+		-- evadeType = "DashS",
+		-- castType = "Self",
+     -- },
 },
 ["Ezreal"] = {
 		dl = 2,
@@ -2982,7 +3038,7 @@ local d = {
 		castType = "Position",
 },
 ["Gnar"] = {
-	{
+	-- {
 		dl = 3,
 		name = "GnarE",
 		range = 475,
@@ -2991,17 +3047,17 @@ local d = {
 		spellKey = 2,
 		evadeType = "DashP",
 		castType = "Position",
-    },
-	{
-		dl = 4,
-		name = "GnarBigE",
-		range = 475,
-		spellDelay = 50,
-		speed = 800,
-		spellKey = 2,
-		evadeType = "DashP",
-		castType = "Position",
-    },
+    -- },
+	-- {
+		-- dl = 4,
+		-- name = "GnarBigE",
+		-- range = 475,
+		-- spellDelay = 50,
+		-- speed = 800,
+		-- spellKey = 2,
+		-- evadeType = "DashP",
+		-- castType = "Position",
+    -- },
 },
 ["Graves"] = {
 		dl = 2,
@@ -3095,7 +3151,7 @@ local d = {
 		castType = "Position",
 },
 ["Fiora"] = {
-	{
+	--{
 		dl = 3,
 		name = "FioraQ",
 		range = 340,
@@ -3104,16 +3160,16 @@ local d = {
 		spellKey = 0,
 		evadeType = "DashP",
 		castType = "Position",
-    },
-	{
-		dl = 3,
-		name = "FioraW",
-		range = 750,
-		spellDelay = 100,
-		spellKey = 1,
-		evadeType = "WindWallP",
-		castType = "Position",
-    },
+   -- },
+	-- {
+		-- dl = 3,
+		-- name = "FioraW",
+		-- range = 750,
+		-- spellDelay = 100,
+		-- spellKey = 1,
+		-- evadeType = "WindWallP",
+		-- castType = "Position",
+    -- },
 },
 ["Fizz"] = {
 		dl = 3,
@@ -3158,7 +3214,7 @@ local d = {
 		BuffName = "SivirE"
 },
 ["Shaco"] = {
-	{
+	--{
 		dl = 3,
 		name = "Deceive",
 		range = 400,
@@ -3166,16 +3222,16 @@ local d = {
 		spellKey = 0,
 		evadeType = "DashP",
 		castType = "Position",
-    },
-	{
-		dl = 3,
-		name = "JackInTheBox",
-		range = 425,
-		spellDelay = 250,
-		spellKey = 1,
-		evadeType = "WindWallP",
-		castType = "Position",
-	},
+   -- },
+	-- {
+		-- dl = 3,
+		-- name = "JackInTheBox",
+		-- range = 425,
+		-- spellDelay = 250,
+		-- spellKey = 1,
+		-- evadeType = "WindWallP",
+		-- castType = "Position",
+	-- },
 },
 ["Tristana"] = {
 		dl = 3,
@@ -3208,17 +3264,17 @@ local d = {
 		castType = "Position",
 },
 ["Yasuo"] = {
-	{
-		dl = 2,
-		name = "SweepingBlade",
-		range = 475,
-		speed = 1000,
-		spellDelay = 50,
-		spellKey = 2,
-		evadeType = "DashT",
-		castType = "Target",
-	},
-	{
+	-- {
+		-- dl = 2,
+		-- name = "SweepingBlade",
+		-- range = 475,
+		-- speed = 1000,
+		-- spellDelay = 50,
+		-- spellKey = 2,
+		-- evadeType = "DashT",
+		-- castType = "Target",
+	-- },
+	--{
 		dl = 3,
 		name = "WindWall",
 		range = 400,
@@ -3226,7 +3282,7 @@ local d = {
 		spellKey = 1,
 		evadeType = "WindWallP",
 		castType = "Position",
-	},
+	--},
 },
 ["MasterYi"] = {
 		dl = 3,
@@ -3419,7 +3475,9 @@ OnDraw(function ()
 end)
 
 OnProcessSpell( function(unit,spellProc)
-	--if unit == myHero then print(spellProc.name) end
+	if EMenu.Draws.DevOpt:Value() then 
+		if unit == myHero then print(spellProc.name) end
+	end
 	if unit.team == MINION_ENEMY then
 	if s[GetObjectName(unit)] then
 		for _,i in pairs(s[GetObjectName(unit)]) do
