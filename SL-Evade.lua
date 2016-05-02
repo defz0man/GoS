@@ -3350,6 +3350,7 @@ EMenu.Draws:Slider("SQ", "SkillShot Quality", 5, 1, 35, 5)
 EMenu.Draws:Info("asd", "lower = higher Quality")
 EMenu:SubMenu("Keys", "Key Bindings")
 EMenu.Keys:KeyBinding("DD", "Disable Dodging", string.byte("K"), true)
+EMenu.Keys:KeyBinding("DDraws", "Disable Drawings", string.byte("J"), true)
 EMenu.Keys:KeyBinding("DoD", "Dodge only Dangerous", string.byte(" "))
 EMenu.Keys:KeyBinding("DoD2", "Dodge only Dangerous 2", string.byte("V"))
 DelayAction( function()
@@ -3419,7 +3420,7 @@ OnDraw(function ()
 	  if EMenu.Draws.DevOpt:Value() then
 		DrawText(_,30,40,offy,GoS.White)
 	  end
-		if i.sType == "Line" then
+		if i.sType == "Line" and not EMenu.Keys.DDraws:Value() then
 			if _ ~= GetObjectSpellName(i.Obj) then obj[_] = nil end
 			local Screen = WorldToScreen(0,GetOrigin(i.Obj))
 			local Screen2 = WorldToScreen(0,i.sPos)
@@ -3456,7 +3457,7 @@ OnDraw(function ()
 					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(255,102,102,102))
 				end
 			end
-		elseif i.sType == "Circular" then
+		elseif i.sType == "Circular" and not EMenu.Keys.DDraws:Value() then
 			if EMenu.Draws.DSPath:Value() then
 				DrawCircle(i.ePos,i.spell.radius,3,EMenu.Draws.SQ:Value(),ARGB(255,255,255,255))
 				if EMenu.Draws.DSEW:Value() then
@@ -3465,7 +3466,7 @@ OnDraw(function ()
 			end
 		end
 		-- if i.jp then DrawCircle(i.jp,i.spell.radius*.5,0,3,GoS.Red) end			
-		if i.safe and EMenu.Draws.DEPos:Value() then 
+		if i.safe and EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() then 
 			local tp232 = WorldToScreen(0,GetOrigin(myHero))
 			local tp233 = WorldToScreen(0,i.safe)
 			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Blue)
