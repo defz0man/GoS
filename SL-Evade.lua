@@ -3273,6 +3273,7 @@ local d = {
 }
 
 
+
 local obj = {}
 local str = {[-1]="P",[0]="Q",[1]="W",[2]="E",[3]="R"}
 local IsEvading2 = false
@@ -3422,7 +3423,7 @@ OnProcessSpell( function(unit,spellProc)
 	if unit.team == MINION_ENEMY then
 	if s[GetObjectName(unit)] then
 		for _,i in pairs(s[GetObjectName(unit)]) do
-			if i.spellType == "Circular" and spellProc.name == i.spellName and ((not DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.charName]["d"..i.name]:Value()) or (DodgeOnlyDangerous and EMenu.Spells[i.charName]["IsD"..i.name]:Value())) then
+			if i.spellType == "Circular" and spellProc.name == i.spellName and EMenu.Spells[i.charName][i.name]:Value() and ((not DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.charName]["d"..i.name]:Value()) or (DodgeOnlyDangerous and EMenu.Spells[i.charName]["IsD"..i.name]:Value())) then
 				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range}
 				if i.killTime then
 					DelayAction(function() obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
