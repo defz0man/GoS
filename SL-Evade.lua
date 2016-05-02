@@ -664,6 +664,7 @@ local s = {
 	charName = "Evelynn",
 	danger = 3,
 	name = "Agony's Embrace",
+	speed = math.huge,
 	radius = 350,
 	range = 650,
 	delay = 250,
@@ -3547,7 +3548,7 @@ OnTick(function()
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
 			   if EMenu.Keys.DD:Value() then return end
 				if i.safe then
-					if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[GetObjectName(myHero)].name]:Value() then 
+					if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() then 
 						if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2.5 then
 							if d[GetObjectName(myHero)].evadeType == "DashP" and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
 								IsEvading2 = true
