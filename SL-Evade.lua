@@ -3349,9 +3349,10 @@ local EMenu = Menu("SL-Evade", "["..SLEPatchnew.."-"..SLEPatchold.."][v.:"..SLEv
 local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash") and SUMMONER_1 or (GetCastName(GetMyHero(),SUMMONER_2):lower():find("summonerflash") and SUMMONER_2 or nil))
 local DodgeOnlyDangerous = false
 EMenu:Slider("d","Danger",2,1,5,1)
-EMenu:Slider("ew", "Extra Width", 20, 1, 100, 5)
 EMenu:SubMenu("Spells", "Spells")
 EMenu:SubMenu("Dashes", "EvadeSpells")	
+EMenu:SubMenu("Advanced", "Advanced")
+EMenu.Advanced:Slider("ew", "Extra Width", 20, 0, 100, 5)
 EMenu:SubMenu("Draws", "Draws")
 EMenu.Draws:Boolean("DSPath", "Draw SkillShot Path", true)
 EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Width", true)
@@ -3368,10 +3369,12 @@ EMenu.Keys:KeyBinding("DoD2", "Dodge only Dangerous 2", string.byte("V"))
 DelayAction(function()
 	for _,k in pairs(GetEnemyHeroes()) do
 		if s[GetObjectName(k)] then
+			EMenu.Spells:Menu(GetObjectName(k),GetObjectName(k))
 			for m,p in pairs(s[GetObjectName(k)]) do
-			if (p.spellName == "" and GetCastName(k,m)) or (p.name == "" and GetCastName(k,m)) then p.name = GetCastName(k,m) end
+			if p.name == "" and GetCastName(k,m) then p.name = GetCastName(k,m) end
+			if p.spellName == "" and GetCastName(k,m) then p.spellName = GeTCastName(k,m) end
 			if not p.spellType then p.spellType = "Line" end
-				if p and p.name ~= "" and p.spellName ~= "" and p.spellType and p.Slot then
+				if p.name ~= "" and p.spellName ~= "" and p.spellType and p.Slot then
 				if not EMenu.Spells[GetObjectName(k)] then EMenu.Spells:Menu(GetObjectName(k), GetObjectName(k)) end
 					EMenu.Spells[GetObjectName(k)]:Boolean(p.name,"|"..(str[p.Slot] or "?").."| - "..(p.name or "."), true)
 					EMenu.Spells[GetObjectName(k)]:Boolean("IsD"..p.name,"IsDangerous", p.Dangerous or false)	
@@ -3448,14 +3451,14 @@ OnDraw(function ()
 				DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,3,EMenu.Draws.SQ:Value(),GoS.White)
 			end
 			endPos = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius)
-			endPos2 = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius+EMenu.ew:Value())
+			endPos2 = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius+EMenu.Advanced.ew:Value())
 			offy = offy + 30
 			local sPos = Vector(i.sPos)
  			local ePos = Vector(endPos)
  			local dVec = Vector(ePos - sPos)
  			-- DrawCircle(dVec,50,0,3,GoS.White)
  			sVec = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5)
-			sVec2 = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5+EMenu.ew:Value())
+			sVec2 = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5+EMenu.Advanced.ew:Value())
  		
  			local TopD1 = WorldToScreen(0,sPos+sVec)
  			local TopD2 = WorldToScreen(0,sPos-sVec)
@@ -3481,7 +3484,7 @@ OnDraw(function ()
 			if EMenu.Draws.DSPath:Value() then
 				DrawCircle(i.ePos,i.spell.radius,3,EMenu.Draws.SQ:Value(),ARGB(255,255,255,255))
 				if EMenu.Draws.DSEW:Value() then
-					DrawCircle(i.ePos,i.spell.radius+EMenu.ew:Value(),1.5,EMenu.Draws.SQ:Value(),ARGB(255,102,102,102))
+					DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),1.5,EMenu.Draws.SQ:Value(),ARGB(255,102,102,102))
 				end
 			end
 		end
@@ -3542,9 +3545,9 @@ OnTick(function()
 					-- and not i.safe then
 					if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 						if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
-							i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.ew:Value())
+							i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						else 
-							i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.ew:Value())
+							i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						end
 						--print("register")
 						i.isEvading = true
@@ -3555,7 +3558,7 @@ OnTick(function()
 					end
 				elseif i.sType == "Circular" then
 					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
-						i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.ew:Value())
+						i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						i.isEvading = true
 						Stopp(true)
 					else
@@ -3566,6 +3569,7 @@ OnTick(function()
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
 			   if EMenu.Keys.DD:Value() then return end
 				if i.safe then
+					if not d[GetObjectName(myHero)] then IsEvading2 = false end
 					if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() then 
 						if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2.5 then
 							if d[GetObjectName(myHero)].evadeType == "DashP" and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
@@ -3639,17 +3643,24 @@ OnTick(function()
 							else
 								IsEvading2 = false
 							end
+						else
+							IsEvading2 = false
 						end
+					else
+						IsEvading2 = false
 					end
 					if Flash and Ready(Flash) then
 						if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius and EMenu.Dashes.EnableFlash:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes.FlashDanger:Value() then
+							IsEvading2 = true
 							CastSkillShot(Flash, i.safe)
+						else
+							IsEvading2 = false
 						end
 					end
 					if IsEvading2 ~= true then
 						Stopp(false)
 						MoveToXYZ(i.safe)
-						Stopp(true)
+						Stopp(true)				
 					end
 					if EMenu.Draws.DevOpt:Value() then 
 						print(IsEvading2)
