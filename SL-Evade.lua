@@ -2650,6 +2650,7 @@ local s = {
 	charName = "Viktor",
 	danger = 2,
 	name = "GravitonField",
+	speed = math.huge,
 	radius = 300,
 	range = 625,
 	delay = 1500,
@@ -2658,7 +2659,7 @@ local s = {
 	spellType = "Circular",
 	defaultOff = true,
 	Dangerous = true,
-	killTime = 0.8,
+	killTime = 1,
 	},
 },
 --end Viktor
@@ -3286,6 +3287,15 @@ local d = {
 		castType = "Position",
 	--},
 },
+["Vladimir"] = {
+		dl = 4,
+		name = "Sanguine Pool",
+		range = 350,
+		spellDelay = 50,
+		spellKey = 1,
+		evadeType = "SpellShieldS",
+		castType = "Self",
+},
 ["MasterYi"] = {
 		dl = 3,
 		name = "AlphaStrike",
@@ -3355,23 +3365,31 @@ EMenu.Keys:KeyBinding("DD", "Disable Dodging", string.byte("K"), true)
 EMenu.Keys:KeyBinding("DDraws", "Disable Drawings", string.byte("J"), true)
 EMenu.Keys:KeyBinding("DoD", "Dodge only Dangerous", string.byte(" "))
 EMenu.Keys:KeyBinding("DoD2", "Dodge only Dangerous 2", string.byte("V"))
-DelayAction( function()
-	for _,i in pairs(GetEnemyHeroes()) do
-		if not s[GetObjectName(i)] then return end
-		EMenu.Spells:SubMenu(GetObjectName(i),GetObjectName(i))
-		for _,l in ipairs(s[GetObjectName(i)]) do
-			EMenu.Spells[GetObjectName(i)]:Boolean(l.name,"|"..(str[l.Slot] or "?").."| - "..(l.name or "."), true)
-			EMenu.Spells[GetObjectName(i)]:Boolean("IsD"..l.name,"IsDangerous", l.Dangerous or false)	
-			EMenu.Spells[GetObjectName(i)]:Slider("d"..l.name,str[l.Slot].."- Danger",(l.danger or 1), 1, 5, 1)
-			EMenu.Spells[GetObjectName(i)]:Info("Info"..l.name, "")			
+DelayAction(function()
+	for _,k in pairs(GetEnemyHeroes()) do
+		if s[GetObjectName(k)] then
+			for m,p in pairs(s[GetObjectName(k)]) do
+			if (p.spellName == "" and GetCastName(k,m)) or (p.name == "" and GetCastName(k,m)) then p.name = GetCastName(k,m) end
+			if not p.spellType then p.spellType = "Line" end
+				if p and p.name ~= "" and p.spellName ~= "" and p.spellType and p.Slot then
+				if not EMenu.Spells[GetObjectName(k)] then EMenu.Spells:Menu(GetObjectName(k), GetObjectName(k)) end
+					EMenu.Spells[GetObjectName(k)]:Boolean(p.name,"|"..(str[p.Slot] or "?").."| - "..(p.name or "."), true)
+					EMenu.Spells[GetObjectName(k)]:Boolean("IsD"..p.name,"IsDangerous", p.Dangerous or false)	
+					EMenu.Spells[GetObjectName(k)]:Slider("d"..p.name,str[p.Slot].."- Danger",(p.danger or 1), 1, 5, 1)
+					EMenu.Spells[GetObjectName(k)]:Info("Info"..p.name, "")			
+				end	
+			end
 		end
 	end
-	if not d[GetObjectName(myHero)] then return end	
-	EMenu.Dashes:Boolean(d[GetObjectName(myHero)].name,"|"..(str[d[GetObjectName(myHero)].spellKey] or "?").."| - "..(d[GetObjectName(myHero)].name or "."), true)
-	EMenu.Dashes:Slider("d"..d[GetObjectName(myHero)].name,(str[d[GetObjectName(myHero)].spellKey] or "?").."- Danger",(d[GetObjectName(myHero)].dl or 2), 1, 5, 1)
-	EMenu.Dashes:Info("Info"..d[GetObjectName(myHero)].name,"")
-	EMenu.Dashes:Boolean("EnableFlash", "Flash", true)
-	EMenu.Dashes:Slider("FlashDanger", "Flash - Danger", 5, 1, 5, 1)
+	if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].spellKey then 
+		EMenu.Dashes:Boolean(d[GetObjectName(myHero)].name,"|"..(str[d[GetObjectName(myHero)].spellKey] or "?").."| - "..(d[GetObjectName(myHero)].name or "."), true)
+		EMenu.Dashes:Slider("d"..d[GetObjectName(myHero)].name,(str[d[GetObjectName(myHero)].spellKey] or "?").."- Danger",(d[GetObjectName(myHero)].dl or 2), 1, 5, 1)
+		EMenu.Dashes:Info("Info"..d[GetObjectName(myHero)].name,"")
+	end
+	if Flash then
+		EMenu.Dashes:Boolean("EnableFlash", "Flash", true)
+		EMenu.Dashes:Slider("FlashDanger", "Flash - Danger", 5, 1, 5, 1)
+	end
 end,.001)
 
 OnCreateObj(function (Object)
