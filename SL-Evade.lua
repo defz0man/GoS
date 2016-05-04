@@ -1,6 +1,6 @@
 local AutoUpdate = true
 local SLEvade = "0.01"
-local SLEPatchnew, SLEPatchold = 6.8, 6.7
+local SLEPatchnew, SLEPatchold = 6.9, 6.8
 
 function AutoUpdate(data)
   if not AutoUpdate then return end
