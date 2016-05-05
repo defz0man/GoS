@@ -40,6 +40,7 @@ local s = {
 	Slot = 2,
 	spellName = "AatroxE",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Aatrox
@@ -56,6 +57,7 @@ local s = {
 	Slot = 0,
 	spellName = "AhriOrbofDeception",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Ahri",
@@ -71,6 +73,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Ahri",
@@ -83,6 +86,7 @@ local s = {
 	Slot = 0,
 	spellName = "AhriOrbofDeception2",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Ahri
@@ -135,6 +139,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Amumu
@@ -152,6 +157,7 @@ local s = {
 	spellName = "FlashFrostSpell",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Anivia
@@ -198,6 +204,7 @@ local s = {
 	spellType = "Line",
 	Dangerous = true,
 	collision = true,
+	FoW = true,
 	},
 	{
 	angle = 5,
@@ -229,7 +236,7 @@ local s = {
 	Slot = 0,
 	spellName = "AzirQ",
 	spellType = "Line",
-
+	FoW = true,
 	isSpecial = true,
 	},
 },
@@ -249,6 +256,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Bard",
@@ -284,6 +292,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Blitzcrank",
@@ -315,7 +324,8 @@ local s = {
 	spellName = "BrandQ",
 	spellType = "Line",
 	collision = true,
-	Dangerous = true,	
+	Dangerous = true,
+	FoW = true,	
 	},
 	{
 	charName = "Brand",
@@ -346,6 +356,7 @@ local s = {
 	spellName = "BraumRWrapper",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Braum",
@@ -361,6 +372,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Braum
@@ -376,6 +388,7 @@ local s = {
 	Slot = 0,
 	spellName = "CaitlynPiltoverPeacemaker",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Caitlyn",
@@ -390,6 +403,7 @@ local s = {
 	spellName = "CaitlynEntrapment",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Caitlyn
@@ -484,6 +498,7 @@ local s = {
 	spellName = "MissileBarrage2",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Corki",
@@ -513,6 +528,7 @@ local s = {
 	spellName = "MissileBarrage",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Corki
@@ -548,6 +564,7 @@ local s = {
 	hasEndExplosion = true,
 	secondaryRadius = 195,
 	extraEndTime = 250,
+	FoW = true,
 	},
 },
 --end Diana
@@ -565,6 +582,7 @@ local s = {
 	spellName = "InfectedCleaverMissileCast",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end DrMundo
@@ -582,6 +600,7 @@ local s = {
 	spellName = "DravenRCast",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Draven",
@@ -596,6 +615,7 @@ local s = {
 	spellName = "DravenDoubleShot",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Draven
@@ -612,6 +632,7 @@ local s = {
 	Slot = 0,
 	spellName = "EkkoQ",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Ekko",
@@ -658,6 +679,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Elise
@@ -693,6 +715,7 @@ local s = {
 	extraSpellNames = "ezrealmysticshotwrapper",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Ezreal",
@@ -706,6 +729,7 @@ local s = {
 	spellName = "EzrealTrueshotBarrage",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Ezreal",
@@ -719,6 +743,7 @@ local s = {
 	Slot = 1,
 	spellName = "EzrealEssenceFlux",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Ezreal
@@ -735,6 +760,7 @@ local s = {
 	Slot = 1,
 	spellName = "FioraW",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Fiora
@@ -770,6 +796,7 @@ local s = {
 	useEndPosition = true,
 	extraEndTime = 1000,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Fizz
@@ -785,6 +812,7 @@ local s = {
 	Slot = 2,
 	spellName = "GalioRighteousGust",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Galio",
@@ -827,6 +855,7 @@ local s = {
 	spellName = "GnarBigQ",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Gnar",
@@ -852,6 +881,7 @@ local s = {
 	Slot = 1,
 	spellName = "GnarBigW",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Gnar",
@@ -867,6 +897,7 @@ local s = {
 	spellName = "GnarQ",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Gnar",
@@ -926,6 +957,7 @@ local s = {
 	spellType = "Line",
 	Dangerous = true,
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Gragas",
@@ -958,6 +990,7 @@ local s = {
 	spellName = "GravesQLineSpell",
 	spellType = "Line",
 	HasEndExplosion = true,
+	FoW = true,
 	},
 	{
 	charName = "Graves",
@@ -972,6 +1005,7 @@ local s = {
 	spellName = "GravesChargeShot",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Graves
@@ -989,6 +1023,7 @@ local s = {
 	spellName = "HecarimUlt",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Hecarim
@@ -1022,6 +1057,7 @@ local s = {
 	spellName = "HeimerdingerW",
 	spellType = "Line",
 	defaultOff = true,
+	FoW = true,
 	},
 	{
 	charName = "Heimerdinger",
@@ -1035,6 +1071,7 @@ local s = {
 	spellName = "HeimerdingerTurretEnergyBlast",
 	spellType = "Line",
 	isSpecial = true,
+	FoW = true,
 	},
 	{
 	charName = "Heimerdinger",
@@ -1047,6 +1084,7 @@ local s = {
 	Slot = 0,
 	spellName = "HeimerdingerTurretBigEnergyBlast",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Heimerdinger
@@ -1062,6 +1100,7 @@ local s = {
 	Slot = 0,
 	spellName = "IllaoiQ",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Illaoi",
@@ -1077,6 +1116,7 @@ local s = {
 	spellType = "Line",
 	Dangerous = true,
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Illaoi",
@@ -1107,6 +1147,7 @@ local s = {
 	delay = 0,
 	spellName = "IreliaTranscendentBlades",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Irelia
@@ -1124,6 +1165,7 @@ local s = {
 	spellName = "HowlingGale",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Janna
@@ -1152,6 +1194,7 @@ local s = {
 	spellName = "JarvanIVDragonStrike2",
 	spellType = "Line",
 	useEndPosition = true,
+	FoW = true,
 	},
 	{
 	charName = "JarvanIV",
@@ -1186,6 +1229,7 @@ local s = {
 	collision = true,
 	hasEndExplosion = true,
 	secondaryRadius = 250,
+	FoW = true,
 	},
 	{
 	charName = "Jayce",
@@ -1202,6 +1246,7 @@ local s = {
 	collision = true,
 	hasEndExplosion = true,
 	secondaryRadius = 175,
+	FoW = true,
 	},
 },
 --end Jayce
@@ -1219,6 +1264,7 @@ local s = {
 	spellType = "Line",
 	Dangerous = true,
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Jinx",
@@ -1234,6 +1280,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Jinx
@@ -1252,6 +1299,7 @@ local s = {
 	spellType = "Line",
 	fixedRange = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Jhin",
@@ -1270,6 +1318,7 @@ local s = {
 	extraMissileNames = "JhinRShotMis4",
 	Dangerous = true,
 	collision = true,
+	FoW = true,
 	},
 },
 --end
@@ -1287,6 +1336,7 @@ local s = {
 	spellName = "KalistaMysticShot",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Kalista
@@ -1304,6 +1354,7 @@ local s = {
 	spellName = "KarmaQ",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Karma",
@@ -1318,6 +1369,7 @@ local s = {
 	spellName = "KarmaQMissileMantra",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Karma
@@ -1379,6 +1431,7 @@ local s = {
 	spellName = "KennenShurikenHurlMissile1",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Kennen
@@ -1396,6 +1449,7 @@ local s = {
 	spellName = "KhazixW",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	angle = 22,
@@ -1411,6 +1465,7 @@ local s = {
 	spellName = "KhazixWLong",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Khazix
@@ -1428,6 +1483,7 @@ local s = {
 	spellName = "KogMawQ",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "KogMaw",
@@ -1441,6 +1497,7 @@ local s = {
 	Slot = 2,
 	spellName = "KogMawVoidOoze",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "KogMaw",
@@ -1472,6 +1529,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Leblanc",
@@ -1487,6 +1545,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Leblanc",
@@ -1530,6 +1589,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	--end LeeSin
 },
@@ -1562,6 +1622,7 @@ local s = {
 	spellName = "LeonaZenithBlade",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Leona
@@ -1591,6 +1652,7 @@ local s = {
 	Slot = 0,
 	spellName = "LissandraQ",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Lissandra
@@ -1609,6 +1671,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	HasEndExplosion = true,
+	FoW = true,
 	},
 	{
 	charName = "Lucian",
@@ -1623,6 +1686,7 @@ local s = {
 	Slot = 0,
 	spellName = "LucianQ",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Lucian
@@ -1642,6 +1706,7 @@ local s = {
 	extraSpellNames = "LuluQMissile",
 	spellType = "Line",
 	isSpecial = true,
+	FoW = true,
 	},
 },
 --end Lulu
@@ -1689,6 +1754,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Lux
@@ -1727,6 +1793,7 @@ local s = {
 	Slot = 0,
 	spellName = "MalzaharQ",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Malzahar
@@ -1761,6 +1828,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Morgana
@@ -1792,6 +1860,7 @@ local s = {
 	spellName = "NamiR",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Nami
@@ -1810,6 +1879,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Nautilus
@@ -1828,6 +1898,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Nidalee
@@ -1843,6 +1914,7 @@ local s = {
 	Slot = 0,
 	spellName = "NocturneDuskbringer",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Nocturne
@@ -1858,6 +1930,7 @@ local s = {
 	Slot = 0,
 	spellName = "OlafAxeThrowCast",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Olaf
@@ -1877,6 +1950,7 @@ local s = {
 	spellType = "Line",
 	isSpecial = true,
 	useEndPosition = true,
+	FoW = true,
 	},
 	{
 	charName = "Orianna",
@@ -1935,6 +2009,7 @@ local s = {
 	Slot = 0,
 	spellName = "PoppyQ",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Poppy",
@@ -1948,6 +2023,7 @@ local s = {
 	spellName = "PoppyRSpellInstant",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Poppy",
@@ -1962,6 +2038,7 @@ local s = {
 	missileName = "PoppyRMissile",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end
@@ -1980,6 +2057,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Quinn
@@ -1997,6 +2075,7 @@ local s = {
 	spellName = "ReksaiQBurrowed",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end RekSai
@@ -2016,6 +2095,7 @@ local s = {
 	extraMissileNames = "RengarEFinalMAX",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Rengar
@@ -2035,6 +2115,7 @@ local s = {
 	spellType = "Line",
 	isSpecial = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Riven",
@@ -2066,6 +2147,7 @@ local s = {
 	spellName = "RumbleGrenade",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Rumble
@@ -2083,6 +2165,7 @@ local s = {
 	spellName = "RyzeQ",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Ryze
@@ -2100,6 +2183,7 @@ local s = {
 	spellType = "Line",
 	Dangerous = true,
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Sejuani",
@@ -2114,6 +2198,7 @@ local s = {
 	spellName = "SejuaniGlacialPrisonCast",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Sejuani
@@ -2131,6 +2216,7 @@ local s = {
 	spellName = "ShenE",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Shen
@@ -2145,6 +2231,7 @@ local s = {
 	Slot = 2,
 	spellName = "ShyvanaFireball",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Shyvana",
@@ -2158,6 +2245,7 @@ local s = {
 	spellName = "ShyvanaTransformCast",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Shyvana
@@ -2176,6 +2264,7 @@ local s = {
 	spellType = "Line",
 	isSpecial = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Sion
@@ -2193,6 +2282,7 @@ local s = {
 	spellName = "SivirQ",
 	extraMissileNames = "SivirQMissileReturn",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Sivir
@@ -2209,6 +2299,7 @@ local s = {
 	Slot = 2,
 	spellName = "SkarnerFracture",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Skarner
@@ -2225,6 +2316,7 @@ local s = {
 	spellName = "SonaR",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Sona
@@ -2288,6 +2380,7 @@ local s = {
 	spellName = "SyndraE",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Syndra",
@@ -2332,6 +2425,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end TahmKench
@@ -2350,6 +2444,7 @@ local s = {
 	spellType = "Line",
 	splits = 3,
 	isSpecial = true,
+	FoW = true,
 	},
 },
 --end Talon
@@ -2368,6 +2463,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Thresh",
@@ -2383,6 +2479,7 @@ local s = {
 	spellName = "ThreshE",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Thresh
@@ -2402,6 +2499,7 @@ local s = {
 	spellName = "WildCards",
 	spellType = "Line",
 	isSpecial = true,
+	FoW = true,
 	},
 },
 --end TwistedFate
@@ -2417,6 +2515,7 @@ local s = {
 	Slot = 3,
 	spellName = "TwitchSprayandPrayAttack",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Twitch
@@ -2433,6 +2532,7 @@ local s = {
 	spellName = "UrgotHeatseekingLineMissile",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 	{
 	charName = "Urgot",
@@ -2477,6 +2577,7 @@ local s = {
 	Slot = 0,
 	spellName = "VarusQ",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Varus",
@@ -2492,6 +2593,7 @@ local s = {
 	spellType = "Line",
 	Dangerous = true,
 	collision = true,
+	FoW = true,
 	},
 },
 --end Varus
@@ -2508,6 +2610,7 @@ local s = {
 	spellName = "VeigarBalefulStrike",
 	missileName = "VeigarBalefulStrikeMis",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Veigar",
@@ -2565,6 +2668,7 @@ local s = {
 	Slot = 1,
 	spellName = "VelkozW",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Velkoz",
@@ -2576,6 +2680,7 @@ local s = {
 	Slot = 0,
 	spellName = "VelkozQMissileSplit",
 	spellType = "Line",
+	FoW = true,
 
 	collision = true,
 	},
@@ -2591,6 +2696,7 @@ local s = {
 	spellName = "VelkozQ",
 	spellType = "Line",
 	collision = true,
+	FoW = true,
 	},
 },
 --end Velkoz
@@ -2607,6 +2713,7 @@ local s = {
 	spellType = "Line",
 	Dangerous = true,
 	defaultOff = true,
+	FoW = true,
 	},
 },
 --end Vi
@@ -2624,6 +2731,7 @@ local s = {
 	spellName = "ViktorDeathRay",
 	extraMissileNames = "ViktorEAugMissile",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Viktor",
@@ -2635,7 +2743,8 @@ local s = {
 	range = 800,
 	Slot = 2,
 	spellName = "ViktorDeathRay3",
-	spellType = "Line",                
+	spellType = "Line",  
+	FoW = true,	
 	},
 	{
 	charName = "Viktor",
@@ -2648,6 +2757,7 @@ local s = {
 	Slot = 2,
 	spellName = "ViktorDeathRay2",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Viktor",
@@ -2708,6 +2818,7 @@ local s = {
 	spellName = "XerathArcanopulse2",
 	useEndPosition = true,
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Xerath",
@@ -2738,6 +2849,7 @@ local s = {
 	spellType = "Line",
 	collision = true,
 	Dangerous = true,
+	FoW = true,
 	},
 },
 --end Xerath
@@ -2756,6 +2868,7 @@ local s = {
 	extraMissileNames = "YasuoQ3Mis",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Yasuo",
@@ -2769,6 +2882,7 @@ local s = {
 	Slot = 0,
 	spellName = "YasuoQ2",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Yasuo",
@@ -2782,6 +2896,7 @@ local s = {
 	Slot = 0,
 	spellName = "YasuoQ2",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Yasuo
@@ -2797,8 +2912,8 @@ local s = {
 	delay = 500,
 	Slot = 0,
 	spellName = "ZacQ",
-	extraSpellNames = "YasuoQ2", "YasuoQ2W",
 	spellType = "Line",
+	FoW = true,
 	},
 },
 --end Zac
@@ -2815,6 +2930,7 @@ local s = {
 	Slot = 0,
 	spellName = "ZedQ",
 	spellType = "Line",
+	FoW = true,
 	},
 	{
 	charName = "Zed",
@@ -2924,6 +3040,7 @@ local s = {
 	spellName = "ZyraE",
 	spellType = "Line",
 	Dangerous = true,
+	FoW = true,
 	},
 	{
 	charName = "Zyra",
@@ -3367,8 +3484,9 @@ DelayAction(function()
 				if p.name ~= "" and p.spellName ~= "" and p.spellType and p.Slot then
 				if not EMenu.Spells[GetObjectName(k)] then EMenu.Spells:Menu(GetObjectName(k), GetObjectName(k)) end
 					EMenu.Spells[GetObjectName(k)]:Boolean(p.name,"|"..(str[p.Slot] or "?").."| - "..(p.name or "."), true)
-					EMenu.Spells[GetObjectName(k)]:Boolean("IsD"..p.name,"IsDangerous", p.Dangerous or false)	
-					EMenu.Spells[GetObjectName(k)]:Slider("d"..p.name,str[p.Slot].."- Danger",(p.danger or 1), 1, 5, 1)
+					EMenu.Spells[GetObjectName(k)]:Boolean("IsD"..p.name,"IsDangerous", p.Dangerous or false)
+					EMenu.Spells[GetObjectName(k)]:Boolean("FoW"..p.name,"FoW Dodge", p.FoW or false)				
+					EMenu.Spells[GetObjectName(k)]:Slider("d"..p.name,"Danger",(p.danger or 1), 1, 5, 1)
 					EMenu.Spells[GetObjectName(k)]:Info("Info"..p.name, "")			
 				end	
 			end
@@ -3483,8 +3601,7 @@ OnDraw(function ()
 			local tp232 = WorldToScreen(0,GetOrigin(myHero))
 			local tp233 = WorldToScreen(0,i.safe)
 			
-			if GetDistance(i.Obj)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then i.uDodge = true end
-			if i.uDodge then DrawText("RIP",30,i.Obj.pos2D.x,i.Obj.pos2D.y,GoS.Red) end
+			if i.uDodge == true and i.sType == "Line" then DrawText("RIP",30,i.Obj.pos2D.x,i.Obj.pos2D.y,GoS.Red) end
 			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Blue)
 			-- DrawText("Evading",30,40,0,GoS.Red) 
 		end
@@ -3499,7 +3616,7 @@ OnProcessSpell( function(unit,spellProc)
 	if s[GetObjectName(unit)] then
 		for _,i in pairs(s[GetObjectName(unit)]) do
 			if i.spellType == "Circular" and spellProc.name == i.spellName and EMenu.Spells[i.charName][i.name]:Value() and ((not DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.charName]["d"..i.name]:Value()) or (DodgeOnlyDangerous and EMenu.Spells[i.charName]["IsD"..i.name]:Value())) then
-				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range}
+				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range, uDodge = false}
 				if i.killTime then
 					DelayAction(function() obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
 				end
@@ -3523,6 +3640,15 @@ OnTick(function()
 	local fT = .75
 		for m,p in pairs(GetEnemyHeroes()) do
 			if not s[GetObjectName(p)] then return end
+			if i.safe and i.sType == "Line" then
+				if GetDistance(i.Obj)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then 
+						i.uDodge = true 
+					else
+						i.uDodge = false
+				end
+			elseif i.safe and i.sType == "Circular" then
+				--logic here
+			end
 			for pp,tabl in pairs(s[GetObjectName(p)]) do
 				if i.sType == "Line" then
 					i.sPos = Vector(i.sPos)
@@ -3564,7 +3690,7 @@ OnTick(function()
 				if i.safe then
 					if not d[GetObjectName(myHero)] then IsEvading2 = false end
 					if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() then 
-						if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2.5 then
+						if i.uDodge == true then
 							if d[GetObjectName(myHero)].evadeType == "DashP" and CanUseSpell(myHero, d[GetObjectName(myHero)].spellKey) == READY then
 								IsEvading2 = true
 								CastSkillShot(d[GetObjectName(myHero)].spellKey, i.safe)
@@ -3643,14 +3769,14 @@ OnTick(function()
 						IsEvading2 = false
 					end
 					if Flash and Ready(Flash) then
-						if GetDistance(myHero,i.safe) > myHero.boundingRadius * myHero.boundingRadius and EMenu.Dashes.EnableFlash:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes.FlashDanger:Value() then
+						if i.uDodge == true and EMenu.Dashes.EnableFlash:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes.FlashDanger:Value() then
 							IsEvading2 = true
 							CastSkillShot(Flash, i.safe)
 						else
 							IsEvading2 = false
 						end
 					end
-					if IsEvading2 ~= true then
+					if IsEvading2 ~= true and i.uDodge ~= true then
 						Stopp(false)
 						MoveToXYZ(i.safe)
 						Stopp(true)				
