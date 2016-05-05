@@ -3400,7 +3400,7 @@ OnCreateObj(function (Object)
 						start.y = GetOrigin(Object).y
 						endpos = GetObjectSpellEndPos(Object) 
 						endpos.y = GetOrigin(Object).y
-						obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType, sSpeed = l.speed or math.huge, sDelay = l.delay or 250, sRange = l.range}
+						obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType, sSpeed = l.speed or math.huge, sDelay = l.delay or 250, sRange = l.range, uDodge = false}
 					end
 				end
 			end
@@ -3449,7 +3449,7 @@ OnDraw(function ()
  			-- DrawCircle(dVec,50,0,3,GoS.White)
  			sVec = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5)
 			sVec2 = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5+EMenu.Advanced.ew:Value())
- 		
+
  			local TopD1 = WorldToScreen(0,sPos+sVec)
  			local TopD2 = WorldToScreen(0,sPos-sVec)
  			local BotD1 = WorldToScreen(0,ePos+sVec)
@@ -3482,6 +3482,9 @@ OnDraw(function ()
 		if i.safe and EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() then 
 			local tp232 = WorldToScreen(0,GetOrigin(myHero))
 			local tp233 = WorldToScreen(0,i.safe)
+			
+			if GetDistance(i.Obj)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then i.uDodge = true end
+			if i.uDodge then DrawText("RIP",30,i.Obj.pos2D.x,i.Obj.pos2D.y,GoS.Red) end
 			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Blue)
 			-- DrawText("Evading",30,40,0,GoS.Red) 
 		end
