@@ -3616,7 +3616,7 @@ OnProcessSpell( function(unit,spellProc)
 	if s[GetObjectName(unit)] then
 		for _,i in pairs(s[GetObjectName(unit)]) do
 			if i.spellType == "Circular" and spellProc.name == i.spellName and EMenu.Spells[i.charName][i.name]:Value() and ((not DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.charName]["d"..i.name]:Value()) or (DodgeOnlyDangerous and EMenu.Spells[i.charName]["IsD"..i.name]:Value())) then
-				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range, uDodge = false}
+				obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range, uDodge = false, caster = unit}
 				if i.killTime then
 					DelayAction(function() obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
 				end
@@ -3642,15 +3642,11 @@ OnTick(function()
 			if not s[GetObjectName(p)] then return end
 			if i.safe and i.sType == "Line" then
 				if GetDistance(i.Obj)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then 
-						i.uDodge = true 
-					else
-						i.uDodge = false
+					i.uDodge = true 
 				end
 			elseif i.safe and i.sType == "Circular" then
-				if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
-						i.uDodge = true
-					else
-						i.uDodge = false
+				if GetDistance(i.caster)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then
+					i.uDodge = true
 				end
 			end
 			for pp,tabl in pairs(s[GetObjectName(p)]) do
