@@ -3647,7 +3647,11 @@ OnTick(function()
 						i.uDodge = false
 				end
 			elseif i.safe and i.sType == "Circular" then
-				--logic here
+				if GetDistance(myHero,i.safe) > myHero.boundingRadius * 2 then
+						i.uDodge = true
+					else
+						i.uDodge = false
+				end
 			end
 			for pp,tabl in pairs(s[GetObjectName(p)]) do
 				if i.sType == "Line" then
@@ -3768,13 +3772,11 @@ OnTick(function()
 					else
 						IsEvading2 = false
 					end
-					if Flash and Ready(Flash) then
-						if i.uDodge == true and EMenu.Dashes.EnableFlash:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes.FlashDanger:Value() then
-							IsEvading2 = true
-							CastSkillShot(Flash, i.safe)
-						else
-							IsEvading2 = false
-						end
+					if Flash and Ready(Flash) and i.uDodge == true and EMenu.Dashes.EnableFlash:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes.FlashDanger:Value() then
+						IsEvading2 = true
+						CastSkillShot(Flash, i.safe)
+					else
+						IsEvading2 = false
 					end
 					if IsEvading2 ~= true and i.uDodge ~= true then
 						Stopp(false)
