@@ -1,6 +1,6 @@
 local AutoUpdate = true
 local SLEvade = "0.01"
-local SLEPatchnew, SLEPatchold = 6.9, 6.8
+local SLEPatchnew, SLEPatchold = GetGameVersion():sub(1,3), GetGameVersion():sub(1,3)-.1
 
 function AutoUpdate(data)
   if not AutoUpdate then return end
@@ -3325,7 +3325,6 @@ local d = {
 },
 
 }
-
 
 
 local obj = {}
