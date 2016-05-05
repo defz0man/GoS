@@ -172,6 +172,7 @@ local s = {
 	charName = "Annie",
 	danger = 4,
 	name = "InfernalGuardian",
+	speed = math.huge,
 	radius = 290,
 	range = 600,
 	delay = 250,
@@ -179,6 +180,7 @@ local s = {
 	spellName = "InfernalGuardian",
 	spellType = "Circular",
 	Dangerous = true,
+	killTime = 0.3,
 	},
 },
 --end Annie
