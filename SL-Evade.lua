@@ -2354,6 +2354,7 @@ local s = {
 	charName = "Swain",
 	danger = 3,
 	name = "Nevermove",
+	speed = math.huge,
 	radius = 250,
 	range = 900,
 	delay = 1100,
@@ -2361,7 +2362,7 @@ local s = {
 	spellName = "SwainShadowGrasp",
 	spellType = "Circular",
 	Dangerous = true,
-	killTime = 0.3,
+	killTime = 0.5,
 	},
 },
 --end Swain
