@@ -3597,13 +3597,17 @@ OnDraw(function ()
 			end
 		end
 		-- if i.jp then DrawCircle(i.jp,i.spell.radius*.5,0,3,GoS.Red) end			
-		if i.safe and EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() then 
+		if i.safe and EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.uDodge ~= true then 
 			local tp232 = WorldToScreen(0,GetOrigin(myHero))
 			local tp233 = WorldToScreen(0,i.safe)
 			
-			if i.uDodge == true and i.sType == "Line" then DrawText("RIP",30,i.Obj.pos2D.x,i.Obj.pos2D.y,GoS.Red) end
+			-- if i.uDodge == true and i.sType == "Line" then DrawText("RIP",30,i.Obj.pos2D.x,i.Obj.pos2D.y,GoS.Red) end
 			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Blue)
-			-- DrawText("Evading",30,40,0,GoS.Red) 
+		elseif i.safe and EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.uDodge == true and not Ready(d[GetObjectName(myHero)].spellKey) then 
+			local tp232 = WorldToScreen(0,GetOrigin(myHero))
+			local tp233 = WorldToScreen(0,i.safe)
+			
+			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Red)
 		end
 	end
 end)
@@ -3642,11 +3646,15 @@ OnTick(function()
 			if not s[GetObjectName(p)] then return end
 			if i.safe and i.sType == "Line" then
 				if GetDistance(i.Obj)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then 
-					i.uDodge = true 
+						i.uDodge = true 
+					else
+						i.uDodge = false
 				end
 			elseif i.safe and i.sType == "Circular" then
 				if GetDistance(i.caster)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then
-					i.uDodge = true
+						i.uDodge = true 
+					else
+						i.uDodge = false
 				end
 			end
 			for pp,tabl in pairs(s[GetObjectName(p)]) do
