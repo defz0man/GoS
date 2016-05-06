@@ -3448,6 +3448,7 @@ local d = {
 },
 
 }
+require 'MapPositionGOS'
 
 
 local obj = {}
@@ -3456,6 +3457,8 @@ local IsEvading2 = false
 local EMenu = Menu("SL-Evade", "["..SLEPatchnew.."-"..SLEPatchold.."][v.:"..SLEvade.."] SL-Evade")
 local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash") and SUMMONER_1 or (GetCastName(GetMyHero(),SUMMONER_2):lower():find("summonerflash") and SUMMONER_2 or nil))
 local DodgeOnlyDangerous = false
+local patha = nil
+local pathb = nil
 EMenu:Slider("d","Danger",2,1,5,1)
 EMenu:SubMenu("Spells", "Spells")
 EMenu:SubMenu("Dashes", "EvadeSpells")	
@@ -3671,9 +3674,14 @@ OnTick(function()
 					-- and not i.safe then
 					if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 						if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
-							i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-						else 
-							i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							if not MapPosition:inWall(patha) then
+									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								else 
+									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							end
+						else
+							patha = nil
 						end
 						--print("register")
 						i.isEvading = true
@@ -3684,10 +3692,16 @@ OnTick(function()
 					end
 				elseif i.sType == "Circular" then
 					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
-						i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						if not MapPosition:inWall(pathb) then
+								i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							else
+								i.safe = myHero + Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						end
 						i.isEvading = true
 						Stopp(true)
 					else
+						pathb = nil
 						i.safe = nil
 						i.isEvading = false
 					end
