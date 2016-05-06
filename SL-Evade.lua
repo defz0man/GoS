@@ -3597,18 +3597,16 @@ OnDraw(function ()
 				end
 			end
 		end
-		-- if i.jp then DrawCircle(i.jp,i.spell.radius*.5,0,3,GoS.Red) end			
-		if i.safe and EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.uDodge ~= true then 
-			local tp232 = WorldToScreen(0,GetOrigin(myHero))
-			local tp233 = WorldToScreen(0,i.safe)
-			
-			-- if i.uDodge == true and i.sType == "Line" then DrawText("RIP",30,i.Obj.pos2D.x,i.Obj.pos2D.y,GoS.Red) end
-			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Blue)
-		elseif i.safe and EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.uDodge == true and not Ready(d[GetObjectName(myHero)].spellKey) then 
-			local tp232 = WorldToScreen(0,GetOrigin(myHero))
-			local tp233 = WorldToScreen(0,i.safe)
-			
-			DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Red)
+		if EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.safe then	
+			if i.uDodge then 
+				local tp232 = WorldToScreen(0,GetOrigin(myHero))
+				local tp233 = WorldToScreen(0,i.safe)
+				DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Red)
+			else
+				local tp234 = WorldToScreen(0,GetOrigin(myHero))
+				local tp235 = WorldToScreen(0,i.safe)		
+				DrawLine(tp234.x,tp234.y,tp235.x,tp235.y,3,GoS.Blue)
+			end
 		end
 	end
 end)
