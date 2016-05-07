@@ -3678,15 +3678,14 @@ OnTick(function()
 							if not MapPosition:inWall(patha) then
 									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								else 
-									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+									i.safe = jp + i.ePos + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 							end
-						else
-							patha = nil
 						end
 						--print("register")
 						i.isEvading = true
 						Stopp(true)
 					else
+						patha = nil
 						i.safe = nil
 						i.isEvading = false
 					end
