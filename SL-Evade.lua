@@ -3620,17 +3620,17 @@ OnDraw(function ()
 				DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
 				DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
 				if EMenu.Draws.DSEW:Value() then
-					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(255,102,102,102))
-					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(255,102,102,102))
-					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(255,102,102,102))
-					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(255,102,102,102))
+					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(175,255,255,255))
+					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(175,255,255,255))
+					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
+					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
 				end
 			end
 		elseif i.sType == "Circular" and not EMenu.Keys.DDraws:Value() then
 			if EMenu.Draws.DSPath:Value() then
 				DrawCircle(i.ePos,i.spell.radius,3,EMenu.Draws.SQ:Value(),ARGB(255,255,255,255))
 				if EMenu.Draws.DSEW:Value() then
-					DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),1.5,EMenu.Draws.SQ:Value(),ARGB(255,102,102,102))
+					DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),1.5,EMenu.Draws.SQ:Value(),ARGB(175,255,255,255))
 				end
 			end
 		end
