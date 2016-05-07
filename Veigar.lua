@@ -85,7 +85,7 @@ function KS()
 			end
 		end	
 		if VMenu.m.D:Value() and Ready(3) and ValidTarget(unit,1000) then
-			RDmg=CalcDamage(myHero, unit, 0, (125*GetCastLevel(myHero,_R) + 125 + (GetBonusAP(myHero) + 0.8*(GetBonusAP(unit)))))
+			RDmg = CalcDamage(myHero, unit, 0, (75*GetCastLevel(myHero,_R) + 100)*math.max((100-GetPercentHP(unit))*1.5,200)*.01)
 			if RDmg>=GetCurrentHP(unit) then
 				RDmg=GetCurrentHP(unit)
 			end
