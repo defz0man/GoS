@@ -1,5 +1,7 @@
 if myHero.charName ~= "Syndra" then return end
 
+local ver = 2
+
 GetWebResultAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/v/Syndra.version", function()
     if tonumber(data) > ver then
 		DownloadFileAsync("https://raw.githubusercontent.com/LoggeL/GoS/master/Syndra.lua", SCRIPT_PATH .. "SyndraForPH.lua", function() print("Updated! Reload please!") return	end)
