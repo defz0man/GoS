@@ -3669,7 +3669,7 @@ OnProcessSpell( function(unit,spellProc)
 end)
 
 OnTick(function()
-	Stopp(false)
+	DisableAll(false)
 	if EMenu.Keys.DoD:Value() or EMenu.Keys.DoD2:Value() then
 			DodgeOnlyDangerous = true
 		else
@@ -3717,7 +3717,7 @@ OnTick(function()
 						end
 						--print("register")
 						i.isEvading = true
-						Stopp(true)
+						DisableAll(true)
 					else
 						patha = nil
 						i.safe = nil
@@ -3732,7 +3732,7 @@ OnTick(function()
 								i.safe = myHero + Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						end
 						i.isEvading = true
-						Stopp(true)
+						DisableAll(true)
 					else
 						pathb = nil
 						i.safe = nil
@@ -3742,6 +3742,8 @@ OnTick(function()
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
 			   if EMenu.Keys.DD:Value() then return end
 				if i.safe then
+					DisableAll(true)
+					MoveToXYZ(i.safe)
 					if not d[GetObjectName(myHero)] then IsEvading2 = false end
 					if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() then 
 						if i.uDodge == true then
@@ -3827,22 +3829,55 @@ OnTick(function()
 						CastSkillShot(Flash, i.safe)
 					else
 						IsEvading2 = false
-					end
-					if IsEvading2 ~= true and i.uDodge ~= true then
-						Stopp(false)
-						MoveToXYZ(i.safe)
-						Stopp(true)				
-					end
+					end			
 					if EMenu.Draws.DevOpt:Value() then 
 						print(IsEvading2)
 					end
 				else
-					Stopp(false)
+					DisableAll(false)
 				end
 			end
 		end
 	end
 end)
+
+function DisableAll(boolean)
+	if boolean then
+		if _G.IOW then
+			IOW.movementEnabled = false
+			IOW.attacksEnabled = false
+		end			
+		if _G.PW then
+			PW.movementEnabled = false
+			PW.attacksEnabled = false
+		end
+		if _G.DAC_Loaded then
+			DAC:MovementEnabled(false)
+			DAC:AttacksEnabled(false)
+		end
+		if _G.GoSWalkLoaded then
+			_G.GoSWalk:EnableMovement(false)
+			_G.GoSWalk:EnableAttack(false)
+		end
+	else
+		if _G.IOW then
+			IOW.movementEnabled = true
+			IOW.attacksEnabled = true
+		end	
+		if _G.PW then
+			PW.movementEnabled = true
+			PW.attacksEnabled = true
+		end
+		if _G.DAC_Loaded then
+			DAC:MovementEnabled(true)
+			DAC:AttacksEnabled(true)
+		end
+		if _G.GoSWalkLoaded then
+			_G.GoSWalk:EnableMovement(true)
+			_G.GoSWalk:EnableAttack(true)
+		end
+	end
+end
 
 
 local t = {_G.MoveToXYZ, _G.AttackUnit, _G.HoldPosition}
