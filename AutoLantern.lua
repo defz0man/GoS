@@ -1,4 +1,3 @@
-require('Inspired')
 local tr = false
 for _,i in pairs(GetAllyHeroes()) do
 	if GetObjectName(i)=="Thresh" then
