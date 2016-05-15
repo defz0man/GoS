@@ -3859,6 +3859,10 @@ function DisableAll(boolean)
 			_G.GoSWalk:EnableMovement(false)
 			_G.GoSWalk:EnableAttack(false)
 		end
+                if _G.AutoCarry_Loaded then
+			DACR.movementEnabled = false
+			DACR.attacksEnabled = false
+                end
 	else
 		if _G.IOW then
 			IOW.movementEnabled = true
@@ -3876,6 +3880,10 @@ function DisableAll(boolean)
 			_G.GoSWalk:EnableMovement(true)
 			_G.GoSWalk:EnableAttack(true)
 		end
+                if _G.AutoCarry_Loaded then
+			DACR.movementEnabled = true
+			DACR.attacksEnabled = true
+                end
 	end
 end
 
