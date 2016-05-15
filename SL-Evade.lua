@@ -2659,7 +2659,7 @@ local s = {
 	spellName = "VeigarDarkMatter",
 	spellType = "Circular",
 	killName = "VeigarDarkMatter",
-	killTime = 1.2,
+	killTime = 0.5,
 	},
 	{
 	charName = "Veigar",
@@ -3676,8 +3676,11 @@ OnTick(function()
 			DodgeOnlyDangerous = false
 	end
 	for _,i in pairs(obj) do
-	local oT = i.sDelay + GetDistance(myHero,i.sPos) / i.sSpeed
-	local fT = .75
+	  if i.sType == "Line" and not i.Obj then
+		  obj[_] = nil
+	  end
+	   local oT = i.sDelay + GetDistance(myHero,i.sPos) / i.sSpeed
+	   local fT = .75
 		for m,p in pairs(GetEnemyHeroes()) do
 			if not s[GetObjectName(p)] then return end
 			if i.safe and i.sType == "Line" then
@@ -3712,7 +3715,7 @@ OnTick(function()
 							if not MapPosition:inWall(patha) then
 									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								else 
-									i.safe = jp + i.ePos + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+									i.safe = jp + Vector(jp - i.safe) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
 							end
 						end
 						--print("register")
@@ -3859,10 +3862,10 @@ function DisableAll(boolean)
 			_G.GoSWalk:EnableMovement(false)
 			_G.GoSWalk:EnableAttack(false)
 		end
-                if _G.AutoCarry_Loaded then
+		if _G.AutoCarry_Loaded then
 			DACR.movementEnabled = false
 			DACR.attacksEnabled = false
-                end
+		end
 	else
 		if _G.IOW then
 			IOW.movementEnabled = true
@@ -3880,10 +3883,10 @@ function DisableAll(boolean)
 			_G.GoSWalk:EnableMovement(true)
 			_G.GoSWalk:EnableAttack(true)
 		end
-                if _G.AutoCarry_Loaded then
+		if _G.AutoCarry_Loaded then
 			DACR.movementEnabled = true
 			DACR.attacksEnabled = true
-                end
+		end
 	end
 end
 
