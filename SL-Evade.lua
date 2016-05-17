@@ -1028,6 +1028,21 @@ local s = {
 	},
 	{
 	charName = "Graves",
+	danger = 2,
+	missileName = "GravesSmokeGrenadeBoom",
+	name = "Smoke Screen",
+	speed = math.huge,
+	radius = 250,
+	range = 1000,
+	delay = 250,
+	Slot = 1,
+	spellName = "GravesSmokeGrenadeBoom",
+	spellType = "Circular",
+	Dangerous = false,
+	killTime = 3,
+	},
+	{
+	charName = "Graves",
 	danger = 3,
 	missileName = "GravesChargeShotShot",
 	name = "Collateral Damage",
@@ -3669,7 +3684,7 @@ OnProcessSpell( function(unit,spellProc)
 end)
 
 OnTick(function()
-	DisableAll(false)
+	--DisableAll(false)
 	if EMenu.Keys.DoD:Value() or EMenu.Keys.DoD2:Value() then
 			DodgeOnlyDangerous = true
 		else
@@ -3720,7 +3735,7 @@ OnTick(function()
 						end
 						--print("register")
 						i.isEvading = true
-						DisableAll(true)
+						--DisableAll(true)
 					else
 						patha = nil
 						i.safe = nil
@@ -3735,7 +3750,7 @@ OnTick(function()
 								i.safe = myHero + Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						end
 						i.isEvading = true
-						DisableAll(true)
+						--DisableAll(true)
 					else
 						pathb = nil
 						i.safe = nil
@@ -3745,7 +3760,7 @@ OnTick(function()
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
 			   if EMenu.Keys.DD:Value() then return end
 				if i.safe then
-					DisableAll(true)
+					BlockInput(true)
 					MoveToXYZ(i.safe)
 					if not d[GetObjectName(myHero)] then IsEvading2 = false end
 					if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() then 
@@ -3837,7 +3852,7 @@ OnTick(function()
 						print(IsEvading2)
 					end
 				else
-					DisableAll(false)
+					BlockInput(false)
 				end
 			end
 		end
