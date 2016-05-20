@@ -63,13 +63,13 @@ OnDraw(function()
 end)
 
 OnCreateObj(function(obj)
-	if (EpicJgl[obj.charName] and SMenu.M[obj.charName]) or (BigJgl[obj.charName] and SMenu.B[obj.charName]) or obj.charName:find("SRU_Dragon") then
+	if (EpicJgl[obj.charName] and SMenu.M[obj.charName]) or (BigJgl[obj.charName] and SMenu.B[obj.charName]) or (obj.charName:lower():find("dragon") and SMenu.M["SRU_Dragon"]:Value()) then
 		s1[obj.charName] = obj
 	end
 end)
 
 OnObjectLoad(function(obj)
-	if (EpicJgl[obj.charName] and SMenu.M[obj.charName]) or (BigJgl[obj.charName] and SMenu.B[obj.charName]) or obj.charName:find("SRU_Dragon") then
+	if (EpicJgl[obj.charName] and SMenu.M[obj.charName]) or (BigJgl[obj.charName] and SMenu.B[obj.charName]) or (obj.charName:lower():find("dragon") and SMenu.M["SRU_Dragon"]:Value()) then
 		s1[obj.charName] = obj
 	end
 end)
