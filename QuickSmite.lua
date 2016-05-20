@@ -33,7 +33,7 @@ OnTick(function()
 		end
 	end
 	for _,i in pairs(s1) do
-		if i.valid and i.distance < 1000 and ((SMenu.B[_] and SMenu.B[_] :Value()) or (SMenu.M[_] and SMenu.M[_] :Value())) then
+		if i.valid and i.distance < 1000 and ((SMenu.B[_] and SMenu.B[_] :Value()) or (SMenu.M[_] and SMenu.M[_]:Value()) or (_:find("Dragon") and SMenu.M["SRU_Dragon"])) then
 			s2[_] = i
 		else
 			s2[_] = nil
