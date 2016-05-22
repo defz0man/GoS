@@ -1,6 +1,11 @@
 local AutoUpdate = true
 local SLEvade = "0.01"
-local SLEPatchnew, SLEPatchold = GetGameVersion():sub(1,3), GetGameVersion():sub(1,3)-.1
+local SLEPatchnew = nil
+if GetGameVersion():sub(3,4) >= "10" then
+		SLEPatchnew = GetGameVersion():sub(1,4)
+	else
+		SLEPatchnew = GetGameVersion():sub(1,3)
+end
 
 function AutoUpdate(data)
   if not AutoUpdate then return end
@@ -3503,7 +3508,7 @@ require 'MapPositionGOS'
 local obj = {}
 local str = {[-1]="P",[0]="Q",[1]="W",[2]="E",[3]="R"}
 local IsEvading2 = false
-local EMenu = Menu("SL-Evade", "["..SLEPatchnew.."-"..SLEPatchold.."][v.:"..SLEvade.."] SL-Evade")
+local EMenu = Menu("SL-Evade", "["..SLEPatchnew.."][v.:"..SLEvade.."] SL-Evade")
 local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash") and SUMMONER_1 or (GetCastName(GetMyHero(),SUMMONER_2):lower():find("summonerflash") and SUMMONER_2 or nil))
 local DodgeOnlyDangerous = false
 local patha = nil
