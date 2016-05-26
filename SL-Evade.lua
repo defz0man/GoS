@@ -3654,6 +3654,7 @@ OnDraw(function ()
 				end
 			end
 		end
+		--if i.jp then DrawCircle(i.jp,50,1,20,GoS.Red) end
 		if EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.safe then	
 			if i.uDodge then 
 				local tp232 = WorldToScreen(0,GetOrigin(myHero))
@@ -3723,11 +3724,7 @@ OnTick(function()
 					S1 = GetOrigin(myHero)+(Vector(i.sPos)-Vector(i.ePos)):perpendicular()
 					S2 = GetOrigin(myHero)
 					jp = Vector(VectorIntersection(i.sPos,i.ePos,S1,S2).x,i.ePos.y,VectorIntersection(i.sPos,i.ePos,S1,S2).y)
-					if GetDistance(myHero,GetOrigin(i.Obj)) < i.spell.radius + i.sSpeed + i.sDelay + myHero.boundingRadius then 
-						i.jp = jp
-					else
-						i.jp = nil
-					end
+					i.jp = jp
 					-- and not i.safe then
 					if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 						if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
@@ -3735,7 +3732,7 @@ OnTick(function()
 							if not MapPosition:inWall(patha) then
 									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								else 
-									i.safe = jp + Vector(jp - i.safe) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
+									i.safe = jp + Vector(jp - patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
 							end
 						end
 						--print("register")
