@@ -3523,7 +3523,7 @@ EMenu.Advanced:Slider("ew", "Extra Spell Width", 20, 0, 100, 5)
 EMenu.Advanced:Boolean("rep", "Recalc Evade Pos", true)
 EMenu:SubMenu("Draws", "Draws")
 EMenu.Draws:Boolean("DSPath", "Draw SkillShot Path", true)
-EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Spell Width", true)
+EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Width", true)
 EMenu.Draws:Boolean("DSPos", "Draw SkillShot Position", true)
 EMenu.Draws:Boolean("DEPos", "Draw Evade Position", true)
 EMenu.Draws:Boolean("DevOpt", "Draw for Devs", false)
@@ -3657,7 +3657,7 @@ OnDraw(function ()
 				end
 			end
 		end
-		if i.jp then DrawCircle(i.jp,50,1,20,GoS.Red) end
+		if EMenu.Draws.DevOpt:Value() then if i.jp then DrawCircle(i.jp,50,1,20,GoS.Red) end end
 		if EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.safe then	
 			if i.uDodge then 
 				local tp232 = WorldToScreen(0,GetOrigin(myHero))
@@ -3693,7 +3693,6 @@ OnProcessSpell( function(unit,spellProc)
 end)
 
 OnTick(function()
-	--DisableAll(false)
 	if EMenu.Keys.DoD:Value() or EMenu.Keys.DoD2:Value() then
 			DodgeOnlyDangerous = true
 		else
@@ -3745,7 +3744,6 @@ OnTick(function()
 						end
 						--print("register")
 						i.isEvading = true
-						--DisableAll(true)
 					else
 						wda = false
 						patha = nil
@@ -3762,7 +3760,6 @@ OnTick(function()
 								i.safe = i.ePos + Vector(pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						end
 						i.isEvading = true
-						--DisableAll(true)
 					else
 						wda = false
 						pathb = nil
@@ -3774,8 +3771,10 @@ OnTick(function()
 			   if EMenu.Keys.DD:Value() then return end
 				if i.safe then
 					if wda == true then 
+						DisableHoldPosition(true)
 						BlockInput(true) 
 					else 
+						DisableHoldPosition(false)
 						BlockInput(false) 
 					end
 					if EMenu.Advanced.rep:Value() == true then
@@ -3874,70 +3873,17 @@ OnTick(function()
 					if EMenu.Draws.DevOpt:Value() then 
 						print(IsEvading2)
 					end
-				else
-					BlockInput(false)
 				end
 			end
 		end
 	end
 end)
 
-function DisableAll(boolean)
+local t = {_G.HoldPosition}
+function DisableHoldPosition(boolean)
 	if boolean then
-		if _G.IOW then
-			IOW.movementEnabled = false
-			IOW.attacksEnabled = false
-		end			
-		if _G.PW then
-			PW.movementEnabled = false
-			PW.attacksEnabled = false
-		end
-		if _G.DAC_Loaded then
-			DAC:MovementEnabled(false)
-			DAC:AttacksEnabled(false)
-		end
-		if _G.GoSWalkLoaded then
-			_G.GoSWalk:EnableMovement(false)
-			_G.GoSWalk:EnableAttack(false)
-		end
-		if _G.AutoCarry_Loaded then
-			DACR.movementEnabled = false
-			DACR.attacksEnabled = false
-		end
+		_G.HoldPosition = function() end
 	else
-		if _G.IOW then
-			IOW.movementEnabled = true
-			IOW.attacksEnabled = true
-		end	
-		if _G.PW then
-			PW.movementEnabled = true
-			PW.attacksEnabled = true
-		end
-		if _G.DAC_Loaded then
-			DAC:MovementEnabled(true)
-			DAC:AttacksEnabled(true)
-		end
-		if _G.GoSWalkLoaded then
-			_G.GoSWalk:EnableMovement(true)
-			_G.GoSWalk:EnableAttack(true)
-		end
-		if _G.AutoCarry_Loaded then
-			DACR.movementEnabled = true
-			DACR.attacksEnabled = true
-		end
-	end
-end
-
-
-local t = {_G.MoveToXYZ, _G.AttackUnit, _G.HoldPosition}
-function Stopp(state)
-	if state then 
-		_G.MoveToXYZ, _G.AttackUnit, _G.HoldPosition = function() end, function() end,function() end
-		BlockF7OrbWalk(true)
-		BlockF7Dodge(true)
-	else
-		_G.MoveToXYZ, _G.AttackUnit, _G.HoldPosition = t[1], t[2], t[3]
-		BlockF7OrbWalk(false)
-		BlockF7Dodge(false)
+		_G.HoldPosition = t[1]
 	end
 end
