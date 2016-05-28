@@ -2526,10 +2526,9 @@ local s = {
 	missileName = "ThreshEMissile1",
 	name = "ThreshE",
 	speed = 2000,
-	radius = 110,
+	radius = 250,
 	range = 1075,
 	delay = 0,
-	defaultOff = true,
 	Slot = 2,
 	spellName = "ThreshE",
 	spellType = "Line",
@@ -3515,14 +3514,16 @@ local Flash = (GetCastName(GetMyHero(),SUMMONER_1):lower():find("summonerflash")
 local DodgeOnlyDangerous = false
 local patha = nil
 local pathb = nil
+local wda = false
 EMenu:Slider("d","Danger",2,1,5,1)
 EMenu:SubMenu("Spells", "Spells")
 EMenu:SubMenu("Dashes", "EvadeSpells")	
 EMenu:SubMenu("Advanced", "Advanced")
-EMenu.Advanced:Slider("ew", "Extra Width", 20, 0, 100, 5)
+EMenu.Advanced:Slider("ew", "Extra Spell Width", 20, 0, 100, 5)
+EMenu.Advanced:Boolean("rep", "Recalc Evade Pos", true)
 EMenu:SubMenu("Draws", "Draws")
 EMenu.Draws:Boolean("DSPath", "Draw SkillShot Path", true)
-EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Width", true)
+EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Spell Width", true)
 EMenu.Draws:Boolean("DSPos", "Draw SkillShot Position", true)
 EMenu.Draws:Boolean("DEPos", "Draw Evade Position", true)
 EMenu.Draws:Boolean("DevOpt", "Draw for Devs", false)
@@ -3656,7 +3657,7 @@ OnDraw(function ()
 				end
 			end
 		end
-		--if i.jp then DrawCircle(i.jp,50,1,20,GoS.Red) end
+		if i.jp then DrawCircle(i.jp,50,1,20,GoS.Red) end
 		if EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.safe then	
 			if i.uDodge then 
 				local tp232 = WorldToScreen(0,GetOrigin(myHero))
@@ -3713,7 +3714,7 @@ OnTick(function()
 						i.uDodge = false
 				end
 			elseif i.safe and i.sType == "Circular" then
-				if GetDistance(i.caster)/i.sSpeed + i.sDelay*.001 < GetDistance(i.safe)/myHero.ms then
+				if GetDistance(i.caster)/i.sSpeed + ((i.spell.killTime or 0)+i.sDelay)*.001 < GetDistance(i.safe)/myHero.ms then
 						i.uDodge = true 
 					else
 						i.uDodge = false
@@ -3726,10 +3727,15 @@ OnTick(function()
 					S1 = GetOrigin(myHero)+(Vector(i.sPos)-Vector(i.ePos)):perpendicular()
 					S2 = GetOrigin(myHero)
 					jp = Vector(VectorIntersection(i.sPos,i.ePos,S1,S2).x,i.ePos.y,VectorIntersection(i.sPos,i.ePos,S1,S2).y)
-					i.jp = jp
+					if GetDistance(i.sPos) > GetDistance(i.ePos) then
+						i.jp = jp
+					else
+						i.jp = nil
+					end
 					-- and not i.safe then
 					if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 						if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
+							wda = true
 							patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 							if not MapPosition:inWall(patha) then
 									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
@@ -3741,21 +3747,24 @@ OnTick(function()
 						i.isEvading = true
 						--DisableAll(true)
 					else
+						wda = false
 						patha = nil
 						i.safe = nil
 						i.isEvading = false
 					end
 				elseif i.sType == "Circular" then
 					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
+						wda = true
 						pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						if not MapPosition:inWall(pathb) then
 								i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 							else
-								i.safe = myHero + Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								i.safe = i.ePos + Vector(pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						end
 						i.isEvading = true
 						--DisableAll(true)
 					else
+						wda = false
 						pathb = nil
 						i.safe = nil
 						i.isEvading = false
@@ -3764,8 +3773,18 @@ OnTick(function()
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
 			   if EMenu.Keys.DD:Value() then return end
 				if i.safe then
-					BlockInput(true)
-					MoveToXYZ(i.safe)
+					if wda == true then 
+						BlockInput(true) 
+					else 
+						BlockInput(false) 
+					end
+					if EMenu.Advanced.rep:Value() == true then
+						if wda == true then
+							MoveToXYZ(i.safe)
+						end
+					else
+						MoveToXYZ(i.safe)
+					end
 					if not d[GetObjectName(myHero)] then IsEvading2 = false end
 					if d[GetObjectName(myHero)] and d[GetObjectName(myHero)].evadeType and d[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..d[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[d[GetObjectName(myHero)].name]:Value() then 
 						if i.uDodge == true then
