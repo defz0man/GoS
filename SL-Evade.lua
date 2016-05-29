@@ -3515,6 +3515,8 @@ local DodgeOnlyDangerous = false
 local patha = nil
 local pathb = nil
 local wda = false
+local wda2 = false
+local asd = false
 EMenu:Slider("d","Danger",2,1,5,1)
 EMenu:SubMenu("Spells", "Spells")
 EMenu:SubMenu("Dashes", "EvadeSpells")	
@@ -3732,55 +3734,104 @@ OnTick(function()
 						i.jp = nil
 					end
 					-- and not i.safe then
-					if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
-						if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
-							wda = true
-							patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-							if not MapPosition:inWall(patha) then
-									i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-								else 
-									i.safe = jp + Vector(jp - patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
+					if EMenu.Advanced.rep:Value() == false then
+						if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
+							if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
+								asd = true
+								if not wda == true then
+									wda = true
+									patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+									if not MapPosition:inWall(patha) then
+											i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+										else 
+											i.safe = jp + Vector(jp - patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
+									end
+								end
 							end
+							--print("register")
+							i.isEvading = true
+						else
+							asd = false
+							wda = false
+							patha = nil
+							i.safe = nil
+							i.isEvading = false
 						end
-						--print("register")
-						i.isEvading = true
 					else
-						wda = false
-						patha = nil
-						i.safe = nil
-						i.isEvading = false
+						if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
+							if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
+								asd = true
+								wda = false
+								patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								if not MapPosition:inWall(patha) then
+										i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+									else 
+										i.safe = jp + Vector(jp - patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
+								end
+							end
+							--print("register")
+							i.isEvading = true
+						else
+							asd = false
+							wda = false
+							patha = nil
+							i.safe = nil
+							i.isEvading = false
+						end
 					end
 				elseif i.sType == "Circular" then
-					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
-						wda = true
-						pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-						if not MapPosition:inWall(pathb) then
-								i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-							else
-								i.safe = i.ePos + Vector(pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+					if EMenu.Advanced.rep:Value() == false then
+						if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
+							asd = true
+							if not wda2 == true then
+								wda2 = true
+								pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								if not MapPosition:inWall(pathb) then
+										i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+									else
+										i.safe = i.ePos + Vector(pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								end
+								i.isEvading = true
+							end
+						else
+							asd = false
+							wda2 = false
+							pathb = nil
+							i.safe = nil
+							i.isEvading = false
 						end
-						i.isEvading = true
 					else
-						wda = false
-						pathb = nil
-						i.safe = nil
-						i.isEvading = false
+						if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
+							asd = true
+							wda2 = false
+							pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							if not MapPosition:inWall(pathb) then
+									i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								else
+									i.safe = i.ePos + Vector(pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							end
+							i.isEvading = true
+						else
+							asd = false
+							wda2 = false
+							pathb = nil
+							i.safe = nil
+							i.isEvading = false
+						end
 					end
 				end
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
 			   if EMenu.Keys.DD:Value() then return end
 				if i.safe then
-					if wda == true then 
+					if asd == true then 
 						DisableHoldPosition(true)
 						BlockInput(true) 
 					else 
 						DisableHoldPosition(false)
 						BlockInput(false) 
 					end
-					if EMenu.Advanced.rep:Value() == true then
-						if wda == true then
-							MoveToXYZ(i.safe)
-						end
+					if wda == true or wda2 == true then
+						MoveToXYZ(i.safe)
 					else
 						MoveToXYZ(i.safe)
 					end
@@ -3873,6 +3924,9 @@ OnTick(function()
 					if EMenu.Draws.DevOpt:Value() then 
 						print(IsEvading2)
 					end
+				else
+					DisableHoldPosition(false)
+					BlockInput(false)
 				end
 			end
 		end
