@@ -37,6 +37,9 @@ function SLEvade:__init()
 	self.wda = false
 	self.wda2 = false
 	self.asd = false
+	self.D = { --Dash items
+	[3152] = {Name = "Hextech Protobelt", State = false}
+	}
 	self.SI = {	--Stasis
 	[3157] = {Name = "Hourglass", State = false},
 	[3090] = {Name = "Wooglets", State = false},
@@ -3726,6 +3729,18 @@ function SLEvade:Dodge()
 			c.State = false
 		end
 	end
+	for i,c in pairs(self.D) do
+		if GetItemSlot(myHero,i)>0 then
+			if not c.State and not EMenu.Dashes["u"..c.Name] then
+				EMenu.Dashes:Boolean("u"..c.Name,"Use "..c.Name,true)
+				EMenu.Dashes:Slider("d"..c.Name,c.Name.." - Danger", 3, 1, 5, 1)
+				EMenu.Dashes:Info("info"..c.Name, "")
+			end
+			c.State = true
+		else
+			c.State = false
+		end
+	end
 	if EMenu.Keys.DoD:Value() or EMenu.Keys.DoD2:Value() then
 			self.DodgeOnlyDangerous = true
 		else
@@ -3922,6 +3937,11 @@ function SLEvade:Dodge()
 					for i,c in pairs(self.SI) do
 						if c.State and Ready(GetItemSlot(myHero,i)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.Dashes["hp"..c.Name]:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
 							CastSpell(GetItemSlot(myHero,i))
+						end
+					end
+					for i,c in pairs(self.D) do
+						if c.State and Ready(GetItemSlot(myHero,i)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
+							CastSkillShot(GetItemSlot(myHero,i), i.safe)
 						end
 					end
 				else
