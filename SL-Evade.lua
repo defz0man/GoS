@@ -91,6 +91,7 @@ function SLEvade:__init()
 		if self.Flash then
 			EMenu.Dashes:Boolean("EnableFlash", "Flash", true)
 			EMenu.Dashes:Slider("FlashDanger", "Flash - Danger", 5, 1, 5, 1)
+			EMenu.Dashes:Info("sadad", "")
 		end
 	end,.001)
 	
@@ -2935,6 +2936,7 @@ self.Spells = {
 		charName = "Xerath",
 		danger = 2,
 		name = "XerathArcaneBarrage2",
+		speed = math.huge,
 		radius = 280,
 		range = 1100,
 		delay = 750,
@@ -2963,6 +2965,7 @@ self.Spells = {
 		danger = 2,
 		name = "XerathLocusOfPower2",
 		missileName = "XerathLocusPulse",
+		speed = math.huge,
 		radius = 200,
 		range = 5600,
 		delay = 600,
@@ -3716,8 +3719,8 @@ function SLEvade:Detection(unit,spellProc)
 end
 
 function SLEvade:Dodge()
-	for i,c in pairs(self.SI) do
-		if GetItemSlot(myHero,i)>0 then
+	for item,c in pairs(self.SI) do
+		if GetItemSlot(myHero,item)>0 then
 			if not c.State and not EMenu.Dashes["u"..c.Name] then
 				EMenu.Dashes:Boolean("u"..c.Name,"Use "..c.Name,true)
 				EMenu.Dashes:Slider("d"..c.Name,c.Name.." - Danger", 5, 1, 5, 1)
@@ -3729,8 +3732,8 @@ function SLEvade:Dodge()
 			c.State = false
 		end
 	end
-	for i,c in pairs(self.D) do
-		if GetItemSlot(myHero,i)>0 then
+	for item,c in pairs(self.D) do
+		if GetItemSlot(myHero,item)>0 then
 			if not c.State and not EMenu.Dashes["u"..c.Name] then
 				EMenu.Dashes:Boolean("u"..c.Name,"Use "..c.Name,true)
 				EMenu.Dashes:Slider("d"..c.Name,c.Name.." - Danger", 3, 1, 5, 1)
@@ -3934,14 +3937,14 @@ function SLEvade:Dodge()
 					if self.Flash and Ready(self.Flash) and i.uDodge == true and EMenu.Dashes.EnableFlash:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes.FlashDanger:Value() then
 						CastSkillShot(self.Flash, i.safe)
 					end		
-					for i,c in pairs(self.SI) do
-						if c.State and Ready(GetItemSlot(myHero,i)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.Dashes["hp"..c.Name]:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
-							CastSpell(GetItemSlot(myHero,i))
+					for item,c in pairs(self.SI) do
+						if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.Dashes["hp"..c.Name]:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
+							CastSpell(GetItemSlot(myHero,item))
 						end
 					end
-					for i,c in pairs(self.D) do
-						if c.State and Ready(GetItemSlot(myHero,i)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
-							CastSkillShot(GetItemSlot(myHero,i), i.safe)
+					for item,c in pairs(self.D) do
+						if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
+							CastSkillShot(GetItemSlot(myHero,item), i.safe)
 						end
 					end
 				else
