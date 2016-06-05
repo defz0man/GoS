@@ -34,8 +34,6 @@ function SLEvade:__init()
 	self.DodgeOnlyDangerous = false
 	self.patha = nil
 	self.pathb = nil
-	self.wda = false
-	self.wda2 = false
 	self.asd = false
 	self.D = { --Dash items
 	[3152] = {Name = "Hextech Protobelt", State = false}
@@ -44,13 +42,13 @@ function SLEvade:__init()
 	[3157] = {Name = "Hourglass", State = false},
 	[3090] = {Name = "Wooglets", State = false},
 	}
-	EMenu:Slider("d","Danger",2,1,5,1)
-	EMenu:SubMenu("Spells", "Spells")
-	EMenu:SubMenu("Dashes", "EvadeSpells")	
-	EMenu:SubMenu("Advanced", "Advanced")
-	EMenu.Advanced:Slider("ew", "Extra Spell Width", 20, 0, 100, 5)
-	EMenu.Advanced:Boolean("rep", "Recalc Evade Pos", true)
-	EMenu:SubMenu("Draws", "Draws")
+	EMenu:Slider("d","Danger",2,1,4,1)
+	EMenu:SubMenu("Spells", "Spell Settings")
+	EMenu:SubMenu("EvadeSpells", "EvadeSpell Settings")
+	EMenu:SubMenu("invulnerable", "Invulnerable Settings")
+	EMenu:SubMenu("Draws", "Drawing Settings")
+	EMenu:SubMenu("Advanced", "Dodge Settings")
+	EMenu.Advanced:Slider("ew", "Extra Spell Width", 30, 0, 100, 5)
 	EMenu.Draws:Boolean("DSPath", "Draw SkillShot Path", true)
 	EMenu.Draws:Boolean("DSEW", "Draw SkillShot Extra Width", true)
 	EMenu.Draws:Boolean("DSPos", "Draw SkillShot Position", true)
@@ -58,7 +56,7 @@ function SLEvade:__init()
 	EMenu.Draws:Boolean("DevOpt", "Draw for Devs", false)
 	EMenu.Draws:Slider("SQ", "SkillShot Quality", 5, 1, 35, 5)
 	EMenu.Draws:Info("asd", "lower = higher Quality")
-	EMenu:SubMenu("Keys", "Key Bindings")
+	EMenu:SubMenu("Keys", "Key Settings")
 	EMenu.Keys:KeyBinding("DD", "Disable Dodging", string.byte("K"), true)
 	EMenu.Keys:KeyBinding("DDraws", "Disable Drawings", string.byte("J"), true)
 	EMenu.Keys:KeyBinding("DoD", "Dodge only Dangerous", string.byte(" "))
@@ -67,31 +65,35 @@ function SLEvade:__init()
 	DelayAction(function()
 		for _,k in pairs(GetEnemyHeroes()) do
 			if self.Spells[GetObjectName(k)] then
-				EMenu.Spells:Menu(GetObjectName(k),GetObjectName(k))
 				for m,p in pairs(self.Spells[GetObjectName(k)]) do
 				if p.name == "" and GetCastName(k,m) then p.name = GetCastName(k,m) end
-				if p.spellName == "" and GetCastName(k,m) then p.spellName = GeTCastName(k,m) end
+				if p.spellName == "" and GetCastName(k,m) then p.spellName = GetCastName(k,m) end
 				if not p.spellType then p.spellType = "Line" end
 					if p.name ~= "" and p.spellName ~= "" and p.spellType and p.Slot then
-					if not EMenu.Spells[GetObjectName(k)] then EMenu.Spells:Menu(GetObjectName(k), GetObjectName(k)) end
-						EMenu.Spells[GetObjectName(k)]:Boolean(p.name,"|"..(self.str[p.Slot] or "?").."| - "..(p.name or "."), true)
-						EMenu.Spells[GetObjectName(k)]:Boolean("IsD"..p.name,"IsDangerous", p.Dangerous or false)
-						EMenu.Spells[GetObjectName(k)]:Boolean("FoW"..p.name,"FoW Dodge", p.FoW or false)				
-						EMenu.Spells[GetObjectName(k)]:Slider("d"..p.name,"Danger",(p.danger or 1), 1, 5, 1)
-						EMenu.Spells[GetObjectName(k)]:Info("Info"..p.name, "")			
+					if not EMenu.Spells[p.name] then EMenu.Spells:Menu(p.name,""..k.charName.." | "..(self.str[p.Slot] or "?").." - "..p.name) end
+						EMenu.Spells[p.name]:Boolean("Dodge"..p.name, "Enable Dodge", true)
+						EMenu.Spells[p.name]:Boolean("Draw"..p.name, "Enable Draw", true)
+						EMenu.Spells[p.name]:Boolean("Dashes"..p.name, "Enable Dashes", true)
+						EMenu.Spells[p.name]:Info("Empty12"..p.name, "")			
+						EMenu.Spells[p.name]:Slider("d"..p.name,"Danger",(p.danger or 1), 1, 4, 1)
+						EMenu.Spells[p.name]:Boolean("IsD"..p.name,"Dangerous", p.Dangerous or false)
+						EMenu.Spells[p.name]:Info("Empty123"..p.name, "")
+						EMenu.Spells[p.name]:Boolean("FoW"..p.name,"FoW Dodge", p.FoW or true)							
 					end	
 				end
 			end
 		end
-		if self.EvadeSpells[GetObjectName(myHero)] and self.EvadeSpells[GetObjectName(myHero)].spellKey then 
-			EMenu.Dashes:Boolean(self.EvadeSpells[GetObjectName(myHero)].name,"|"..(self.str[self.EvadeSpells[GetObjectName(myHero)].spellKey] or "?").."| - "..(self.EvadeSpells[GetObjectName(myHero)].name or "."), true)
-			EMenu.Dashes:Slider("d"..self.EvadeSpells[GetObjectName(myHero)].name,(self.str[self.EvadeSpells[GetObjectName(myHero)].spellKey] or "?").."- Danger",(self.EvadeSpells[GetObjectName(myHero)].dl or 2), 1, 5, 1)
-			EMenu.Dashes:Info("Info"..self.EvadeSpells[GetObjectName(myHero)].name,"")
+		if self.EvadeSpells[GetObjectName(myHero)] then
+			if self.EvadeSpells[GetObjectName(myHero)].name ~= "" and self.EvadeSpells[GetObjectName(myHero)].spellKey then
+			if not EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)].name] then EMenu.EvadeSpells:Menu(self.EvadeSpells[GetObjectName(myHero)].name,""..myHero.charName.." | "..(self.str[self.EvadeSpells[GetObjectName(myHero)].spellKey] or "?").." - "..self.EvadeSpells[GetObjectName(myHero)].name) end
+				EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)].name]:Boolean("Dodge"..self.EvadeSpells[GetObjectName(myHero)].name, "Enable Dodge", true)
+				EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)].name]:Slider("d"..self.EvadeSpells[GetObjectName(myHero)].name,"Danger",(self.EvadeSpells[GetObjectName(myHero)].dl or 1), 1, 4, 1)						
+			end	
 		end
 		if self.Flash then
-			EMenu.Dashes:Boolean("EnableFlash", "Flash", true)
-			EMenu.Dashes:Slider("FlashDanger", "Flash - Danger", 5, 1, 5, 1)
-			EMenu.Dashes:Info("sadad", "")
+			EMenu.EvadeSpells:Menu("Flash",""..myHero.charName.." | Summoner - Flash")
+			EMenu.EvadeSpells["Flash"]:Boolean("DodgeFlash", "Enable Dodge", true)
+			EMenu.EvadeSpells["Flash"]:Slider("dFlash","Danger", 4, 1, 4, 1)
 		end
 	end,.001)
 	
@@ -3601,7 +3603,7 @@ function SLEvade:CreateObject(Object)
 					print(GetObjectSpellName(Object)) 
 				end
 				for m,l in pairs(self.Spells[GetObjectName(GetObjectSpellOwner(Object))]) do
-					if (l.missileName == GetObjectSpellName(Object) or GetObjectSpellName(Object):lower():find(l.name:lower()) or GetObjectSpellName(Object):lower():find(l.spellName:lower()) or (tostring(l.extraMissileNames) and l.extraMissileNames == GetObjectSpellName(Object))) and l.spellType == "Line" and EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))][l.name]:Value() and ((not self.DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))]["d"..l.name]:Value()) or (self.DodgeOnlyDangerous and EMenu.Spells[GetObjectName(GetObjectSpellOwner(Object))]["IsD"..l.name]:Value())) then
+					if (l.missileName == GetObjectSpellName(Object) or GetObjectSpellName(Object):lower():find(l.name:lower()) or GetObjectSpellName(Object):lower():find(l.spellName:lower()) or (tostring(l.extraMissileNames) and l.extraMissileNames == GetObjectSpellName(Object))) and l.spellType == "Line" and EMenu.Spells[l.name]["Dodge"..l.name]:Value() and ((not self.DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[l.name]["d"..l.name]:Value()) or (self.DodgeOnlyDangerous and EMenu.Spells[l.name]["IsD"..l.name]:Value())) then
 						start = GetObjectSpellStartPos(Object)
 						start.y = GetOrigin(Object).y
 						endpos = GetObjectSpellEndPos(Object) 
@@ -3639,6 +3641,7 @@ function SLEvade:Drawings()
 	  if EMenu.Draws.DevOpt:Value() then
 		DrawText(_,30,40,offy,GoS.White)
 	  end
+      if EMenu.Spells[i.spell.name]["Draw"..i.spell.name]:Value() then
 		if i.sType == "Line" and not EMenu.Keys.DDraws:Value() then
 			if _ ~= GetObjectSpellName(i.Obj) then self.obj[_] = nil end
 			local Screen = WorldToScreen(0,GetOrigin(i.Obj))
@@ -3695,6 +3698,7 @@ function SLEvade:Drawings()
 				DrawLine(tp234.x,tp234.y,tp235.x,tp235.y,3,GoS.Blue)
 			end
 		end
+	  end
 	end
 end
 
@@ -3705,7 +3709,7 @@ function SLEvade:Detection(unit,spellProc)
 	if unit.team == MINION_ENEMY then
 	if self.Spells[GetObjectName(unit)] then
 		for _,i in pairs(self.Spells[GetObjectName(unit)]) do
-			if i.spellType == "Circular" and spellProc.name == i.spellName and EMenu.Spells[i.charName][i.name]:Value() and ((not self.DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.charName]["d"..i.name]:Value()) or (self.DodgeOnlyDangerous and EMenu.Spells[i.charName]["IsD"..i.name]:Value())) then
+			if i.spellType == "Circular" and spellProc.name == i.spellName and EMenu.Spells[i.name]["Dodge"..i.name]:Value() and ((not self.DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.name]["d"..i.name]:Value()) or (self.DodgeOnlyDangerous and EMenu.Spells[i.name]["IsD"..i.name]:Value())) then
 				self.obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range, uDodge = false, caster = unit}
 				if i.killTime then
 					DelayAction(function() self.obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
@@ -3721,11 +3725,10 @@ end
 function SLEvade:Dodge()
 	for item,c in pairs(self.SI) do
 		if GetItemSlot(myHero,item)>0 then
-			if not c.State and not EMenu.Dashes["u"..c.Name] then
-				EMenu.Dashes:Boolean("u"..c.Name,"Use "..c.Name,true)
-				EMenu.Dashes:Slider("d"..c.Name,c.Name.." - Danger", 5, 1, 5, 1)
-				EMenu.Dashes:Slider("hp"..c.Name,"%My HP to use", 100, 10, 100, 5)
-				EMenu.Dashes:Info("info"..c.Name, "")
+			if not c.State and not EMenu.invulnerable["u"..c.Name] then
+				EMenu.invulnerable:Menu(c.name,""..myHero.charName.." | Item - "..c.name)
+				EMenu.invulnerable[c.name]:Boolean("Dodge"..c.name, "Enable Dodge", true)
+				EMenu.invulnerable[c.name]:Slider("d"..c.name,"Danger", 4, 1, 4, 1)
 			end
 			c.State = true
 		else
@@ -3734,10 +3737,10 @@ function SLEvade:Dodge()
 	end
 	for item,c in pairs(self.D) do
 		if GetItemSlot(myHero,item)>0 then
-			if not c.State and not EMenu.Dashes["u"..c.Name] then
-				EMenu.Dashes:Boolean("u"..c.Name,"Use "..c.Name,true)
-				EMenu.Dashes:Slider("d"..c.Name,c.Name.." - Danger", 3, 1, 5, 1)
-				EMenu.Dashes:Info("info"..c.Name, "")
+			if not c.State and not EMenu.EvadeSpells["u"..c.Name] then
+				EMenu.EvadeSpells:Menu(c.Name,""..myHero.charName.." | Item - "..c.Name)
+				EMenu.EvadeSpells[c.Name]:Boolean("Dodge"..c.Name, "Enable Dodge", true)
+				EMenu.EvadeSpells[c.Name]:Slider("d"..c.Name,"Danger", 2, 1, 4, 1)
 			end
 			c.State = true
 		else
@@ -3782,88 +3785,38 @@ function SLEvade:Dodge()
 					else
 						i.jp = nil
 					end
-					if EMenu.Advanced.rep:Value() == false then
 						if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
 							if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 								self.asd = true
-								if not self.wda == true then
-									self.wda = true
-									self.patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-									if not MapPosition:inWall(self.patha) then
-											i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-										else 
-											i.safe = jp + Vector(jp - self.patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
-									end
-								end
-							end
-							i.isEvading = true
-						else
-							self.asd = false
-							self.wda = false
-							self.patha = nil
-							i.safe = nil
-							i.isEvading = false
-						end
-					else
-						if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe then
-							if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
-								self.asd = true
-								self.wda = false
 								self.patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								if not MapPosition:inWall(self.patha) then
 										i.safe = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 									else 
-										i.safe = jp + Vector(jp - self.patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value()) --// might not work
+										i.safe = jp + Vector(jp - self.patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								end
 							end
 							i.isEvading = true
 						else
 							self.asd = false
-							self.wda = false
 							self.patha = nil
 							i.safe = nil
 							i.isEvading = false
 						end
-					end
 				elseif i.sType == "Circular" then
-					if EMenu.Advanced.rep:Value() == false then
-						if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
-							self.asd = true
-							if not self.wda2 == true then
-								self.wda2 = true
-								self.pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-								if not MapPosition:inWall(self.pathb) then
-										i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-									else
-										i.safe = i.ePos + Vector(self.pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-								end
-								i.isEvading = true
-							end
-						else
-							self.asd = false
-							self.wda2 = false
-							self.pathb = nil
-							i.safe = nil
-							i.isEvading = false
+					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
+						self.asd = true
+						self.pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						if not MapPosition:inWall(self.pathb) then
+								i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							else
+								i.safe = i.ePos + Vector(self.pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						end
+						i.isEvading = true
 					else
-						if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
-							self.asd = true
-							self.wda2 = false
-							self.pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-							if not MapPosition:inWall(self.pathb) then
-									i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-								else
-									i.safe = i.ePos + Vector(self.pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-							end
-							i.isEvading = true
-						else
-							self.asd = false
-							self.wda2 = false
-							self.pathb = nil
-							i.safe = nil
-							i.isEvading = false
-						end
+						self.asd = false
+						self.pathb = nil
+						i.safe = nil
+						i.isEvading = false
 					end
 				end
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
@@ -3876,75 +3829,72 @@ function SLEvade:Dodge()
 						DisableHoldPosition(false)
 						BlockInput(false) 
 					end
-					if self.wda == true or self.wda2 == true then
-						MoveToXYZ(i.safe)
-					else
-						MoveToXYZ(i.safe)
-					end
-					if not self.EvadeSpells[GetObjectName(myHero)] then IsEvading2 = false end
-					if self.EvadeSpells[GetObjectName(myHero)] and self.EvadeSpells[GetObjectName(myHero)].evadeType and self.EvadeSpells[GetObjectName(myHero)].spellKey and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..self.EvadeSpells[GetObjectName(myHero)].name]:Value() and EMenu.Dashes[self.EvadeSpells[GetObjectName(myHero)].name]:Value() then 
-						if i.uDodge == true then
-							if self.EvadeSpells[GetObjectName(myHero)].evadeType == "DashP" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
-								CastSkillShot(self.EvadeSpells[GetObjectName(myHero)].spellKey, i.safe)
-							end	
-							if self.EvadeSpells[GetObjectName(myHero)].evadeType == "DashT" then
-								for pp,ally in pairs(GetAllyHeroes()) do
-									if ally ~= nil then
-										if GetDistance(myHero,ally) < self.EvadeSpells[GetObjectName(myHero)].range and not ally.dead and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then	
-											DelayAction(function()								
-												CastTargetSpell(ally, self.EvadeSpells[GetObjectName(myHero)].spellKey)
-											end,oT*fT*.001)
+					MoveToXYZ(i.safe)
+					if EMenu.Spells[tabl.name]["Dashes"..tabl.name]:Value() then
+						if EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)].name]["Dodge"..self.EvadeSpells[GetObjectName(myHero)].name]:Value() and self.EvadeSpells[GetObjectName(myHero)] and self.EvadeSpells[GetObjectName(myHero)].evadeType and self.EvadeSpells[GetObjectName(myHero)].spellKey and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)].name]["d"..self.EvadeSpells[GetObjectName(myHero)].name]:Value() then 
+							if i.uDodge == true then
+								if self.EvadeSpells[GetObjectName(myHero)].evadeType == "DashP" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
+									CastSkillShot(self.EvadeSpells[GetObjectName(myHero)].spellKey, i.safe)
+								end	
+								if self.EvadeSpells[GetObjectName(myHero)].evadeType == "DashT" then
+									for pp,ally in pairs(GetAllyHeroes()) do
+										if ally ~= nil then
+											if GetDistance(myHero,ally) < self.EvadeSpells[GetObjectName(myHero)].range and not ally.dead and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then	
+												DelayAction(function()								
+													CastTargetSpell(ally, self.EvadeSpells[GetObjectName(myHero)].spellKey)
+												end,oT*fT*.001)
+											end
+										end
+									end
+									for _,minion in pairs(minionManager.objects) do
+										if GetTeam(minion) == MINION_ALLY then 
+											if GetDistance(myHero,minion) < self.EvadeSpells[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
+												DelayAction(function()										
+													CastTargetSpell(minion, self.EvadeSpells[GetObjectName(myHero)].spellKey)
+												end,oT*fT*.001)
+											end
+										end
+										if GetTeam(minion) == MINION_JUNGLE then 
+											if GetDistance(myHero,minion) < self.EvadeSpells[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
+												DelayAction(function()
+													CastTargetSpell(minion, self.EvadeSpells[GetObjectName(myHero)].spellKey)
+												end,oT*fT*.001)
+											end
 										end
 									end
 								end
-								for _,minion in pairs(minionManager.objects) do
-									if GetTeam(minion) == MINION_ALLY then 
-										if GetDistance(myHero,minion) < self.EvadeSpells[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
-											DelayAction(function()										
-												CastTargetSpell(minion, self.EvadeSpells[GetObjectName(myHero)].spellKey)
-											end,oT*fT*.001)
-										end
-									end
-									if GetTeam(minion) == MINION_JUNGLE then 
-										if GetDistance(myHero,minion) < self.EvadeSpells[GetObjectName(myHero)].range and not minion.dead and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
-											DelayAction(function()
-												CastTargetSpell(minion, self.EvadeSpells[GetObjectName(myHero)].spellKey)
-											end,oT*fT*.001)
-										end
-									end
+								if self.EvadeSpells[GetObjectName(myHero)].evadeType == "WindWallP" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
+									IsEvading2 = true
+									DelayAction(function()
+									CastSkillShot(self.EvadeSpells[GetObjectName(myHero)].spellKey, i.ePos)
+									end,oT*fT*.001)
+								else
+									IsEvading2 = false
+								end		
+								if self.EvadeSpells[GetObjectName(myHero)].evadeType == "SpellShieldS" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == 0 then
+									DelayAction(function()
+										CastSpell(self.EvadeSpells[GetObjectName(myHero)].spellKey)
+									end,oT*fT*.001)
 								end
-							end
-							if self.EvadeSpells[GetObjectName(myHero)].evadeType == "WindWallP" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == READY then
-								IsEvading2 = true
-								DelayAction(function()
-								CastSkillShot(self.EvadeSpells[GetObjectName(myHero)].spellKey, i.ePos)
-								end,oT*fT*.001)
-							else
-								IsEvading2 = false
-							end		
-							if self.EvadeSpells[GetObjectName(myHero)].evadeType == "SpellShieldS" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == 0 then
-								DelayAction(function()
+								-- if self.EvadeSpells[GetObjectName(myHero)].evadeType == "SpellShieldT" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == 0 then
+								-- end
+								if self.EvadeSpells[GetObjectName(myHero)].evadeType == "DashS" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == 0 then
 									CastSpell(self.EvadeSpells[GetObjectName(myHero)].spellKey)
-								end,oT*fT*.001)
-							end
-							-- if self.EvadeSpells[GetObjectName(myHero)].evadeType == "SpellShieldT" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == 0 then
-							-- end
-							if self.EvadeSpells[GetObjectName(myHero)].evadeType == "DashS" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)].spellKey) == 0 then
-								CastSpell(self.EvadeSpells[GetObjectName(myHero)].spellKey)
+								end
 							end
 						end
-					end
-					if self.Flash and Ready(self.Flash) and i.uDodge == true and EMenu.Dashes.EnableFlash:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes.FlashDanger:Value() then
-						CastSkillShot(self.Flash, i.safe)
-					end		
-					for item,c in pairs(self.SI) do
-						if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.Dashes["hp"..c.Name]:Value() and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
-							CastSpell(GetItemSlot(myHero,item))
+						if self.Flash and Ready(self.Flash) and i.uDodge == true and EMenu.EvadeSpells["Flash"]["DodgeFlash"]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells["Flash"]["dFlash"]:Value() then
+							CastSkillShot(self.Flash, i.safe)
+						end		
+						for item,c in pairs(self.SI) do
+							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.invulnerable[c.Name]["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.invulnerable[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.invulnerable[c.Name]["d"..c.Name]:Value() then
+								CastSpell(GetItemSlot(myHero,item))
+							end
 						end
-					end
-					for item,c in pairs(self.D) do
-						if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.Dashes["u"..c.Name]:Value() and i.uDodge == true and EMenu.Spells[GetObjectName(p)]["d"..tabl.name]:Value() >= EMenu.Dashes["d"..c.Name]:Value() then
-							CastSkillShot(GetItemSlot(myHero,item), i.safe)
+						for item,c in pairs(self.D) do
+							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.EvadeSpells[c.Name]["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.EvadeSpells[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells[c.Name]["d"..c.Name]:Value() then
+								CastSkillShot(GetItemSlot(myHero,item), i.safe)
+							end
 						end
 					end
 				else
