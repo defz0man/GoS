@@ -35,6 +35,7 @@ function SLEvade:__init()
 	self.patha = nil -- walcheck line
 	self.pathb = nil -- wallcheck circ
 	self.asd = false -- blockinput
+	self.mposs = nil -- self.mousepos
 	self.ues = false --self.usingevadespells
 	self.ut = false --self.usingitems
 	self.usp = false --self.usingsummonerspells
@@ -3339,7 +3340,7 @@ function SLEvade:CreateObject(Object)
 						start.y = GetOrigin(Object).y
 						endpos = GetObjectSpellEndPos(Object) 
 						endpos.y = GetOrigin(Object).y
-						self.obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType, sSpeed = l.speed or math.huge, sDelay = l.delay or 250, sRange = l.range, uDodge = false}
+						self.obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType, sSpeed = l.speed or math.huge, sDelay = l.delay or 250, sRange = l.range, uDodge = false, mpos = nil}
 					end
 				end
 			end
@@ -3441,7 +3442,7 @@ function SLEvade:Detection(unit,spellProc)
 	if self.Spells[GetObjectName(unit)] then
 		for _,i in pairs(self.Spells[GetObjectName(unit)]) do
 			if i.spellType == "Circular" and spellProc.name == i.spellName and EMenu.Spells[i.name]["Dodge"..i.name]:Value() and ((not self.DodgeOnlyDangerous and EMenu.d:Value() <= EMenu.Spells[i.name]["d"..i.name]:Value()) or (self.DodgeOnlyDangerous and EMenu.Spells[i.name]["IsD"..i.name]:Value())) then
-				self.obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range, uDodge = false, caster = unit}
+				self.obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range, uDodge = false, caster = unit, mpos = nil}
 				if i.killTime then
 					DelayAction(function() self.obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
 				end
@@ -3487,8 +3488,23 @@ function SLEvade:Dodge()
 	  if i.sType == "Line" and not i.Obj then
 		  self.obj[_] = nil
 	  end
-	   local oT = i.sDelay + GetDistance(myHero,i.sPos) / i.sSpeed
+		if i.sType == "Circular" then 
+			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius + 100 and not i.safe then
+				if not i.mpos and not self.mposs then
+					i.mpos = GetMousePos() - (Vector(GetMousePos()) - Vector(myHero.pos)):perpendicular():normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+					self.mposs = GetMousePos()
+				end
+			else
+				self.mposs = nil
+				i.mpos = nil
+			end
+		end
+	  local oT = i.sDelay + GetDistance(myHero,i.sPos) / i.sSpeed
 	   local fT = .75
+	   if EMenu.Draws.DevOpt:Value() then
+		if i.mpos ~= nil then DrawCircle(i.mpos,50,1.5,20,GoS.Green) end
+		if self.mposs ~= nil then DrawCircle(self.mposs,50,1.5,20,GoS.Red) end
+	   end
 		for m,p in pairs(GetEnemyHeroes()) do
 			if not self.Spells[GetObjectName(p)] then return end
 			if i.safe and i.sType == "Line" then
@@ -3537,10 +3553,19 @@ function SLEvade:Dodge()
 					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
 						self.asd = true
 						self.pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-						if not MapPosition:inWall(self.pathb) then
-								i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-							else
-								i.safe = i.ePos + Vector(self.pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						self.pathb2 = Vector(i.ePos) + (i.mpos - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						if self.mposs and GetDistance(self.mposs,self.pathb) > GetDistance(self.mposs,self.pathb2) then
+							if not MapPosition:inWall(self.pathb2) then
+									i.safe = Vector(i.ePos) + (i.mpos - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								else
+									i.safe = i.ePos + Vector(self.pathb2-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							end
+						else
+							if not MapPosition:inWall(self.pathb) then
+									i.safe = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								else
+									i.safe = i.ePos + Vector(self.pathb-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+							end
 						end
 						i.isEvading = true
 					else
