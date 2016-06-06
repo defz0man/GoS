@@ -34,6 +34,7 @@ function SLEvade:__init()
 	self.DodgeOnlyDangerous = false -- Dodge Only Dangerous
 	self.patha = nil -- walcheck line
 	self.pathb = nil -- wallcheck circ
+	self.pathb2 = nil -- wallcheck circ2
 	self.asd = false -- blockinput
 	self.mposs = nil -- self.mousepos
 	self.ues = false --self.usingevadespells
@@ -3571,6 +3572,7 @@ function SLEvade:Dodge()
 					else
 						self.asd = false
 						self.pathb = nil
+						self.pathb2 = nil
 						i.safe = nil
 						i.isEvading = false
 					end
