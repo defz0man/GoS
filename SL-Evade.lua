@@ -3564,7 +3564,7 @@ function SLEvade:Dodge()
 					if EMenu.Spells[tabl.name]["Dashes"..tabl.name]:Value() then
 						for op = 0,3 do
 							if self.EvadeSpells[GetObjectName(myHero)] and self.EvadeSpells[GetObjectName(myHero)][op] and EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)][op].name]["Dodge"..self.EvadeSpells[GetObjectName(myHero)][op].name]:Value() and self.EvadeSpells[GetObjectName(myHero)][op].evadeType and self.EvadeSpells[GetObjectName(myHero)][op].spellKey and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)][op].name]["d"..self.EvadeSpells[GetObjectName(myHero)][op].name]:Value() then 
-								if --[[i.uDodge == true and--]] self.usp == false and self.ut == false then
+								if i.uDodge == true and self.usp == false and self.ut == false then
 									if self.EvadeSpells[GetObjectName(myHero)][op].evadeType == "DashP" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)][op].spellKey) == READY then
 											self.ues = true
 											CastSkillShot(self.EvadeSpells[GetObjectName(myHero)][op].spellKey, i.safe)
