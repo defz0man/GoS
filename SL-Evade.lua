@@ -2601,6 +2601,7 @@ self.Spells = {
 		name = "TaliyahQ",
 		speed = 3500,
 		radius = 50,
+		delay = 250,
 		range = 1000,
 		Slot = 0,
 		spellName = "TaliyahQ",
@@ -2613,6 +2614,7 @@ self.Spells = {
 		name = "TaliyahW",
 		speed = math.huge,
 		radius = 170,
+		delay = 250,
 		range = 900,
 		Slot = 1,
 		spellName = "TaliyahW",
@@ -2626,6 +2628,7 @@ self.Spells = {
 		danger = 1,
 		speed = math.huge,
 		radius = 325,
+		delay = 250,
 		range = 800,
 		Slot = 2,
 		spellName = "TaliyahE",
@@ -2638,6 +2641,7 @@ self.Spells = {
 		name = "TaliyahR",
 		speed = math.huge,
 		radius = 130,
+		delay = 250,
 		range = 3000,
 		Slot = 3,
 		spellName = "TaliyahR",
@@ -3607,7 +3611,7 @@ function SLEvade:Dodge()
 					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe and i.mpos then
 						self.asd = true
 						self.pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-						self.pathb2 = Vector(i.ePos) + ((Vector(i.mpos) + GetOrigin(myHero)) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						self.pathb2 = Vector(i.ePos) + (Vector(i.mpos) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						if self.mposs and GetDistance(self.mposs,self.pathb) > GetDistance(self.mposs,self.pathb2) then
 							if not MapPosition:inWall(self.pathb2) then
 									i.safe = Vector(i.ePos) + (Vector(i.mpos) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
