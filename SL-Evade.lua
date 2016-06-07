@@ -2594,6 +2594,57 @@ self.Spells = {
 		FoW = true,
 		},
 	},
+	["Taliyah"] = {
+		{
+		charName = "Taliyah",
+		danger = 1,
+		name = "TaliyahQ",
+		speed = 3500,
+		radius = 50,
+		range = 1000,
+		Slot = 0,
+		spellName = "TaliyahQ",
+		spellType = "Line",
+		FoW = true,
+		},
+		{
+		charName = "Taliyah",
+		danger = 3,
+		name = "TaliyahW",
+		speed = math.huge,
+		radius = 170,
+		range = 900,
+		Slot = 1,
+		spellName = "TaliyahW",
+		spellType = "Circular",
+		FoW = true,
+		killTime = 1000,
+		},
+		{
+		charName = "Taliyah",
+		name = "TaliyahE",
+		danger = 1,
+		speed = math.huge,
+		radius = 325,
+		range = 800,
+		Slot = 2,
+		spellName = "TaliyahE",
+		spellType = "Line",
+		FoW = true,
+		},
+		{
+		charName = "Taliyah",
+		danger = 3,
+		name = "TaliyahR",
+		speed = math.huge,
+		radius = 130,
+		range = 3000,
+		Slot = 3,
+		spellName = "TaliyahR",
+		spellType = "Line",
+		FoW = true,
+		},
+	},
 	--end Talon
 	["Thresh"] = {
 		{
@@ -3436,9 +3487,9 @@ function SLEvade:Drawings()
 end
 
 function SLEvade:Detection(unit,spellProc)
-	-- if EMenu.Draws.DevOpt:Value() then 
-		-- if unit == myHero then print(spellProc.name) end
-	-- end
+	if EMenu.Draws.DevOpt:Value() then 
+		if unit == myHero then print(spellProc.name) end
+	end
 	if unit.team == MINION_ENEMY then
 	if self.Spells[GetObjectName(unit)] then
 		for _,i in pairs(self.Spells[GetObjectName(unit)]) do
@@ -3458,10 +3509,10 @@ end
 function SLEvade:Dodge()
 	for item,c in pairs(self.SI) do
 		if GetItemSlot(myHero,item)>0 then
-			if not c.State and not EMenu.invulnerable["u"..c.Name] then
-				EMenu.invulnerable:Menu(c.name,""..myHero.charName.." | Item - "..c.name)
-				EMenu.invulnerable[c.name]:Boolean("Dodge"..c.name, "Enable Dodge", true)
-				EMenu.invulnerable[c.name]:Slider("d"..c.name,"Danger", 4, 1, 4, 1)
+			if not c.State and not EMenu.invulnerable[c.Name] then
+				EMenu.invulnerable:Menu(c.Name,""..myHero.charName.." | Item - "..c.Name)
+				EMenu.invulnerable[c.Name]:Boolean("Dodge"..c.Name, "Enable Dodge", true)
+				EMenu.invulnerable[c.Name]:Slider("d"..c.Name,"Danger", 4, 1, 4, 1)
 			end
 			c.State = true
 		else
@@ -3470,7 +3521,7 @@ function SLEvade:Dodge()
 	end
 	for item,c in pairs(self.D) do
 		if GetItemSlot(myHero,item)>0 then
-			if not c.State and not EMenu.EvadeSpells["u"..c.Name] then
+			if not c.State and not EMenu.EvadeSpells[c.Name] then
 				EMenu.EvadeSpells:Menu(c.Name,""..myHero.charName.." | Item - "..c.Name)
 				EMenu.EvadeSpells[c.Name]:Boolean("Dodge"..c.Name, "Enable Dodge", true)
 				EMenu.EvadeSpells[c.Name]:Slider("d"..c.Name,"Danger", 2, 1, 4, 1)
@@ -3490,7 +3541,7 @@ function SLEvade:Dodge()
 		  self.obj[_] = nil
 	  end
 		if i.sType == "Circular" then 
-			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius + 100 and not i.safe then
+			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius + 10 and not i.safe then
 				if not i.mpos and not self.mposs then
 					i.mpos = GetMousePos() - (Vector(GetMousePos()) - Vector(myHero.pos)):perpendicular():normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 					self.mposs = GetMousePos()
@@ -3549,15 +3600,17 @@ function SLEvade:Dodge()
 							self.patha = nil
 							i.safe = nil
 							i.isEvading = false
+							DisableHoldPosition(false)
+							BlockInput(false)
 						end
 				elseif i.sType == "Circular" then
-					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe then
+					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe and i.mpos then
 						self.asd = true
 						self.pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-						self.pathb2 = Vector(i.ePos) + (i.mpos - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						self.pathb2 = Vector(i.ePos) + ((Vector(i.mpos) + GetOrigin(myHero)) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						if self.mposs and GetDistance(self.mposs,self.pathb) > GetDistance(self.mposs,self.pathb2) then
 							if not MapPosition:inWall(self.pathb2) then
-									i.safe = Vector(i.ePos) + (i.mpos - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+									i.safe = Vector(i.ePos) + (Vector(i.mpos) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								else
 									i.safe = i.ePos + Vector(self.pathb2-i.ePos):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 							end
@@ -3575,6 +3628,8 @@ function SLEvade:Dodge()
 						self.pathb2 = nil
 						i.safe = nil
 						i.isEvading = false
+						DisableHoldPosition(false)
+						BlockInput(false)
 					end
 				end
 			--DashP = Dash - Position, DashS = Dash - Self, DashT = Dash - Targeted, SpellShieldS = SpellShield - Self, SpellShieldT = SpellShield - Targeted, WindWallP = WindWall - Position, 
