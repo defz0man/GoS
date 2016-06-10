@@ -3730,7 +3730,7 @@ function SLEvade:Dodge()
 								self.usp = false
 						end		
 						for item,c in pairs(self.SI) do
-							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.invulnerable[c.Name]["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.invulnerable[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.invulnerable[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
+							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.invulnerable[c.Name]["Dodge"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.invulnerable[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.invulnerable[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
 									self.ut = true
 									CastSpell(GetItemSlot(myHero,item))
 								else
@@ -3738,7 +3738,7 @@ function SLEvade:Dodge()
 							end
 						end
 						for item,c in pairs(self.D) do
-							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.EvadeSpells[c.Name]["u"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.EvadeSpells[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
+							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.EvadeSpells[c.Name]["Dodge"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.EvadeSpells[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
 									self.ut = true
 									CastSkillShot(GetItemSlot(myHero,item), i.safe)
 								else
