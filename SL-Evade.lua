@@ -3432,14 +3432,12 @@ function SLEvade:Drawings()
       if EMenu.Spells[i.spell.name]["Draw"..i.spell.name]:Value() then
 		if i.sType == "Line" and not EMenu.Keys.DDraws:Value() then
 			if _ ~= GetObjectSpellName(i.Obj) then self.obj[_] = nil end
-			local Screen = WorldToScreen(0,GetOrigin(i.Obj))
-			local Screen2 = WorldToScreen(0,i.sPos)
 			if EMenu.Draws.DSPos:Value() then
 				DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,3,EMenu.Draws.SQ:Value(),GoS.White)
 			end
 			endPos = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius)
 			offy = offy + 30
-			local sPos = Vector(i.sPos)
+			local sPos = GetOrigin(i.Obj)
  			local ePos = Vector(endPos)
  			local dVec = Vector(ePos - sPos)
  			-- DrawCircle(dVec,50,0,3,GoS.White)
