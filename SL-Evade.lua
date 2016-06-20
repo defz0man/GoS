@@ -16,6 +16,14 @@ local function DisableHoldPosition(boolean)
 	end
 end
 
+local function dArrow(s, e, r, c)--startpos,endpos,radius,color
+	DrawLine3D(s.x,s.y,s.z,e.x,e.y,e.z,w,c)
+	local s2 = e-((s-e):normalized()*75):perpendicular()+(s-e):normalized()*75
+	DrawLine3D(s2.x,s2.y,s2.z,e.x,e.y,e.z,w,c)
+	local s3 = e-((s-e):normalized()*75):perpendicular2()+(s-e):normalized()*75
+	DrawLine3D(s3.x,s3.y,s3.z,e.x,e.y,e.z,w,c)
+end
+
 Callback.Add("Load", function()	
 	EMenu = Menu("SL-Evade", "["..SLEPatchnew.."][v.:"..SLEvadeVer.."] SL-Evade")
 	SLEAutoUpdater()
@@ -3472,16 +3480,12 @@ function SLEvade:Drawings()
 				end
 			end
 		end
-		if EMenu.Draws.DevOpt:Value() then if i.jp then DrawCircle(i.jp,50,1,20,GoS.Red) end end
+		--if EMenu.Draws.DevOpt:Value() then if i.jp then DrawCircle(i.jp,50,1,20,GoS.Red) end end
 		if EMenu.Draws.DEPos:Value() and not EMenu.Keys.DDraws:Value() and i.safe then	
 			if i.uDodge then 
-				local tp232 = WorldToScreen(0,GetOrigin(myHero))
-				local tp233 = WorldToScreen(0,i.safe)
-				DrawLine(tp232.x,tp232.y,tp233.x,tp233.y,3,GoS.Red)
-			else
-				local tp234 = WorldToScreen(0,GetOrigin(myHero))
-				local tp235 = WorldToScreen(0,i.safe)		
-				DrawLine(tp234.x,tp234.y,tp235.x,tp235.y,3,GoS.Blue)
+				dArrow(myHero.pos,i.safe,3,GoS.Red)
+			else		
+				dArrow(myHero.pos,i.safe,3,GoS.Blue)
 			end
 		end
 	  end
