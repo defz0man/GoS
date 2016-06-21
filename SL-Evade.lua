@@ -16,7 +16,7 @@ local function DisableHoldPosition(boolean)
 	end
 end
 
-local function dArrow(s, e, r, c)--startpos,endpos,radius,color
+local function dArrow(s, e, w, c)--startpos,endpos,width,color
 	DrawLine3D(s.x,s.y,s.z,e.x,e.y,e.z,w,c)
 	local s2 = e-((s-e):normalized()*75):perpendicular()+(s-e):normalized()*75
 	DrawLine3D(s2.x,s2.y,s2.z,e.x,e.y,e.z,w,c)
