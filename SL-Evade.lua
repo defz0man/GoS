@@ -3607,10 +3607,10 @@ function SLEvade:Dodge()
 							if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 								self.asd = true
 								self.patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-								self.patha2 = jp + (Vector(i.mpos) - Vector(i.ePos)) + (Vector(i.mpos) - Vector(i.sPos)):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								self.patha2 = Vector(i.mpos) + Vector(i.sPos - i.ePos):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								if self.mposs2 and GetDistance(self.mposs2,self.patha) > GetDistance(self.mposs2,self.patha2) then
 									if not MapPosition:inWall(self.patha2) then
-											i.safe = jp + (Vector(i.mpos) - Vector(i.ePos)) + (Vector(i.mpos) - Vector(i.sPos)):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+											i.safe = Vector(i.mpos) + Vector(i.sPos - i.ePos):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 										else 
 											i.safe = jp + Vector(jp - self.patha2) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 									end
