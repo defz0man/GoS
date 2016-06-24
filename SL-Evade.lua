@@ -3672,9 +3672,9 @@ function SLEvade:Dodge()
 						BlockInput(false) 
 					end
 					MoveToXYZ(i.safe)
-					if EMenu.Spells[tabl.name]["Dashes"..tabl.name]:Value() then
+					if EMenu.Spells[i.spell.name]["Dashes"..i.spell.name]:Value() then
 						for op = 0,3 do
-							if self.EvadeSpells[GetObjectName(myHero)] and self.EvadeSpells[GetObjectName(myHero)][op] and EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)][op].name]["Dodge"..self.EvadeSpells[GetObjectName(myHero)][op].name]:Value() and self.EvadeSpells[GetObjectName(myHero)][op].evadeType and self.EvadeSpells[GetObjectName(myHero)][op].spellKey and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)][op].name]["d"..self.EvadeSpells[GetObjectName(myHero)][op].name]:Value() then 
+							if self.EvadeSpells[GetObjectName(myHero)] and self.EvadeSpells[GetObjectName(myHero)][op] and EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)][op].name]["Dodge"..self.EvadeSpells[GetObjectName(myHero)][op].name]:Value() and self.EvadeSpells[GetObjectName(myHero)][op].evadeType and self.EvadeSpells[GetObjectName(myHero)][op].spellKey and EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() >= EMenu.EvadeSpells[self.EvadeSpells[GetObjectName(myHero)][op].name]["d"..self.EvadeSpells[GetObjectName(myHero)][op].name]:Value() then 
 								if i.uDodge == true and self.usp == false and self.ut == false then
 									if self.EvadeSpells[GetObjectName(myHero)][op].evadeType == "DashP" and CanUseSpell(myHero, self.EvadeSpells[GetObjectName(myHero)][op].spellKey) == READY then
 											self.ues = true
@@ -3748,14 +3748,14 @@ function SLEvade:Dodge()
 								end
 							end
 						end
-						if self.Flash and Ready(self.Flash) and i.uDodge == true and EMenu.EvadeSpells.Flash.DodgeFlash:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells.Flash.dFlash:Value() and self.ues == false and self.ut == false then
+						if self.Flash and Ready(self.Flash) and i.uDodge == true and EMenu.EvadeSpells.Flash.DodgeFlash:Value() and EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() >= EMenu.EvadeSpells.Flash.dFlash:Value() and self.ues == false and self.ut == false then
 								self.usp = true
 								CastSkillShot(self.Flash, i.safe)
 							else
 								self.usp = false
 						end		
 						for item,c in pairs(self.SI) do
-							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.invulnerable[c.Name]["Dodge"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.invulnerable[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.invulnerable[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
+							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.invulnerable[c.Name]["Dodge"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.invulnerable[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() >= EMenu.invulnerable[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
 									self.ut = true
 									CastSpell(GetItemSlot(myHero,item))
 								else
@@ -3763,7 +3763,7 @@ function SLEvade:Dodge()
 							end
 						end
 						for item,c in pairs(self.D) do
-							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.EvadeSpells[c.Name]["Dodge"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.EvadeSpells[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[tabl.name]["d"..tabl.name]:Value() >= EMenu.EvadeSpells[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
+							if c.State and Ready(GetItemSlot(myHero,item)) and EMenu.EvadeSpells[c.Name]["Dodge"..c.Name]:Value() and i.uDodge == true and GetPercentHP(myHero) <= EMenu.EvadeSpells[c.Name]["hp"..c.Name]:Value() and EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() >= EMenu.EvadeSpells[c.Name]["d"..c.Name]:Value() and self.ues == false and self.usp == false then
 									self.ut = true
 									CastSkillShot(GetItemSlot(myHero,item), i.safe)
 								else
