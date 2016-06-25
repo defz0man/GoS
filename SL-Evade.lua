@@ -2630,7 +2630,7 @@ self.Spells = {
 		spellName = "TaliyahW",
 		spellType = "Circular",
 		FoW = true,
-		killTime = 1000,
+		killTime = 1,
 		},
 		{
 		charName = "Taliyah",
@@ -3515,6 +3515,9 @@ function SLEvade:Detection(unit,spellProc)
 end
 
 function SLEvade:Dodge()
+	-- local mpads2 = Vector(myHero.pos) - Vector(Vector(myHero.pos)-GetMousePos()):normalized() * 170
+	-- DrawCircle(mpads2,50,1,20,GoS.Green)
+	-- print(mpads2)
 	for item,c in pairs(self.SI) do
 		if GetItemSlot(myHero,item)>0 then
 			if not c.State and not EMenu.invulnerable[c.Name] then
@@ -3551,7 +3554,7 @@ function SLEvade:Dodge()
 		if i.sType == "Circular" then 
 			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius + 10 and not i.safe then
 				if not i.mpos and not self.mposs then
-					i.mpos = GetMousePos() - (Vector(GetMousePos()) - Vector(myHero.pos)):perpendicular():normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+					i.mpos = Vector(myHero.pos) - Vector(Vector(myHero.pos)-GetMousePos()):normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 					self.mposs = GetMousePos()
 				end
 			else
@@ -3560,12 +3563,12 @@ function SLEvade:Dodge()
 			end
 		elseif i.sType == "Line" then
 			if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius + 10 and not i.safe then
-				if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
+				--if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 					if not i.mpos and not self.mposs2 then
-						i.mpos = GetMousePos() - (Vector(GetMousePos()) - Vector(myHero.pos)):perpendicular():normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+						i.mpos = Vector(myHero.pos) - Vector(Vector(myHero.pos)-GetMousePos()):normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						self.mposs2 = GetMousePos()
 					end	
-				end
+				--end
 			else
 				self.mposs2 = nil
 				i.mpos = nil
@@ -3604,13 +3607,13 @@ function SLEvade:Dodge()
 						i.jp = nil
 					end
 						if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe and i.mpos then
-							if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
+							--if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 								self.asd = true
 								self.patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
-								self.patha2 = Vector(i.mpos) + Vector(i.sPos - i.ePos):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+								self.patha2 = Vector(i.mpos) + Vector(Vector(i.mpos) - i.ePos):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 								if self.mposs2 and GetDistance(self.mposs2,self.patha) > GetDistance(self.mposs2,self.patha2) then
 									if not MapPosition:inWall(self.patha2) then
-											i.safe = Vector(i.mpos) + Vector(i.sPos - i.ePos):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
+											i.safe = Vector(i.mpos) + Vector(Vector(i.mpos) - i.ePos):normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 										else 
 											i.safe = jp + Vector(jp - self.patha2) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 									end
@@ -3621,7 +3624,7 @@ function SLEvade:Dodge()
 											i.safe = jp + Vector(jp - self.patha) + Vector(i.sPos - i.ePos):perpendicular2():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 									end
 								end
-							end
+							--end
 							i.isEvading = true
 						else
 							self.asd = false
