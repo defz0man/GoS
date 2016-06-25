@@ -3463,15 +3463,96 @@ function SLEvade:Drawings()
  			local BotD3 = WorldToScreen(0,ePos+sVec2)
  			local BotD4 = WorldToScreen(0,ePos-sVec2)
 			if EMenu.Draws.DSPath:Value() then
-				DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,3,ARGB(255,255,255,255))
-				DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,3,ARGB(255,255,255,255))
-				DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
-				DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
-				if EMenu.Draws.DSEW:Value() then
-					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(175,255,255,255))
-					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(175,255,255,255))
-					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
-					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
+				if i.jp and GetDistance(myHero,i.jp) > i.spell.radius + myHero.boundingRadius then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						end
+					if EMenu.Draws.DSEW:Value() then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))				
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))				
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))				
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						end
+					end
+				else
+					if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,0.75,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,0.75,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,0.75,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,0.75,GoS.Red)				
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1,GoS.Red)				
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.25,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.25,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.25,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.25,GoS.Red)				
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.5,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.5,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.5,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.5,GoS.Red)
+					end
+					if EMenu.Draws.DSEW:Value() then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2,GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2.5,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2.5,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2.5,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2.5,GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,3,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,3,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,3,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,3,GoS.Red)
+						end
+					end				
 				end
 			end
 		elseif i.sType == "LuxR" and not EMenu.Keys.DDraws:Value() then
@@ -3491,22 +3572,142 @@ function SLEvade:Drawings()
  			local BotD3 = WorldToScreen(0,ePos+sVec2)
  			local BotD4 = WorldToScreen(0,ePos-sVec2)
 			if EMenu.Draws.DSPath:Value() then
-				DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,3,ARGB(255,255,255,255))
-				DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,3,ARGB(255,255,255,255))
-				DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
-				DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
-				if EMenu.Draws.DSEW:Value() then
-					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(175,255,255,255))
-					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(175,255,255,255))
-					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
-					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
+				if i.jp and GetDistance(myHero,i.jp) > i.spell.radius + myHero.boundingRadius then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,0.75,ARGB(145,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1,ARGB(155,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.25,ARGB(165,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.5,ARGB(175,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						end
+					if EMenu.Draws.DSEW:Value() then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(225,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))				
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2,ARGB(235,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))				
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2.5,ARGB(245,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))				
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,3,ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						end
+					end
+				else
+					if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,0.75,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,0.75,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,0.75,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,0.75,GoS.Red)				
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1,GoS.Red)				
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.25,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.25,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.25,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.25,GoS.Red)				
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+						DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,1.5,GoS.Red)
+						DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,1.5,GoS.Red)
+						DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,1.5,GoS.Red)
+						DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,1.5,GoS.Red)
+					end
+					if EMenu.Draws.DSEW:Value() then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2,GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,2.5,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,2.5,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,2.5,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,2.5,GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,3,GoS.Red)
+							DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,3,GoS.Red)
+							DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,3,GoS.Red)
+							DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,3,GoS.Red)
+						end
+					end				
 				end
-			end			
+			end
 		elseif i.sType == "Circular" and not EMenu.Keys.DDraws:Value() then
 			if EMenu.Draws.DSPath:Value() then
-				DrawCircle(i.ePos,i.spell.radius,3,EMenu.Draws.SQ:Value(),ARGB(255,255,255,255))
-				if EMenu.Draws.DSEW:Value() then
-					DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),1.5,EMenu.Draws.SQ:Value(),ARGB(175,255,255,255))
+				if GetDistance(myHero,i.ePos) > i.spell.radius + myHero.boundingRadius then
+					if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+						DrawCircle(i.ePos,i.spell.radius,0.75,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))	
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+						DrawCircle(i.ePos,i.spell.radius,1,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+						DrawCircle(i.ePos,i.spell.radius,1.25,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+						DrawCircle(i.ePos,i.spell.radius,1.5,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+					end
+					if EMenu.Draws.DSEW:Value() then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),1.5,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))	
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),2,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),2.5,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),3,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),31*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))
+						end
+					end
+				else
+					if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+						DrawCircle(i.ePos,i.spell.radius,0.75,EMenu.Draws.SQ:Value(),GoS.Red)	
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+						DrawCircle(i.ePos,i.spell.radius,1,EMenu.Draws.SQ:Value(),GoS.Red)
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+						DrawCircle(i.ePos,i.spell.radius,1.25,EMenu.Draws.SQ:Value(),GoS.Red)
+					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+						DrawCircle(i.ePos,i.spell.radius,1.5,EMenu.Draws.SQ:Value(),GoS.Red)
+					end
+					if EMenu.Draws.DSEW:Value() then
+						if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),1.5,EMenu.Draws.SQ:Value(),GoS.Red)	
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),2,EMenu.Draws.SQ:Value(),GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 3 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),2.5,EMenu.Draws.SQ:Value(),GoS.Red)
+						elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 4 then
+							DrawCircle(i.ePos,i.spell.radius+EMenu.Advanced.ew:Value(),3,EMenu.Draws.SQ:Value(),GoS.Red)
+						end
+					end				
 				end
 			end
 		end
@@ -3582,9 +3783,6 @@ function SLEvade:Dodge()
 			self.DodgeOnlyDangerous = false
 	end
 	for _,i in pairs(self.obj) do
-	  if i.sType == "Line" and not i.Obj then
-		  self.obj[_] = nil
-	  end
 		if i.sType == "Circular" then 
 			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius + 10 and not i.safe then
 				if not i.mpos and not self.mposs then
@@ -3641,9 +3839,12 @@ function SLEvade:Dodge()
 					S1 = GetOrigin(myHero)+(Vector(i.sPos)-Vector(i.ePos)):perpendicular()
 					S2 = GetOrigin(myHero)
 					jp = Vector(VectorIntersection(i.sPos,i.ePos,S1,S2).x,i.ePos.y,VectorIntersection(i.sPos,i.ePos,S1,S2).y)
-					if GetDistance(i.sPos) > GetDistance(i.ePos) then
+					if GetDistance(i.sPos) < i.spell.range + myHero.boundingRadius then
 						i.jp = jp
 					else
+						i.jp = nil
+					end
+					if GetDistance(i.ePos) > i.spell.range + myHero.boundingRadius then
 						i.jp = nil
 					end
 						if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe and i.mpos then
