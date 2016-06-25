@@ -1893,8 +1893,9 @@ self.Spells = {
 		delay = 1000,
 		Slot = 3,
 		spellName = "LuxMaliceCannon",
-		spellType = "Line",
+		spellType = "LuxR",
 		Dangerous = true,
+		killTime = 1,
 		},
 		{
 		charName = "Lux",
@@ -3445,14 +3446,13 @@ function SLEvade:Drawings()
 			if EMenu.Draws.DSPos:Value() then
 				DrawCircle(GetOrigin(i.Obj),(i.spell.radius+myHero.boundingRadius)*.5,3,EMenu.Draws.SQ:Value(),GoS.White)
 			end
-			endPos = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius)
+			local endPos = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius)
 			offy = offy + 30
 			local sPos = GetOrigin(i.Obj)
  			local ePos = Vector(endPos)
  			local dVec = Vector(ePos - sPos)
- 			-- DrawCircle(dVec,50,0,3,GoS.White)
- 			sVec = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5)
-			sVec2 = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5+EMenu.Advanced.ew:Value())
+ 			local sVec = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5)
+			local sVec2 = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5+EMenu.Advanced.ew:Value())
 
  			local TopD1 = WorldToScreen(0,sPos+sVec)
  			local TopD2 = WorldToScreen(0,sPos-sVec)
@@ -3474,6 +3474,34 @@ function SLEvade:Drawings()
 					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
 				end
 			end
+		elseif i.sType == "LuxR" and not EMenu.Keys.DDraws:Value() then
+			local endPos = Vector(i.sPos)+Vector(Vector(i.ePos)-i.sPos):normalized()*(i.spell.range+i.spell.radius)
+			local sPos = Vector(i.sPos)
+ 			local ePos = Vector(endPos)
+ 			local dVec = Vector(ePos - sPos)
+ 			local sVec = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5)
+			local sVec2 = dVec:normalized():perpendicular()*((i.spell.radius+myHero.boundingRadius)*.5+EMenu.Advanced.ew:Value())
+
+ 			local TopD1 = WorldToScreen(0,sPos+sVec)
+ 			local TopD2 = WorldToScreen(0,sPos-sVec)
+ 			local BotD1 = WorldToScreen(0,ePos+sVec)
+ 			local BotD2 = WorldToScreen(0,ePos-sVec)
+ 			local TopD3 = WorldToScreen(0,sPos+sVec2)
+ 			local TopD4 = WorldToScreen(0,sPos-sVec2)
+ 			local BotD3 = WorldToScreen(0,ePos+sVec2)
+ 			local BotD4 = WorldToScreen(0,ePos-sVec2)
+			if EMenu.Draws.DSPath:Value() then
+				DrawLine(TopD1.x,TopD1.y,TopD2.x,TopD2.y,3,ARGB(255,255,255,255))
+				DrawLine(TopD1.x,TopD1.y,BotD1.x,BotD1.y,3,ARGB(255,255,255,255))
+				DrawLine(TopD2.x,TopD2.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
+				DrawLine(BotD1.x,BotD1.y,BotD2.x,BotD2.y,3,ARGB(255,255,255,255))
+				if EMenu.Draws.DSEW:Value() then
+					DrawLine(TopD3.x,TopD3.y,TopD4.x,TopD4.y,1.5,ARGB(175,255,255,255))
+					DrawLine(TopD3.x,TopD3.y,BotD3.x,BotD3.y,1.5,ARGB(175,255,255,255))
+					DrawLine(TopD4.x,TopD4.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
+					DrawLine(BotD3.x,BotD3.y,BotD4.x,BotD4.y,1.5,ARGB(175,255,255,255))
+				end
+			end			
 		elseif i.sType == "Circular" and not EMenu.Keys.DDraws:Value() then
 			if EMenu.Draws.DSPath:Value() then
 				DrawCircle(i.ePos,i.spell.radius,3,EMenu.Draws.SQ:Value(),ARGB(255,255,255,255))
@@ -3508,6 +3536,12 @@ function SLEvade:Detection(unit,spellProc)
 				end
 			elseif spellProc.name == i.killName then
 				self.obj[i.spellName] = nil
+			end
+			if i.spellType == "LuxR" and spellProc.name == "LuxMaliceCannon" and EMenu.Spells[i.name]["Dodge"..i.name]:Value() then
+				self.obj[i.spellName] = {sPos = spellProc.startPos, ePos = spellProc.endPos, spell = i, obj = spellProc, sType = i.spellType, radius = i.radius, sSpeed = i.speed or math.huge, sDelay = i.delay or 250, sRange = i.range, uDodge = false, caster = unit, mpos = nil}
+				if i.killTime then
+					DelayAction(function() self.obj[i.spellName] = nil end,i.killTime + GetDistance(unit,spellProc.endPos)/i.speed + i.delay*.001)
+				end					
 			end
 		end
 	end
@@ -3561,7 +3595,7 @@ function SLEvade:Dodge()
 				self.mposs = nil
 				i.mpos = nil
 			end
-		elseif i.sType == "Line" then
+		elseif i.sType == "Line" or i.sType == "LuxR" then
 			if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius + 10 and not i.safe then
 				--if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 					if not i.mpos and not self.mposs2 then
@@ -3593,9 +3627,15 @@ function SLEvade:Dodge()
 					else
 						i.uDodge = false
 				end
+			elseif i.safe and i.sType == "LuxR" then
+				if GetDistance(i.caster)/i.sSpeed + ((i.spell.killTime or 0)+i.sDelay)*.001 < GetDistance(i.safe)/myHero.ms then
+						i.uDodge = true 
+					else
+						i.uDodge = false
+				end
 			end
 			for pp,tabl in pairs(self.Spells[GetObjectName(p)]) do
-				if i.sType == "Line" then
+				if i.sType == "Line" or i.sType == "LuxR" then
 					i.sPos = Vector(i.sPos)
 					i.ePos = Vector(i.ePos)
 					S1 = GetOrigin(myHero)+(Vector(i.sPos)-Vector(i.ePos)):perpendicular()
