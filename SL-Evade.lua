@@ -50,6 +50,7 @@ function SLEvade:__init()
 	self.ut = false --self.usingitems
 	self.usp = false --self.usingsummonerspells
 	self.mposs2 = nil -- self.mousepos line
+	self.mV = nil -- wp
 	self.D = { --Dash items
 	[3152] = {Name = "Hextech Protobelt", State = false}
 	}
@@ -119,6 +120,7 @@ function SLEvade:__init()
 	Callback.Add("CreateObj", function(Object) self:CreateObject(Object) end)
 	Callback.Add("DeleteObj", function(Object) self:DeleteObject(Object) end)
 	Callback.Add("Draw", function() self:Drawings() end)
+	Callback.Add("ProcessWaypoint", function(unit,wp) self:prwp(unit,wp) end)
 
 self.Spells = {
 
@@ -3392,6 +3394,16 @@ self.EvadeSpells = {
 
 end
 
+function SLEvade:Position()
+return Vector(myHero) + Vector(Vector(self.mV) - myHero.pos):normalized() * myHero.ms/2
+end
+
+function SLEvade:prwp(unit, wp)
+  if wp and unit == myHero and wp.index == 1 then
+	self.mV = wp.position
+  end
+end
+
 function SLEvade:CreateObject(Object)
 	DelayAction( function()
 		if GetObjectBaseName(Object) == "missile" and not GetObjectSpellName(Object):lower():find("attack") then
@@ -3572,7 +3584,7 @@ function SLEvade:Drawings()
 			end
 		elseif i.sType == "Circular" and not EMenu.Keys.DDraws:Value() then
 			if EMenu.Draws.DSPath:Value() then
-				if GetDistance(myHero,i.ePos) > i.spell.radius + myHero.boundingRadius then
+				if (GetDistance(self:Position(),i.ePos) > i.spell.radius + myHero.boundingRadius) or (GetDistance(myHero,i.ePos) > i.spell.radius + myHero.boundingRadius) then
 					if EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 1 then
 						DrawCircle(i.ePos,i.spell.radius,0.75,EMenu.Draws.SQ:Value(),ARGB(255,51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),51*EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value(),255))	
 					elseif EMenu.Spells[i.spell.name]["d"..i.spell.name]:Value() == 2 then
@@ -3626,6 +3638,9 @@ function SLEvade:Drawings()
 			end
 		end
 	  end
+	end
+	if EMenu.Draws.DevOpt:Value() then
+		DrawCircle(self:Position(),50,1,20,GoS.Blue)
 	end
 end
 
@@ -3690,7 +3705,7 @@ function SLEvade:Dodge()
 	end
 	for _,i in pairs(self.obj) do
 		if i.sType == "Circular" then 
-			if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius + 10 and not i.safe then
+			if (GetDistance(self:Position(),i.ePos) < i.radius + myHero.boundingRadius + 10) or (GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius + 10) and not i.safe then
 				if not i.mpos and not self.mposs then
 					i.mpos = Vector(myHero.pos) - Vector(Vector(myHero.pos)-GetMousePos()):normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 					self.mposs = GetMousePos()
@@ -3700,7 +3715,7 @@ function SLEvade:Dodge()
 				i.mpos = nil
 			end
 		elseif i.sType == "Line" or i.sType == "LuxR" then
-			if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius + 10 and not i.safe then
+			if i.jp and (GetDistance(self:Position(),i.jp) < i.spell.radius + myHero.boundingRadius + 10) or (GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius + 10) and not i.safe then
 				--if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 					if not i.mpos and not self.mposs2 then
 						i.mpos = Vector(myHero.pos) - Vector(Vector(myHero.pos)-GetMousePos()):normalized() * ((i.spell.radius+myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
@@ -3745,15 +3760,15 @@ function SLEvade:Dodge()
 					S1 = GetOrigin(myHero)+(Vector(i.sPos)-Vector(i.ePos)):perpendicular()
 					S2 = GetOrigin(myHero)
 					jp = Vector(VectorIntersection(i.sPos,i.ePos,S1,S2).x,i.ePos.y,VectorIntersection(i.sPos,i.ePos,S1,S2).y)
-					if GetDistance(i.sPos) < i.spell.range + myHero.boundingRadius then
+					if GetDistance(i.sPos) < i.spell.range + myHero.boundingRadius + 200 then
 						i.jp = jp
 					else
 						i.jp = nil
 					end
-					if GetDistance(i.ePos) > i.spell.range + myHero.boundingRadius then
+					if GetDistance(i.ePos) > i.spell.range + myHero.boundingRadius + 200 then
 						i.jp = nil
 					end
-						if i.jp and GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius and not i.safe and i.mpos then
+						if i.jp and (GetDistance(self:Position(),i.jp) < i.spell.radius + myHero.boundingRadius) or (GetDistance(myHero,i.jp) < i.spell.radius + myHero.boundingRadius) and not i.safe and i.mpos then
 							--if GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular(),jp) >= GetDistance(GetOrigin(myHero) + Vector(i.sPos-i.ePos):perpendicular2(),jp) then
 								self.asd = true
 								self.patha = jp + Vector(i.sPos - i.ePos):perpendicular():normalized() * ((i.spell.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
@@ -3783,7 +3798,7 @@ function SLEvade:Dodge()
 							BlockInput(false)
 						end
 				elseif i.sType == "Circular" then
-					if GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius and not i.safe and i.mpos then
+					if (GetDistance(self:Position(),i.ePos) < i.radius + myHero.boundingRadius) or (GetDistance(myHero,i.ePos) < i.radius + myHero.boundingRadius) and not i.safe and i.mpos then
 						self.asd = true
 						self.pathb = Vector(i.ePos) + (GetOrigin(myHero) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
 						self.pathb2 = Vector(i.ePos) + (Vector(i.mpos) - Vector(i.ePos)):normalized() * ((i.radius + myHero.boundingRadius)*1.1+EMenu.Advanced.ew:Value())
