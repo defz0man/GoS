@@ -3418,6 +3418,31 @@ function SLEvade:CreateObject(Object)
 						start = GetObjectSpellStartPos(Object)
 						start.y = GetOrigin(Object).y
 						endpos = GetObjectSpellEndPos(Object) 
+						if l.collision then
+							endpos = Vector(endpos)
+							local cCreep = {}
+							for _,i in pairs(minionManager.objects) do
+								if i and i.alive and i.team ~= MINION_ALLY and GetDistance(i.pos,start) < l.range then
+									local helperVec = Vector(endpos - start):perpendicular()
+									local vI = Vector(VectorIntersection(endpos,start,i.pos,helperVec).x,myHero.pos.y,VectorIntersection(endpos,start,i.pos,helperVec).y)
+									if (l.radius and GetDistance(vI,i.pos) < l.radius) or (l.width and GetDistance(vI,i.pos) < l.width) then
+										cCreep[i.networkID] = i
+									end
+								end								
+							end
+							local closest = nil
+							local cDist = math.huge
+							for _,i in pairs(cCreep) do
+								if GetDistance(start,i) < cDist then
+									closest = i
+									cDist = GetDistance(start,i)
+								end
+							end
+							if closest then
+								endPos = closest.pos 
+								print("Collision")
+							end
+						end
 						endpos.y = GetOrigin(Object).y
 						self.obj[GetObjectSpellName(Object)] = {Obj = Object, sPos = start, ePos = endpos, spell = l, sType = l.spellType, sSpeed = l.speed or math.huge, sDelay = l.delay or 250, sRange = l.range, uDodge = false, mpos = nil}
 					end
