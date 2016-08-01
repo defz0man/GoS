@@ -1,4 +1,5 @@
 if GetObjectName(GetMyHero()) ~= "Karma" then return end
+
 if not pcall( require, "OpenPredict" ) then PrintChat("This script doesn't work without OpenPredict! Download it!") return end
 
 local version = 1
@@ -17,6 +18,8 @@ KMenu.sh:Slider("sP", "Shield ally under %HP", 50, 0, 100, 1)
 KMenu.sh:Boolean("sG", "Use shield as GapCloser", false)
 KMenu.sh:Boolean("sT", "Shield Turretshot", true)
 KMenu.sh:Boolean("sL", "Shield LowHealth", true)
+KMenu.sh:KeyBinding("sR", "Ult Shield" , string.byte("T"))
+
 
 eHeroes = {}
 DelayAction( function()
@@ -63,7 +66,18 @@ local KarmaQ = { delay = 0.1, speed = 1700, width = 100, range = qRange}
 local Move = { delay = 0.5, speed = math.huge, width = 50, range = math.huge}
 local cSkin = 0
 local item = {3092,3142,3153}
+local Mode = nil
 --	FrostQuell 	 gb 	bork 
+
+if FileExist(COMMON_PATH.."MixLib.lua") then
+ require('MixLib')
+else
+ PrintChat("MixLib not found. Please wait for download.")
+ DownloadFileAsync("https://raw.githubusercontent.com/VTNEETS/NEET-Scripts/master/MixLib.lua", COMMON_PATH.."MixLib.lua", 
+	function() 
+	require('MixLib')
+	end)
+end
 
 --Lvlup table
 local lTable={
@@ -71,20 +85,22 @@ local lTable={
 [2]={_Q,_E,_W,_Q,_Q,_R,_Q,_E,_Q,_E,_R,_E,_E,_W,_W,_R,_W,_W}
 }
 
+
 -- Start
-OnTick(function(myHero)
+OnTick(function()
 	if not IsDead(myHero) then
+		Mode = Mix:Mode()
 		local unit = GetCurrentTarget()
 		ks()
-		combo(unit)
 		shield()
+		combo(unit)
 		items(unit)
 		lvlUp()
 		skin()
 	end
 end)
 
-OnDraw(function(myHero)
+OnDraw(function()
 	local qRdy = Ready(_Q)
 	local wRdy = Ready(_W)
 	local rRdy = Ready(_R)
@@ -113,10 +129,11 @@ end)
 
 function combo(unit)
 
-	if IOW:Mode() == "Combo" then
+	if Mode == "Combo" then
 		local qRdy = Ready(_Q)
 		local wRdy = Ready(_W)
 		local rRdy = Ready(_R)
+		
 		--W
 		if KMenu.c.W:Value() and wRdy and ValidTarget(unit, wRange) then
 			if rRdy and GetPercentHP(myHero) < KMenu.c.rW:Value() then
@@ -148,16 +165,23 @@ function combo(unit)
 end
 
 function shield()
+	if not Ready(2) then return end
+	if KMenu.sh.sR:Value() and Ready(3) then
+		CastSpell(3)
+		DelayAction(function()
+			CastTargetSpell(myHero,2)
+		end,.5)
+	end
 	for _,i in pairs(GetAllyHeroes()) do
 		local movePos = GetPrediction(i, Move).castPos
 		local ePos = GetOrigin(ClosestEnemy(GetOrigin(i)))
-		if IOW:Mode() == "Combo" and KMenu.sh.sG:Value() and KMenu.sh[eHeroes[GetObjectName(i)]]:Value() and GetDistance(ePos,GetOrigin(i))>GetDistance(ePos,movePos) and GetDistance(GetOrigin(myHero),GetOrigin(i))< eRange then
+		if Mode == "Combo" and KMenu.sh.sG:Value() and KMenu.sh[eHeroes[GetObjectName(i)]]:Value() and GetDistance(ePos,GetOrigin(i))>GetDistance(ePos,movePos) and GetDistance(GetOrigin(myHero),GetOrigin(i))< eRange then
 			CastTargetSpell(i,2)
 		end
 	end
 	local movePos = GetPrediction(myHero, Move).castPos
 	local ePos = GetOrigin(ClosestEnemy(GetOrigin(myHero)))
-	if IOW:Mode() == "Combo" and KMenu.sh.sG:Value() and KMenu.sh[eHeroes[GetObjectName(myHero)]]:Value() and GetDistance(ePos,GetOrigin(myHero))>GetDistance(ePos,movePos) then
+	if Mode == "Combo" and KMenu.sh.sG:Value() and KMenu.sh[eHeroes[GetObjectName(myHero)]]:Value() and GetDistance(ePos,GetOrigin(myHero))>GetDistance(ePos,movePos) then
 			CastTargetSpell(myHero,2)
 	end
 end
@@ -181,7 +205,7 @@ end
 
 function items(unit)
 	if KMenu.i.iO:Value() and ValidTarget(unit,700) then
-		if IOW:Mode() == "Combo" or not KMenu.i.iC:Value() then
+		if Mode == "Combo" or not KMenu.i.iC:Value() then
 			for _,i in pairs(item) do
 				if GetItemSlot(myHero,i)>0 and Ready(GetItemSlot(myHero,i)) then
 					CastTargetSpell(unit,GetItemSlot(myHero,i))
