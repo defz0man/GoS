@@ -9,10 +9,11 @@ AnnieMenu.Combo:Boolean("W", "Use W", true)						--Add a button to toggle the us
 AnnieMenu.Combo:Boolean("R", "Use R", true)						--Add a button to toggle the usage of R
 AnnieMenu.Combo:Boolean("KSQ", "Killsteal with Q", true)		--Add a button to killsteal with Q
 AnnieMenu.Combo:Boolean("UOP", "Use OpenPredict for R", true)	--Adds a button so we can check if the user wants to use openPredict	[OPTIONAL]
+AnnieMenu.Combo:Boolean("E", "Use E vs Enemy AA", true)			--Add a button to toggle the usage of E
 
 local AnnieR = {delay = 0.075, range = 600, radius = 150, speed = math.huge}		--TABLE for Annie R ONLY if you are using OpenPredict
 
-OnTick(function ()									--The code inside the Function runs every tick
+OnTick(function()									--The code inside the Function runs every tick
 	
 	local target = GetCurrentTarget()					--Saves the "best" enemy champ to the target variable
 		
@@ -60,7 +61,7 @@ OnTick(function ()									--The code inside the Function runs every tick
 				end		--Ends CastR logic
 			else		--If the user wants to use OpenPred
 				local RPred = GetCircularAOEPrediction(target,AnnieR)	--Now we calc OpenPred Stuff from Table
-				if RPred.hitChance >= 0.3 then							--Judge HitChance (returns form 0-1)
+				if RPred.hitChance < 0.2 then							--Judge HitChance
 					CastSkillShot(_R,RPred.castPos)						--Cast ult at OP predicted position
 				end
 			end
@@ -84,6 +85,21 @@ OnTick(function ()									--The code inside the Function runs every tick
 			end										--End dmg check for Q
 		end				--end basic check for Q
 	end			--end KS
-end)		--End script
+end)		--End of the code that gets run each Tick
+
+--[[
+The code below may be a bit more advanced and is only used the autoE 
+for that we create a new Callback (like OnTick) which triggeres each time someone casts a spell
+AutoAttacks are also considered a spell
+Their name is usually something like "AnnieBasicAttack1" so we just try to find "attack" in the spell
+--]]
+
+OnProcessSpell(function(unit,spellProc)		--Creates the callback with the object (unit is the casting unit or hero) that casts the spell (spellProc is the spell data)
+	if GetTeam(unit) ~= GetTeam(myHero) and GetObjectType(unit) == Obj_AI_Hero and spellProc.name:lower():find("attack") then		--first check makes sure the spell is coming from an enemy, second checks that it is not a minion and the third checks for autoAttacks
+		if AnnieMenu.Combo.E:Value() and Ready(_E) then		--usual check
+			CastSpell(_E)		--CastE 
+		end
+	end
+end)
 
 print("Annie loaded")	--Little message to show that the script has injected without breaking
