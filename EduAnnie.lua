@@ -61,7 +61,7 @@ OnTick(function()									--The code inside the Function runs every tick
 				end		--Ends CastR logic
 			else		--If the user wants to use OpenPred
 				local RPred = GetCircularAOEPrediction(target,AnnieR)	--Now we calc OpenPred Stuff from Table
-				if RPred.hitChance < 0.2 then							--Judge HitChance
+				if RPred.hitChance > 0.2 then							--Judge HitChance
 					CastSkillShot(_R,RPred.castPos)						--Cast ult at OP predicted position
 				end
 			end
