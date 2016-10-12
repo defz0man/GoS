@@ -1,6 +1,7 @@
 if GetObjectName(GetMyHero()) ~= "Karma" then return end
 
 if not pcall( require, "OpenPredict" ) then PrintChat("This script doesn't work without OpenPredict! Download it!") return end
+require('MixLib')
 
 local version = 1
  
